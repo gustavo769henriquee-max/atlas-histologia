@@ -1,0 +1,1193 @@
+import { supabase } from '../lib/supabase.js'
+
+let logoUrlAtual = ''
+
+export async function renderAparencia() {
+
+  const { data, error } =
+    await supabase
+      .from('configuracoes_site')
+      .select('*')
+      .limit(1)
+      .maybeSingle()
+
+  if (error) {
+    console.error(error)
+
+    return `
+      <div class="admin-error">
+        Erro ao carregar as configura��es.
+      </div>
+    `
+  }
+
+  const config = data || {}
+
+  const logoUrlInicial = config.logo_url || ''
+
+
+  return `
+    <section id="admin-section-aparencia" class="admin-section active">
+
+      <div class="admin-title-row">
+
+        <div>
+          <span class="eyebrow">
+            PERSONALIZA��O
+          </span>
+
+          <h1>
+            Apar�ncia
+          </h1>
+
+          <p>
+            Personalize o conte�do e as cores do Atlas.
+          </p>
+        </div>
+
+      </div>
+
+
+      <form id="aparencia-form">
+
+
+
+        <div class="form-card">
+
+          <div class="form-card-title">
+
+            <span>???</span>
+
+            <div>
+              <h2>Identidade visual</h2>
+
+              <p>
+                Escolha uma logo para representar o Atlas.
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="logo-editor">
+
+            <div class="logo-preview-box">
+
+              <div
+                id="logo-preview"
+                class="logo-preview"
+              >
+                ??
+              </div>
+
+            </div>
+
+
+            <div class="logo-editor-info">
+
+              <label class="logo-upload-button">
+
+                <span>??</span>
+                Escolher logo
+
+                <input
+                  id="config-logo" data-logo-url="${logoUrlInicial}"
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  hidden
+                >
+
+              </label>
+
+
+              <button
+                type="button"
+                id="remover-logo"
+                class="button secondary"
+              >
+                Remover logo
+              </button>
+
+
+              <p class="logo-help">
+                PNG, JPG ou WebP. Recomendamos uma imagem
+                quadrada com fundo transparente.
+              </p>
+              <div class="logo-size-control">
+
+                <div class="logo-size-header">
+
+                  <label for="config-logo-tamanho">
+                    Tamanho da logo
+                  </label>
+
+                  <strong id="logo-tamanho-valor">
+                    100%
+                  </strong>
+
+                </div>
+
+                <input
+                  id="config-logo-tamanho" value="${config.logo_tamanho || 100}"
+                  type="range"
+                  min="50"
+                  max="150"
+                  step="1"
+                  value="100"
+                >
+
+                <div class="logo-size-labels">
+                  <span>50%</span>
+                  <span>100%</span>
+                  <span>150%</span>
+                </div>
+
+              </div>
+
+
+
+              <span
+                id="logo-nome"
+                class="logo-file-name"
+              >
+                Nenhuma logo selecionada
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="form-card">
+
+          <div class="form-card-title">
+
+            <span>??</span>
+
+            <div>
+              <h2>Textos do site</h2>
+
+              <p>
+                Altere os textos exibidos para os visitantes.
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="form-grid">
+
+            <div class="form-field">
+
+              <label>
+                Nome do site
+              </label>
+
+              <input
+                id="config-nome"
+                type="text"
+                value="${escapeHtml(config.nome_site || '')}"
+              >
+
+            </div>
+
+
+            <div class="form-field">
+
+              <label>
+                Subt�tulo
+              </label>
+
+              <input
+                id="config-subtitulo"
+                type="text"
+                value="${escapeHtml(config.subtitulo || '')}"
+              >
+
+            </div>
+
+
+            <div class="form-field full">
+
+              <label>
+                T�tulo da p�gina inicial
+              </label>
+
+              <input
+                id="config-titulo"
+                type="text"
+                value="${escapeHtml(config.titulo_inicio || '')}"
+              >
+
+            </div>
+
+
+            <div class="form-field full">
+
+              <label>
+                Descri��o da p�gina inicial
+              </label>
+
+              <textarea
+                id="config-descricao"
+                rows="4"
+              >${escapeHtml(config.descricao_inicio || '')}</textarea>
+
+            </div>
+
+
+            <div class="form-field">
+
+              <label>
+                Bot�o principal
+              </label>
+
+              <input
+                id="config-botao"
+                type="text"
+                value="${escapeHtml(config.texto_botao_principal || '')}"
+              >
+
+            </div>
+
+
+            <div class="form-field">
+
+              <label>
+                Bot�o secund�rio
+              </label>
+
+              <input
+                id="config-botao-secundario"
+                type="text"
+                value="${escapeHtml(config.texto_botao_secundario || '')}"
+              >
+
+            </div>
+
+
+            <div class="form-field full">
+
+              <label>
+                Texto da se��o Sobre
+              </label>
+
+              <textarea
+                id="config-sobre"
+                rows="3"
+              >${escapeHtml(config.texto_sobre || '')}</textarea>
+
+            </div>
+
+
+            <div class="form-field full">
+
+              <label>
+                Texto do rodap�
+              </label>
+
+              <input
+                id="config-rodape"
+                type="text"
+                value="${escapeHtml(config.texto_rodape || '')}"
+              >
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-card">
+
+          <div class="form-card-title">
+
+            <span>??</span>
+
+            <div>
+              <h2>Cores</h2>
+
+              <p>
+                Personalize a identidade visual do Atlas.
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="form-grid">
+
+
+            <div class="form-field">
+
+              <label>
+                Cor principal
+              </label>
+
+              <div class="color-control">
+
+                <input
+                  id="config-cor-principal"
+                  type="color"
+                  value="${config.cor_principal || '#1e6f5c'}"
+                >
+
+                <input id="cor-principal-valor" type="text" class="color-code-input" value="${config.cor_principal || '#1e6f5c'}" maxlength="7" placeholder="#000000" autocomplete="off">
+
+              </div>
+
+            </div>
+
+
+            <div class="form-field">
+
+              <label>
+                Cor de fundo
+              </label>
+
+              <div class="color-control">
+
+                <input
+                  id="config-cor-fundo"
+                  type="color"
+                  value="${config.cor_fundo || '#f5f7f6'}"
+                >
+
+                <input id="cor-fundo-valor" type="text" class="color-code-input" value="${config.cor_fundo || '#f5f7f6'}" maxlength="7" placeholder="#000000" autocomplete="off">
+
+              </div>
+
+            </div>
+
+
+            <div class="form-field">
+
+              <label>
+                Cor dos textos
+              </label>
+
+              <div class="color-control">
+
+                <input
+                  id="config-cor-texto"
+                  type="color"
+                  value="${config.cor_texto || '#17211f'}"
+                >
+
+                <input id="cor-texto-valor" type="text" class="color-code-input" value="${config.cor_texto || '#17211f'}" maxlength="7" placeholder="#000000" autocomplete="off">
+
+              </div>
+
+            </div>
+
+
+            <div class="form-field">
+
+              <label>
+                Cor de destaque
+              </label>
+
+              <div class="color-control">
+
+                <input
+                  id="config-cor-destaque"
+                  type="color"
+                  value="${config.cor_destaque || '#102f29'}"
+                >
+
+                <input id="cor-destaque-valor" type="text" class="color-code-input" value="${config.cor_destaque || '#102f29'}" maxlength="7" placeholder="#000000" autocomplete="off">
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="aparencia-status"
+          class="form-status"
+        ></div>
+
+
+        <div class="form-actions">
+
+          <button
+            type="button"
+            class="button secondary"
+            id="cancelar-aparencia"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            class="button primary"
+          >
+            ?? Salvar altera��es
+          </button>
+
+        </div>
+
+
+      
+      <div class="aparencia-preview-card">
+
+        <div class="aparencia-preview-header">
+          <div>
+            <span class="eyebrow">PR�VIA</span>
+            <h2>Como o Atlas ficar�</h2>
+          </div>
+
+          <span class="preview-live">
+            ? AO VIVO
+          </span>
+        </div>
+
+        <div
+          id="aparencia-preview"
+          class="aparencia-preview"
+        >
+
+          <header class="preview-header">
+
+            <div class="preview-brand">
+
+              <span class="preview-logo">
+                ??
+              </span>
+
+              <span>
+                <strong id="preview-nome">
+                  Atlas
+                </strong>
+
+                <small id="preview-subtitulo">
+                  Histol�gico
+                </small>
+              </span>
+
+            </div>
+
+            <nav class="preview-nav">
+              <span>In�cio</span>
+              <span>L�minas</span>
+              <span>Sobre</span>
+            </nav>
+
+          </header>
+
+
+          <section class="preview-hero">
+
+            <span class="preview-eyebrow">
+              ?? MICROSCOPIA � ESTUDO � EXPLORA��O
+            </span>
+
+            <h1 id="preview-titulo">
+              Explore o mundo microsc�pico.
+            </h1>
+
+            <p id="preview-descricao">
+              Um atlas de histologia interativo para explorar
+              tecidos, estruturas e l�minas histol�gicas.
+            </p>
+
+            <div class="preview-actions">
+
+              <button
+                type="button"
+                id="preview-botao"
+                class="preview-button preview-primary"
+              >
+                Explorar Atlas
+              </button>
+
+              <button
+                type="button"
+                id="preview-botao-secundario"
+                class="preview-button preview-secondary"
+              >
+                Conhe�a o projeto
+              </button>
+
+            </div>
+
+          </section>
+
+        </div>
+
+      </div>
+      </form>
+
+    </section>
+  `
+}
+
+
+
+function atualizarPreviewAparencia() {
+
+  const pegar = id =>
+    document.querySelector(id)?.value || ''
+
+  const nome =
+    pegar('#config-nome') || 'Atlas'
+
+  const subtitulo =
+    pegar('#config-subtitulo') || 'Histol�gico'
+
+  const titulo =
+    pegar('#config-titulo') || 'Explore o mundo microsc�pico.'
+
+  const descricao =
+    pegar('#config-descricao') ||
+    'Um atlas de histologia interativo para explorar tecidos, estruturas e l�minas histol�gicas.'
+
+  const botao =
+    pegar('#config-botao') ||
+    'Explorar ' + nome
+
+  const botaoSecundario =
+    pegar('#config-botao-secundario') ||
+    'Conhe�a o projeto'
+
+  const preview = document.querySelector('#aparencia-preview')
+
+  if (!preview) return
+
+  const atualizarTexto = (seletor, valor) => {
+
+    const elemento =
+      preview.querySelector(seletor)
+
+    if (elemento) {
+      elemento.textContent = valor
+    }
+
+  }
+
+  atualizarTexto('#preview-nome', nome)
+  atualizarTexto('#preview-subtitulo', subtitulo)
+  atualizarTexto('#preview-titulo', titulo)
+  atualizarTexto('#preview-descricao', descricao)
+  atualizarTexto('#preview-botao', botao)
+  atualizarTexto('#preview-botao-secundario', botaoSecundario)
+
+
+  const principal =
+    pegar('#config-cor-principal')
+
+  const fundo =
+    pegar('#config-cor-fundo')
+
+  const texto =
+    pegar('#config-cor-texto')
+
+  const destaque =
+    pegar('#config-cor-destaque')
+
+
+  if (principal) {
+    preview.style.setProperty(
+      '--preview-principal',
+      principal
+    )
+  }
+
+  if (fundo) {
+    preview.style.setProperty(
+      '--preview-fundo',
+      fundo
+    )
+  }
+
+  if (texto) {
+    preview.style.setProperty(
+      '--preview-texto',
+      texto
+    )
+  }
+
+  if (destaque) {
+    preview.style.setProperty(
+      '--preview-destaque',
+      destaque
+    )
+  }
+
+}
+
+
+function configurarPreviewAparencia() {
+
+  const campos = document.querySelectorAll(
+    '#aparencia-form input, #aparencia-form textarea'
+  )
+
+  campos.forEach(campo => {
+
+    campo.addEventListener(
+      'input',
+      atualizarPreviewAparencia
+    )
+
+    campo.addEventListener(
+      'change',
+      atualizarPreviewAparencia
+    )
+
+  })
+
+  atualizarPreviewAparencia()
+
+}
+
+
+function configurarTamanhoLogo() {
+
+  const controle =
+    document.querySelector('#config-logo-tamanho')
+
+  const valor =
+    document.querySelector('#logo-tamanho-valor')
+
+  if (!controle || !valor) {
+    return
+  }
+
+
+  const atualizar = () => {
+
+    const tamanho =
+      Number(controle.value)
+
+    valor.textContent =
+      tamanho + '%'
+
+
+    const previewLogo =
+      document.querySelector('.preview-logo')
+
+    const imagemPreview =
+      previewLogo?.querySelector('img')
+
+
+    if (imagemPreview) {
+
+      const tamanhoBase = 42
+      const tamanhoFinal =
+        tamanhoBase * (tamanho / 100)
+
+      imagemPreview.style.width =
+        tamanhoFinal + 'px'
+
+      imagemPreview.style.height =
+        tamanhoFinal + 'px'
+
+      imagemPreview.style.maxWidth =
+        'none'
+
+      imagemPreview.style.maxHeight =
+        'none'
+
+    }
+
+
+    const caixaLogo =
+      document.querySelector('#logo-preview')
+
+    const imagemEditor =
+      caixaLogo?.querySelector('img')
+
+
+    if (imagemEditor) {
+
+      const tamanhoBaseEditor = 90
+      const tamanhoFinalEditor =
+        tamanhoBaseEditor * (tamanho / 100)
+
+      imagemEditor.style.width =
+        tamanhoFinalEditor + 'px'
+
+      imagemEditor.style.height =
+        tamanhoFinalEditor + 'px'
+
+      imagemEditor.style.maxWidth =
+        'none'
+
+      imagemEditor.style.maxHeight =
+        'none'
+
+    }
+
+  }
+
+
+  controle.addEventListener(
+    'input',
+    atualizar
+  )
+
+
+  atualizar()
+
+}
+
+function configurarLogoPreview() {
+
+  const input =
+    document.querySelector('#config-logo')
+
+  const preview =
+    document.querySelector('#logo-preview')
+
+  const nome =
+    document.querySelector('#logo-nome')
+
+  const remover =
+    document.querySelector('#remover-logo')
+
+  if (!input || !preview || !nome || !remover) {
+    return
+  }
+
+
+
+  input.addEventListener('change', async () => {
+
+    const arquivo =
+      input.files?.[0]
+
+    if (!arquivo) {
+      return
+    }
+
+
+    if (!arquivo.type.startsWith('image/')) {
+      input.value = ''
+      return
+    }
+
+
+    nome.textContent =
+      'Enviando logo...'
+
+
+    const extensao =
+      arquivo.name.split('.').pop().toLowerCase()
+
+    const nomeArquivo =
+      `logo-${Date.now()}.${extensao}`
+
+
+    const { error: uploadError } =
+      await supabase
+        .storage
+        .from('logos')
+        .upload(nomeArquivo, arquivo, {
+          cacheControl: '3600',
+          upsert: true
+        })
+
+
+    if (uploadError) {
+
+      console.error(uploadError)
+
+      nome.textContent =
+        'Erro ao enviar a logo'
+
+      return
+    }
+
+
+    const { data: urlData } =
+      supabase
+        .storage
+        .from('logos')
+        .getPublicUrl(nomeArquivo)
+
+
+    const logoUrl =
+      urlData?.publicUrl
+
+
+    if (!logoUrl) {
+
+      nome.textContent =
+        'N�o foi poss�vel obter a URL da logo'
+
+      return
+    }
+
+
+    /* Guarda a URL para o salvamento */
+
+    logoUrlAtual = logoUrl
+
+    input.dataset.logoUrl =
+      logoUrl
+
+
+    /* Mostra no editor */
+
+    preview.innerHTML = ''
+
+    const imagem =
+      document.createElement('img')
+
+    imagem.src =
+      logoUrl
+
+    imagem.alt =
+      'Logo do Atlas'
+
+    preview.appendChild(imagem)
+
+
+    nome.textContent =
+      arquivo.name
+
+
+    /* Mostra tamb�m na pr�via do site */
+
+    const previewLogo =
+      document.querySelector('.preview-logo')
+
+    if (previewLogo) {
+
+      previewLogo.innerHTML = ''
+
+      const imagemPreview =
+        document.createElement('img')
+
+      imagemPreview.src =
+        logoUrl
+
+      imagemPreview.alt =
+        'Logo'
+
+      previewLogo.appendChild(
+        imagemPreview
+      )
+
+    }
+
+
+    /* Reaplica o tamanho escolhido */
+
+    const controle =
+      document.querySelector('#config-logo-tamanho')
+
+    if (controle) {
+      controle.dispatchEvent(
+        new Event('input')
+      )
+    }
+
+  })
+
+
+  remover.addEventListener('click', () => {
+
+    input.value = ''
+
+    input.dataset.logoUrl = ''
+
+    preview.innerHTML =
+      '??'
+
+    nome.textContent =
+      'Nenhuma logo selecionada'
+
+
+    const previewLogo =
+      document.querySelector('.preview-logo')
+
+    if (previewLogo) {
+      previewLogo.innerHTML = '??'
+    }
+
+  })
+
+}
+
+export function setupAparencia() {
+
+  configurarPreviewAparencia()
+  configurarLogoPreview()
+  configurarTamanhoLogo()
+
+  const editoresCor = [
+    ['#config-cor-principal', '#cor-principal-valor'],
+    ['#config-cor-fundo', '#cor-fundo-valor'],
+    ['#config-cor-texto', '#cor-texto-valor'],
+    ['#config-cor-destaque', '#cor-destaque-valor']
+  ]
+
+  editoresCor.forEach(([idCor, idCodigo]) => {
+
+    const seletor = document.querySelector(idCor)
+    const codigo = document.querySelector(idCodigo)
+
+    if (!seletor || !codigo) return
+
+    codigo.value = seletor.value.toUpperCase()
+
+    seletor.addEventListener('input', () => {
+      codigo.value = seletor.value.toUpperCase()
+    })
+
+    codigo.addEventListener('input', () => {
+
+      let valor = codigo.value.trim()
+
+      if (!valor.startsWith('#')) {
+        valor = '#' + valor
+      }
+
+      if (/^#[0-9A-Fa-f]{6}$/.test(valor)) {
+        seletor.value = valor
+      }
+
+    })
+
+    codigo.addEventListener('blur', () => {
+
+      let valor = codigo.value.trim()
+
+      if (!valor.startsWith('#')) {
+        valor = '#' + valor
+      }
+
+      if (/^#[0-9A-Fa-f]{6}$/.test(valor)) {
+        codigo.value = valor.toUpperCase()
+        seletor.value = valor
+      } else {
+        codigo.value = seletor.value.toUpperCase()
+      }
+
+    })
+
+  })
+
+
+  const form =
+    
+  document.querySelector('#aparencia-form')
+
+  if (!form) return
+
+
+  const cores = [
+    ['#config-cor-principal', '#cor-principal-valor'],
+    ['#config-cor-fundo', '#cor-fundo-valor'],
+    ['#config-cor-texto', '#cor-texto-valor'],
+    ['#config-cor-destaque', '#cor-destaque-valor']
+  ]
+
+
+  cores.forEach(([inputId, valorId]) => {
+
+    const input =
+      document.querySelector(inputId)
+
+    const valor =
+      document.querySelector(valorId)
+
+    if (!input || !valor) return
+
+    input.addEventListener('input', () => {
+
+      valor.textContent =
+        input.value
+
+    })
+
+  })
+
+
+  form.addEventListener(
+    'submit',
+    async event => {
+
+      event.preventDefault()
+
+      const status =
+        document.querySelector('#aparencia-status')
+
+      status.textContent =
+        'Salvando...'
+
+      status.className =
+        'form-status loading'
+
+
+      const dados = {
+
+        nome_site:
+          document.querySelector('#config-nome').value,
+
+        subtitulo:
+          document.querySelector('#config-subtitulo').value,
+
+        titulo_inicio:
+          document.querySelector('#config-titulo').value,
+
+        descricao_inicio:
+          document.querySelector('#config-descricao').value,
+
+        texto_botao_principal:
+          document.querySelector('#config-botao').value,
+
+        texto_botao_secundario:
+          document.querySelector('#config-botao-secundario').value,
+
+        texto_sobre:
+          document.querySelector('#config-sobre').value,
+
+        texto_rodape:
+          document.querySelector('#config-rodape').value,
+
+        cor_principal:
+          document.querySelector('#config-cor-principal').value,
+
+        cor_fundo:
+          document.querySelector('#config-cor-fundo').value,
+
+        cor_texto:
+          document.querySelector('#config-cor-texto').value,
+
+        cor_destaque:
+          document.querySelector('#config-cor-destaque').value,
+
+        logo_tamanho:
+          Number(document.querySelector('#config-logo-tamanho').value),
+
+        logo_url:
+          logoUrlAtual || document.querySelector('#config-logo').dataset.logoUrl || null,
+
+        atualizado_em:
+          new Date().toISOString()
+
+      }
+
+
+      const { data: existente } =
+        await supabase
+          .from('configuracoes_site')
+          .select('id')
+          .limit(1)
+          .maybeSingle()
+
+
+      let resultado
+
+
+      if (existente?.id) {
+
+        resultado =
+          await supabase
+            .from('configuracoes_site')
+            .update(dados)
+            .eq('id', existente.id)
+
+      } else {
+
+        resultado =
+          await supabase
+            .from('configuracoes_site')
+            .insert(dados)
+
+      }
+
+
+      if (resultado.error) {
+
+        console.error(
+          resultado.error
+        )
+
+        status.textContent =
+          'Erro ao salvar: ' +
+          resultado.error.message
+
+        status.className =
+          'form-status error'
+
+        return
+
+      }
+
+
+      status.textContent =
+        'Configura��es salvas com sucesso!'
+
+      status.className =
+        'form-status success'
+
+    }
+  )
+
+
+  document
+    .querySelector('#cancelar-aparencia')
+    ?.addEventListener(
+      'click',
+      () => {
+
+        window.location.hash =
+          '#admin'
+
+      }
+    )
+
+}
+
+
+function escapeHtml(value = '') {
+
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;')
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

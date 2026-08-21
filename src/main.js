@@ -1,0 +1,703 @@
+﻿import './style.css'
+import OpenSeadragon from 'openseadragon'
+import { supabase } from './lib/supabase.js'
+
+import { renderLogin, setupLogin } from './pages/login.js'
+import { renderAdmin, setupAdmin } from './pages/admin.js'
+import { renderCatalogo } from './pages/catalogo.js'
+import { renderNovaLamina, setupNovaLamina } from './pages/nova-lamina.js'
+
+const app = document.querySelector('#app')
+
+function aplicarConfiguracoesVisuais(config = {}) {
+
+  const root = document.documentElement
+
+  if (config.cor_principal) {
+    root.style.setProperty('--green', config.cor_principal)
+    root.style.setProperty('--green-light', config.cor_principal)
+    root.style.setProperty('--cor-principal', config.cor_principal)
+  }
+
+  if (config.cor_fundo) {
+    root.style.setProperty('--cream', config.cor_fundo)
+    root.style.setProperty('--cor-fundo', config.cor_fundo)
+  }
+
+  if (config.cor_texto) {
+    root.style.setProperty('--text', config.cor_texto)
+    root.style.setProperty('--cor-texto', config.cor_texto)
+  }
+
+  if (config.cor_destaque) {
+    root.style.setProperty('--green-light', config.cor_destaque)
+    root.style.setProperty('--cor-destaque', config.cor_destaque)
+  }
+
+}
+
+async function carregarConfiguracoesSite() {
+
+  const { data, error } =
+    await supabase
+      .from('configuracoes_site')
+      .select('*')
+      .limit(1)
+      .maybeSingle()
+
+  if (error) {
+    console.error('Erro ao carregar configurações do site:', error)
+    return {}
+  }
+
+  return data || {}
+}
+
+function getRoute() {
+  const hash = window.location.hash
+
+  if (hash === '#login') return 'login'
+  if (hash === '#admin') return 'admin'
+  if (hash.startsWith('#nova-lamina')) return 'nova-lamina'
+  if (hash === '#laminas') return 'catalogo'
+  if (hash.startsWith('#lamina/')) return 'lamina'
+
+  return 'home'
+}
+
+function renderHeader(config = {}) {
+  return `
+    <header class="header">
+      <div class="container header-content">
+
+        <a href="#inicio" class="brand">
+          <span
+  class="brand-icon"
+  style="
+    width: ${Number(config.logo_tamanho || 100) * 0.42}px;
+    height: ${Number(config.logo_tamanho || 100) * 0.42}px;
+  "
+>
+  ${
+    config.logo_url
+      ? `<img src="${escapeHtml(config.logo_url)}" alt="Logo" style="width:100%;height:100%;object-fit:contain;">`
+      : '🔬'
+  }
+</span>
+
+          <span>
+            <strong>${escapeHtml(config.nome_site || "Atlas")}</strong>
+            <small>${escapeHtml(config.subtitulo || "Histológico")}</small>
+          </span>
+        </a>
+
+        <nav class="nav">
+          <a href="#inicio">Início</a>
+          <a href="#laminas">Lâminas</a>
+          <a href="#sobre">Sobre</a>
+          <a href="#login">Administração</a>
+        </nav>
+
+      </div>
+    </header>
+  `
+}
+
+function renderHome(config = {}) {
+  return `
+    ${renderHeader(config)}
+
+    <main>
+
+      <section class="hero" id="inicio">
+
+        <div class="container hero-grid">
+
+          <div class="hero-text">
+
+            <span class="eyebrow">
+              🔬 MICROSCOPIA • ESTUDO • EXPLORAÇÃO
+            </span>
+
+            <h1>
+              ${escapeHtml(config.titulo_inicio || "Explore o mundo microscópico.")}
+            </h1>
+
+            <p>
+              ${escapeHtml(config.descricao_inicio || "Um atlas de histologia interativo para explorar tecidos, estruturas e lâminas histológicas de uma forma visual e dinâmica.")}
+            </p>
+
+            <div class="hero-actions">
+
+              <a href="#laminas" class="button primary">
+                ${escapeHtml(config.texto_botao_principal || "Explorar " + (config.nome_site || "Atlas"))}
+                <span>→</span>
+              </a>
+
+              <a href="#sobre" class="button secondary">
+                ${escapeHtml(config.texto_botao_secundario || "Conheça o projeto")}
+              </a>
+
+            </div>
+
+          </div>
+
+          <div class="hero-visual">
+
+            <div class="microscope-card">
+
+              <div class="microscope-glow"></div>
+
+              <div class="microscope">
+
+                <div class="microscope-top"></div>
+                <div class="microscope-body"></div>
+                <div class="microscope-base"></div>
+                <div class="microscope-lens"></div>
+
+              </div>
+
+              <div class="scan-line"></div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <section class="section" id="sobre">
+
+        <div class="container about-grid">
+
+          <div>
+
+            <span class="eyebrow">
+              SOBRE O ATLAS
+            </span>
+
+            <h2>
+              Aprender histologia
+              de uma forma diferente.
+            </h2>
+
+          </div>
+
+          <div class="about-text">
+
+            <p>
+              ${escapeHtml(config.texto_sobre || ("O " + (config.nome_site || "Atlas") + " " + (config.subtitulo || "Histológico") + " foi pensado para transformar a observação das lâminas em uma experiência de aprendizagem visual e interativa."))}
+            </p>
+
+            <a href="#laminas" class="button primary">
+              Explorar lâminas →
+            </a>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <footer class="footer">
+
+      <div class="container">
+
+        <span>🔬 ${escapeHtml(config.nome_site || "Atlas")} ${escapeHtml(config.subtitulo || "Histológico")}</span>
+        <span>${escapeHtml(config.texto_rodape || "Projeto acadêmico")}</span>
+
+      </div>
+
+    </footer>
+  `
+}
+
+
+function escapeHtml(value = '') {
+
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;')
+
+}
+
+
+function renderLamina(lamina) {
+
+  const estruturas =
+    Array.isArray(lamina.estruturas)
+      ? lamina.estruturas
+      : []
+
+
+  return `
+    ${renderHeader(config)}
+
+    <main>
+
+      <section class="slide-header">
+
+        <div class="container">
+
+          <a href="#laminas" class="back-link">
+            ← Voltar para as lâminas
+          </a>
+
+          <div class="slide-title">
+
+            <div>
+
+              <span class="eyebrow">
+                ${escapeHtml(lamina.categoria || 'Histologia')}
+              </span>
+
+              <h1>
+                ${escapeHtml(lamina.nome || 'Lâmina')}
+              </h1>
+
+              <p>
+                Explore a lâmina utilizando zoom e movimentação.
+              </p>
+
+            </div>
+
+            <div class="slide-meta">
+
+              ${lamina.tecnica
+                ? `<span>🔬 ${escapeHtml(lamina.tecnica)}</span>`
+                : ''}
+
+              ${lamina.coloracao
+                ? `<span>🧫 ${escapeHtml(lamina.coloracao)}</span>`
+                : ''}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <section class="viewer-section">
+
+        <div class="container viewer-layout">
+
+          <div class="viewer-container">
+
+            <div
+              id="openseadragon"
+              class="viewer"
+            ></div>
+
+            <div class="viewer-controls">
+
+              <span>
+                Arraste para movimentar •
+                Use a roda do mouse para ampliar
+              </span>
+
+              <div class="zoom-buttons">
+
+                <button id="zoom-out">−</button>
+                <button id="zoom-home">⌂</button>
+                <button id="zoom-in">+</button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <aside class="info-panel">
+
+            <div class="panel-label">
+              SOBRE A LÂMINA
+            </div>
+
+            <h2>
+              ${escapeHtml(lamina.nome || 'Lâmina')}
+            </h2>
+
+            <p class="description">
+              ${escapeHtml(lamina.descricao || '')}
+            </p>
+
+
+            ${estruturas.length
+              ? `
+                <div class="info-section">
+
+                  <h3>
+                    🔎 O que observar
+                  </h3>
+
+                  <div class="structure-list">
+
+                    ${estruturas.map(estrutura => `
+                      <button class="structure">
+
+                        <span class="structure-dot"></span>
+
+                        <span>
+
+                          <strong>
+                            ${escapeHtml(estrutura.nome || '')}
+                          </strong>
+
+                          <small>
+                            ${escapeHtml(estrutura.descricao || '')}
+                          </small>
+
+                        </span>
+
+                      </button>
+                    `).join('')}
+
+                  </div>
+
+                </div>
+              `
+              : ''}
+
+          </aside>
+
+        </div>
+
+      </section>
+
+    </main>
+  `
+}
+
+
+async function buscarLamina(id) {
+
+  const { data, error } =
+    await supabase
+      .from('laminas')
+      .select('*')
+      .eq('id', id)
+      .eq('publicado', true)
+      .single()
+
+
+  if (error) {
+
+    console.error(
+      'Erro ao buscar lâmina:',
+      error
+    )
+
+    return null
+  }
+
+
+  return data
+}
+
+
+function iniciarViewer(lamina) {
+
+  const elemento =
+    document.querySelector('#openseadragon')
+
+
+  if (!elemento) {
+
+    console.error(
+      'Elemento #openseadragon não encontrado.'
+    )
+
+    return
+  }
+
+
+  if (!lamina.imagem_url) {
+
+    elemento.innerHTML = `
+      <div style="
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        height:100%;
+        color:white;
+        padding:30px;
+        text-align:center;
+      ">
+        Imagem da lâmina não encontrada.
+      </div>
+    `
+
+    return
+  }
+
+
+  const viewer =
+    OpenSeadragon({
+
+      element: elemento,
+
+      prefixUrl:
+        'https://openseadragon.github.io/openseadragon/images/',
+
+      tileSources: {
+
+        type: 'image',
+
+        url: lamina.imagem_url
+
+      },
+
+      showNavigationControl: false,
+
+      animationTime: 0.8,
+
+      zoomPerScroll: 1.5,
+
+      maxZoomPixelRatio: 8,
+
+      visibilityRatio: 1,
+
+      constrainDuringPan: true
+
+    })
+
+
+  document
+    .querySelector('#zoom-in')
+    ?.addEventListener(
+      'click',
+      () => viewer.viewport.zoomBy(1.5)
+    )
+
+
+  document
+    .querySelector('#zoom-out')
+    ?.addEventListener(
+      'click',
+      () => viewer.viewport.zoomBy(0.67)
+    )
+
+
+  document
+    .querySelector('#zoom-home')
+    ?.addEventListener(
+      'click',
+      () => viewer.viewport.goHome()
+    )
+
+}
+
+
+async function render() {
+
+  const route =
+    getRoute()
+
+
+  if (route === 'login') {
+
+    app.innerHTML =
+      renderLogin()
+
+    setupLogin()
+
+    return
+  }
+
+
+  if (route === 'admin') {
+
+    const {
+      data: {
+        user
+      }
+    } =
+      await supabase.auth.getUser()
+
+
+    if (!user) {
+
+      window.location.hash =
+        '#login'
+
+      return
+    }
+
+
+    app.innerHTML =
+      await renderAdmin()
+
+    setupAdmin()
+
+    return
+  }
+
+
+  if (route === 'nova-lamina') {
+
+    const {
+      data: {
+        user
+      }
+    } =
+      await supabase.auth.getUser()
+
+
+    if (!user) {
+
+      window.location.hash =
+        '#login'
+
+      return
+    }
+
+
+    app.innerHTML =
+      renderNovaLamina()
+
+    setupNovaLamina()
+
+    return
+  }
+
+
+  if (route === 'catalogo') {
+
+    await renderCatalogo()
+
+    return
+  }
+
+
+  if (route === 'lamina') {
+
+    const id =
+      window.location.hash
+        .replace('#lamina/', '')
+
+
+    if (!id) {
+
+      window.location.hash =
+        '#laminas'
+
+      return
+    }
+
+
+    app.innerHTML = `
+      ${renderHeader(config)}
+
+      <main style="
+        min-height:60vh;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+      ">
+
+        <div>
+          <h1>Carregando lâmina...</h1>
+        </div>
+
+      </main>
+    `
+
+
+    const lamina =
+      await buscarLamina(id)
+
+
+    if (!lamina) {
+
+      app.innerHTML = `
+        ${renderHeader(config)}
+
+        <main style="
+          min-height:60vh;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          text-align:center;
+        ">
+
+          <div>
+
+            <h1>
+              Lâmina não encontrada
+            </h1>
+
+            <p>
+              Não foi possível carregar esta lâmina.
+            </p>
+
+            <a
+              href="#laminas"
+              class="button primary"
+            >
+              Voltar para lâminas
+            </a>
+
+          </div>
+
+        </main>
+      `
+
+      return
+    }
+
+
+    app.innerHTML =
+      renderLamina(lamina)
+
+
+    iniciarViewer(lamina)
+
+    return
+  }
+
+    const config = await carregarConfiguracoesSite()
+
+    aplicarConfiguracoesVisuais(config)
+
+    app.innerHTML = renderHome(config)
+
+}
+
+
+window.addEventListener(
+  'hashchange',
+  render
+)
+
+
+render()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
