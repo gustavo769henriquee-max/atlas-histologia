@@ -1,4 +1,4 @@
-﻿@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 
 .admin-page {
   min-height: 100vh;
@@ -30,7 +30,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--green);
+  background: var(--green-light);
   color: white;
   text-decoration: none;
   font-size: 21px;
@@ -74,7 +74,7 @@
 .admin-sidebar {
   width: 230px;
   flex-shrink: 0;
-  background: #102f29;
+  background: var(--cor-destaque);
   padding: 24px 14px;
   display: flex;
   flex-direction: column;
@@ -651,7 +651,7 @@
 }
 
 /* ============================================================
-   CATEGORIAS — CRUD
+   CATEGORIAS � CRUD
    ============================================================ */
 
 .form-status {
@@ -841,7 +841,7 @@
 }
 
 /* ============================================================
-   CONFIGURAÇÕES — DASHBOARD INFORMATIVO
+   CONFIGURA��ES � DASHBOARD INFORMATIVO
    ============================================================ */
 
 #configuracoes-content {
@@ -911,3 +911,4 @@
     text-align: left;
   }
 }
+

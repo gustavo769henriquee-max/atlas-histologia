@@ -1,4 +1,4 @@
-﻿import { supabase } from '../lib/supabase.js'
+import { supabase } from '../lib/supabase.js'
 
 let logoUrlAtual = ''
 
@@ -16,7 +16,7 @@ export async function renderAparencia() {
 
     return `
       <div class="admin-error">
-        Erro ao carregar as configurações.
+        Erro ao carregar as configura��es.
       </div>
     `
   }
@@ -35,15 +35,15 @@ export async function renderAparencia() {
 
         <div>
           <span class="eyebrow">
-            PERSONALIZAÇÃO
+            PERSONALIZA��O
           </span>
 
           <h1>
-            Aparência
+            Apar�ncia
           </h1>
 
           <p>
-            Personalize o conteúdo e as cores do Atlas.
+            Personalize o conte�do e as cores do Atlas.
           </p>
         </div>
 
@@ -58,7 +58,7 @@ export async function renderAparencia() {
 
           <div class="form-card-title">
 
-            <span>🖼️</span>
+            <span>???</span>
 
             <div>
               <h2>Identidade visual</h2>
@@ -79,7 +79,7 @@ export async function renderAparencia() {
                 id="logo-preview"
                 class="logo-preview"
               >
-                🔬
+                ??
               </div>
 
             </div>
@@ -89,7 +89,7 @@ export async function renderAparencia() {
 
               <label class="logo-upload-button">
 
-                <span>📁</span>
+                <span>??</span>
                 Escolher logo
 
                 <input
@@ -165,7 +165,7 @@ export async function renderAparencia() {
 
           <div class="form-card-title">
 
-            <span>✍️</span>
+            <span>??</span>
 
             <div>
               <h2>Textos do site</h2>
@@ -198,7 +198,7 @@ export async function renderAparencia() {
             <div class="form-field">
 
               <label>
-                Subtítulo
+                Subt�tulo
               </label>
 
               <input
@@ -213,7 +213,7 @@ export async function renderAparencia() {
             <div class="form-field full">
 
               <label>
-                Título da página inicial
+                T�tulo da p�gina inicial
               </label>
 
               <input
@@ -228,7 +228,7 @@ export async function renderAparencia() {
             <div class="form-field full">
 
               <label>
-                Descrição da página inicial
+                Descri��o da p�gina inicial
               </label>
 
               <textarea
@@ -242,7 +242,7 @@ export async function renderAparencia() {
             <div class="form-field">
 
               <label>
-                Botão principal
+                Bot�o principal
               </label>
 
               <input
@@ -257,7 +257,7 @@ export async function renderAparencia() {
             <div class="form-field">
 
               <label>
-                Botão secundário
+                Bot�o secund�rio
               </label>
 
               <input
@@ -272,7 +272,7 @@ export async function renderAparencia() {
             <div class="form-field full">
 
               <label>
-                Texto da seção Sobre
+                Texto da se��o Sobre
               </label>
 
               <textarea
@@ -286,7 +286,7 @@ export async function renderAparencia() {
             <div class="form-field full">
 
               <label>
-                Texto do rodapé
+                Texto do rodap�
               </label>
 
               <input
@@ -306,7 +306,7 @@ export async function renderAparencia() {
 
           <div class="form-card-title">
 
-            <span>🎨</span>
+            <span>??</span>
 
             <div>
               <h2>Cores</h2>
@@ -333,10 +333,10 @@ export async function renderAparencia() {
                 <input
                   id="config-cor-principal"
                   type="color"
-                  value="${config.cor_principal || '#1e6f5c'}"
+                  value="${config.cor_principal || 'var(--cor-principal)'}"
                 >
 
-                <input id="cor-principal-valor" type="text" class="color-code-input" value="${config.cor_principal || '#1e6f5c'}" maxlength="7" placeholder="#000000" autocomplete="off">
+                <input id="cor-principal-valor" type="text" class="color-code-input" value="${config.cor_principal || 'var(--cor-principal)'}" maxlength="7" placeholder="#000000" autocomplete="off">
 
               </div>
 
@@ -396,10 +396,10 @@ export async function renderAparencia() {
                 <input
                   id="config-cor-destaque"
                   type="color"
-                  value="${config.cor_destaque || '#102f29'}"
+                  value="${config.cor_destaque || 'var(--cor-destaque)'}"
                 >
 
-                <input id="cor-destaque-valor" type="text" class="color-code-input" value="${config.cor_destaque || '#102f29'}" maxlength="7" placeholder="#000000" autocomplete="off">
+                <input id="cor-destaque-valor" type="text" class="color-code-input" value="${config.cor_destaque || 'var(--cor-destaque)'}" maxlength="7" placeholder="#000000" autocomplete="off">
 
               </div>
 
@@ -430,7 +430,7 @@ export async function renderAparencia() {
             type="submit"
             class="button primary"
           >
-            💾 Salvar alterações
+            ?? Salvar altera��es
           </button>
 
         </div>
@@ -441,12 +441,12 @@ export async function renderAparencia() {
 
         <div class="aparencia-preview-header">
           <div>
-            <span class="eyebrow">PRÉVIA</span>
-            <h2>Como o Atlas ficará</h2>
+            <span class="eyebrow">PR�VIA</span>
+            <h2>Como o Atlas ficar�</h2>
           </div>
 
           <span class="preview-live">
-            ● AO VIVO
+            ? AO VIVO
           </span>
         </div>
 
@@ -460,7 +460,7 @@ export async function renderAparencia() {
             <div class="preview-brand">
 
               <span class="preview-logo">
-                🔬
+                ??
               </span>
 
               <span>
@@ -469,15 +469,15 @@ export async function renderAparencia() {
                 </strong>
 
                 <small id="preview-subtitulo">
-                  Histológico
+                  Histol�gico
                 </small>
               </span>
 
             </div>
 
             <nav class="preview-nav">
-              <span>Início</span>
-              <span>Lâminas</span>
+              <span>In�cio</span>
+              <span>L�minas</span>
               <span>Sobre</span>
             </nav>
 
@@ -487,16 +487,16 @@ export async function renderAparencia() {
           <section class="preview-hero">
 
             <span class="preview-eyebrow">
-              🔬 MICROSCOPIA • ESTUDO • EXPLORAÇÃO
+              ?? MICROSCOPIA � ESTUDO � EXPLORA��O
             </span>
 
             <h1 id="preview-titulo">
-              Explore o mundo microscópico.
+              Explore o mundo microsc�pico.
             </h1>
 
             <p id="preview-descricao">
               Um atlas de histologia interativo para explorar
-              tecidos, estruturas e lâminas histológicas.
+              tecidos, estruturas e l�minas histol�gicas.
             </p>
 
             <div class="preview-actions">
@@ -514,7 +514,7 @@ export async function renderAparencia() {
                 id="preview-botao-secundario"
                 class="preview-button preview-secondary"
               >
-                Conheça o projeto
+                Conhe�a o projeto
               </button>
 
             </div>
@@ -541,14 +541,14 @@ function atualizarPreviewAparencia() {
     pegar('#config-nome') || 'Atlas'
 
   const subtitulo =
-    pegar('#config-subtitulo') || 'Histológico'
+    pegar('#config-subtitulo') || 'Histol�gico'
 
   const titulo =
-    pegar('#config-titulo') || 'Explore o mundo microscópico.'
+    pegar('#config-titulo') || 'Explore o mundo microsc�pico.'
 
   const descricao =
     pegar('#config-descricao') ||
-    'Um atlas de histologia interativo para explorar tecidos, estruturas e lâminas histológicas.'
+    'Um atlas de histologia interativo para explorar tecidos, estruturas e l�minas histol�gicas.'
 
   const botao =
     pegar('#config-botao') ||
@@ -556,7 +556,7 @@ function atualizarPreviewAparencia() {
 
   const botaoSecundario =
     pegar('#config-botao-secundario') ||
-    'Conheça o projeto'
+    'Conhe�a o projeto'
 
   const preview = document.querySelector('#aparencia-preview')
 
@@ -822,7 +822,7 @@ function configurarLogoPreview() {
     if (!logoUrl) {
 
       nome.textContent =
-        'Não foi possível obter a URL da logo'
+        'N�o foi poss�vel obter a URL da logo'
 
       return
     }
@@ -856,7 +856,7 @@ function configurarLogoPreview() {
       arquivo.name
 
 
-    /* Mostra também na prévia do site */
+    /* Mostra tamb�m na pr�via do site */
 
     const previewLogo =
       document.querySelector('.preview-logo')
@@ -904,7 +904,7 @@ function configurarLogoPreview() {
     logoUrlAtual = ''
 
     preview.innerHTML =
-      '🔬'
+      '??'
 
     nome.textContent =
       'Nenhuma logo selecionada'
@@ -914,7 +914,7 @@ function configurarLogoPreview() {
       document.querySelector('.preview-logo')
 
     if (previewLogo) {
-      previewLogo.innerHTML = '🔬'
+      previewLogo.innerHTML = '??'
     }
 
   })
@@ -1135,7 +1135,7 @@ export function setupAparencia() {
 
 
         status.textContent =
-          'Configurações salvas com sucesso!'
+          'Configura��es salvas com sucesso!'
 
         status.className =
           'form-status success'
@@ -1174,6 +1174,7 @@ function escapeHtml(value = '') {
     .replaceAll("'", '&#039;')
 
 }
+
 
 
 

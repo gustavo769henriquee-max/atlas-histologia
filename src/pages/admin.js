@@ -1,4 +1,4 @@
-﻿import { renderAparencia, setupAparencia } from "./aparencia.js";
+import { renderAparencia, setupAparencia } from "./aparencia.js";
 import "./admin.css";
 
 import { supabase, isAdmin } from "../lib/supabase.js";
@@ -45,7 +45,7 @@ export async function renderAdmin() {
         <div class="admin-brand">
 
           <a href="#inicio" class="admin-logo">
-            🔬
+            ??
           </a>
 
           <div>
@@ -78,7 +78,7 @@ export async function renderAdmin() {
             class="admin-menu active"
             data-section="laminas"
           >
-            🔬
+            ??
             <span>Lâminas</span>
           </button>
 
@@ -86,7 +86,7 @@ export async function renderAdmin() {
             class="admin-menu"
             data-section="categorias"
           >
-            🗂️
+            ???
             <span>Categorias</span>
           </button>
 
@@ -94,7 +94,7 @@ export async function renderAdmin() {
             class="admin-menu"
             data-section="aparencia"
           >
-            🎨
+            ??
             <span>Aparência</span>
           </button>
 
@@ -102,14 +102,14 @@ export async function renderAdmin() {
             class="admin-menu"
             data-section="configuracoes"
           >
-            ⚙️
+            ??
             <span>Configurações</span>
           </button>
 
           <div class="admin-sidebar-bottom">
 
             <a href="#inicio">
-              ← Voltar ao site
+              ? Voltar ao site
             </a>
 
           </div>
@@ -157,7 +157,7 @@ export async function renderAdmin() {
 
               <div class="admin-stat">
 
-                <span>🔬</span>
+                <span>??</span>
 
                 <div>
                   <strong>${lista.length}</strong>
@@ -169,7 +169,7 @@ export async function renderAdmin() {
 
               <div class="admin-stat">
 
-                <span>🟢</span>
+                <span>??</span>
 
                 <div>
                   <strong>${publicadas}</strong>
@@ -181,7 +181,7 @@ export async function renderAdmin() {
 
               <div class="admin-stat">
 
-                <span>⚪</span>
+                <span>?</span>
 
                 <div>
                   <strong>${ocultas}</strong>
@@ -197,7 +197,7 @@ export async function renderAdmin() {
 
               <div class="admin-search">
 
-                🔎
+                ??
 
                 <input
                   id="admin-search"
@@ -289,7 +289,7 @@ export async function renderAdmin() {
                 <div class="form-card-title">
 
                   <span>
-                    🗂️
+                    ???
                   </span>
 
                   <div>
@@ -376,11 +376,11 @@ export async function renderAdmin() {
                       <select id="categoria-ativo">
 
                         <option value="true">
-                          🟢 Ativa
+                          ?? Ativa
                         </option>
 
                         <option value="false">
-                          ⚪ Inativa
+                          ? Inativa
                         </option>
 
                       </select>
@@ -423,7 +423,7 @@ export async function renderAdmin() {
 
               <div class="admin-placeholder">
 
-                <div>🗂️</div>
+                <div>???</div>
 
                 <p>
                   Carregando categorias...
@@ -477,7 +477,7 @@ export async function renderAdmin() {
 
                 <div class="admin-stat">
 
-                  <span>🔬</span>
+                  <span>??</span>
 
                   <div>
                     <strong id="stat-laminas">-</strong>
@@ -489,7 +489,7 @@ export async function renderAdmin() {
 
                 <div class="admin-stat">
 
-                  <span>🟢</span>
+                  <span>??</span>
 
                   <div>
                     <strong id="stat-publicadas">-</strong>
@@ -501,7 +501,7 @@ export async function renderAdmin() {
 
                 <div class="admin-stat">
 
-                  <span>🗂️</span>
+                  <span>???</span>
 
                   <div>
                     <strong id="stat-categorias">-</strong>
@@ -516,7 +516,7 @@ export async function renderAdmin() {
               <div class="config-card">
 
                 <h2>
-                  ⚙️ Configurações do site
+                  ?? Configurações do site
                 </h2>
 
                 <p>
@@ -644,7 +644,7 @@ function renderLaminas(laminas) {
       <div class="admin-empty">
 
         <div>
-          🔬
+          ??
         </div>
 
         <h2>
@@ -693,7 +693,7 @@ function renderLaminas(laminas) {
               `
               : `
                 <div class="admin-no-image">
-                  🔬
+                  ??
                 </div>
               `
           }
@@ -713,7 +713,7 @@ function renderLaminas(laminas) {
               class="admin-status ${publicada ? "published" : "hidden"}"
             >
 
-              ${publicada ? "● Publicada" : "○ Oculta"}
+              ${publicada ? "? Publicada" : "? Oculta"}
 
             </span>
 
@@ -734,13 +734,13 @@ function renderLaminas(laminas) {
 
             ${
               lamina.tecnica
-                ? `<span>🔬 ${escapeHtml(lamina.tecnica)}</span>`
+                ? `<span>?? ${escapeHtml(lamina.tecnica)}</span>`
                 : ""
             }
 
             ${
               lamina.coloracao
-                ? `<span>🧫 ${escapeHtml(lamina.coloracao)}</span>`
+                ? `<span>?? ${escapeHtml(lamina.coloracao)}</span>`
                 : ""
             }
 
@@ -756,7 +756,7 @@ function renderLaminas(laminas) {
             class="admin-action view"
             title="Visualizar"
           >
-            👁️
+            ???
           </a>
 
 
@@ -766,7 +766,7 @@ function renderLaminas(laminas) {
             data-id="${lamina.id}"
             title="Editar"
           >
-            ✏️
+            ??
           </button>
 
 
@@ -776,7 +776,7 @@ function renderLaminas(laminas) {
             data-id="${lamina.id}"
             title="${publicada ? "Ocultar" : "Publicar"}"
           >
-            ${publicada ? "🙈" : "🟢"}
+            ${publicada ? "??" : "??"}
           </button>
 
 
@@ -786,7 +786,7 @@ function renderLaminas(laminas) {
             data-id="${lamina.id}"
             title="Excluir"
           >
-            🗑️
+            ???
           </button>
 
         </div>
@@ -804,7 +804,7 @@ async function carregarCategoriasAdmin() {
 
   lista.innerHTML = `
     <div class="admin-placeholder">
-      <div>⏳</div>
+      <div>?</div>
       <p>Carregando categorias...</p>
     </div>
   `;
@@ -836,7 +836,7 @@ async function carregarCategoriasAdmin() {
   if (!categorias.length) {
     lista.innerHTML = `
       <div class="admin-empty">
-        <div>🗂️</div>
+        <div>???</div>
         <h2>Nenhuma categoria</h2>
         <p>Crie sua primeira categoria.</p>
       </div>
@@ -855,7 +855,7 @@ async function carregarCategoriasAdmin() {
           >
 
             <div class="categoria-card-icon">
-              🗂️
+              ???
             </div>
 
 
@@ -872,7 +872,7 @@ async function carregarCategoriasAdmin() {
                     categoria.ativo ? "published" : "hidden"
                   }"
                 >
-                  ${categoria.ativo ? "● Ativa" : "○ Inativa"}
+                  ${categoria.ativo ? "? Ativa" : "? Inativa"}
                 </span>
 
               </div>
@@ -903,7 +903,7 @@ async function carregarCategoriasAdmin() {
                 data-categoria-edit="${categoria.id}"
                 title="Editar"
               >
-                ✏️
+                ??
               </button>
 
 
@@ -913,7 +913,7 @@ async function carregarCategoriasAdmin() {
                 data-categoria-toggle="${categoria.id}"
                 title="${categoria.ativo ? "Desativar" : "Ativar"}"
               >
-                ${categoria.ativo ? "🙈" : "🟢"}
+                ${categoria.ativo ? "??" : "??"}
               </button>
 
 
@@ -923,7 +923,7 @@ async function carregarCategoriasAdmin() {
                 data-categoria-delete="${categoria.id}"
                 title="Excluir"
               >
-                🗑️
+                ???
               </button>
 
             </div>
@@ -1255,7 +1255,7 @@ async function carregarConfiguracoesAdmin() {
     }
 
     if (viewCorPrincipal) {
-      viewCorPrincipal.textContent = config.cor_principal || "#1e6f5c";
+      viewCorPrincipal.textContent = config.cor_principal || "var(--cor-principal)";
     }
 
     if (viewCorFundo) {
@@ -1570,3 +1570,4 @@ function escapeHtml(value = "") {
 
     .replaceAll("'", "&#039;");
 }
+

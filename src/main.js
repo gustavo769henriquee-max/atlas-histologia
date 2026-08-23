@@ -1,4 +1,4 @@
-﻿import "./style.css";
+import "./style.css";
 import OpenSeadragon from "openseadragon";
 import { supabase } from "./lib/supabase.js";
 

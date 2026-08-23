@@ -1,8 +1,8 @@
-﻿:root {
+:root {
   --cor-principal: #1f6feb;
   --cor-fundo: #f7f9fc;
   --cor-texto: #172033;
-  --cor-destaque: #22c55e;
+  --cor-destaque: var(--cor-destaque);
 }
 :root {
   font-family:
@@ -17,8 +17,8 @@
   background: #f5f7f5;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  --green: var(--cor-principal, #1e6f5c);
-  --green-light: var(--cor-destaque, #102f29);
+  --green: var(--cor-principal, var(--cor-principal));
+  --green-light: var(--cor-destaque, var(--cor-destaque));
   --mint: #dcefe7;
   --cream: #f5f7f5;
   --white: #ffffff;
@@ -221,8 +221,8 @@ a {
   position: relative;
   overflow: hidden;
   border-radius: 28px;
-  background: #dbece5;
-  border: 1px solid #cbded5;
+  background: color-mix(in srgb, var(--green) 8%, white);
+  border: 1px solid color-mix(in srgb, var(--green) 18%, white);
 }
 
 .microscope-glow {
@@ -253,7 +253,7 @@ a {
   right: 28px;
   top: 10px;
   border-radius: 30px 30px 12px 12px;
-  background: #263e36;
+  background: var(--green);
   transform: rotate(23deg);
 }
 
@@ -264,7 +264,7 @@ a {
   left: 53px;
   top: 55px;
   border-radius: 45px 20px 30px 25px;
-  background: #345b4e;
+  background: var(--green-light);
   transform: rotate(22deg);
 }
 
@@ -274,7 +274,7 @@ a {
   height: 38px;
   bottom: 0;
   border-radius: 30px 30px 14px 14px;
-  background: #263e36;
+  background: var(--green);
 }
 
 .microscope-lens {
@@ -284,7 +284,7 @@ a {
   left: 45px;
   bottom: 66px;
   border-radius: 15px;
-  background: #1d302a;
+  background: color-mix(in srgb, var(--green) 65%, black);
 }
 
 .floating-tag {
@@ -2768,7 +2768,7 @@ a {
 
 /* ============================================================
    FASE 18 — Preview de múltiplas imagens (formulário)
-   Miniaturas com remoção e reordenação (↑/↓); índice 0 é a
+   Miniaturas com remoção e reordenação (?/?); índice 0 é a
    principal.
    ============================================================ */
 
@@ -2853,3 +2853,6 @@ a {
   font-size: 12px;
   text-align: center;
 }
+
+
+
