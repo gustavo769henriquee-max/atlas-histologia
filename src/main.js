@@ -14,7 +14,6 @@ function aplicarConfiguracoesVisuais(config = {}) {
 
   if (config.cor_principal) {
     root.style.setProperty("--green", config.cor_principal);
-    root.style.setProperty("--green-light", config.cor_principal);
     root.style.setProperty("--cor-principal", config.cor_principal);
   }
 

@@ -16,7 +16,7 @@ export async function renderAparencia() {
 
     return `
       <div class="admin-error">
-        Erro ao carregar as configura��es.
+        Erro ao carregar as configurações.
       </div>
     `
   }
@@ -35,15 +35,15 @@ export async function renderAparencia() {
 
         <div>
           <span class="eyebrow">
-            PERSONALIZA��O
+            PERSONALIZAÇÃO
           </span>
 
           <h1>
-            Apar�ncia
+            Aparência
           </h1>
 
           <p>
-            Personalize o conte�do e as cores do Atlas.
+            Personalize o conteúdo e as cores do Atlas.
           </p>
         </div>
 
@@ -58,7 +58,7 @@ export async function renderAparencia() {
 
           <div class="form-card-title">
 
-            <span>???</span>
+            <span>🖼️</span>
 
             <div>
               <h2>Identidade visual</h2>
@@ -79,7 +79,7 @@ export async function renderAparencia() {
                 id="logo-preview"
                 class="logo-preview"
               >
-                ??
+                🔬
               </div>
 
             </div>
@@ -89,7 +89,7 @@ export async function renderAparencia() {
 
               <label class="logo-upload-button">
 
-                <span>??</span>
+                <span>📁</span>
                 Escolher logo
 
                 <input
@@ -165,7 +165,7 @@ export async function renderAparencia() {
 
           <div class="form-card-title">
 
-            <span>??</span>
+            <span>✍️</span>
 
             <div>
               <h2>Textos do site</h2>
@@ -198,7 +198,7 @@ export async function renderAparencia() {
             <div class="form-field">
 
               <label>
-                Subt�tulo
+                Subtítulo
               </label>
 
               <input
@@ -213,7 +213,7 @@ export async function renderAparencia() {
             <div class="form-field full">
 
               <label>
-                T�tulo da p�gina inicial
+                Título da página inicial
               </label>
 
               <input
@@ -228,7 +228,7 @@ export async function renderAparencia() {
             <div class="form-field full">
 
               <label>
-                Descri��o da p�gina inicial
+                Descrição da página inicial
               </label>
 
               <textarea
@@ -242,7 +242,7 @@ export async function renderAparencia() {
             <div class="form-field">
 
               <label>
-                Bot�o principal
+                Botão principal
               </label>
 
               <input
@@ -257,7 +257,7 @@ export async function renderAparencia() {
             <div class="form-field">
 
               <label>
-                Bot�o secund�rio
+                Botão secundário
               </label>
 
               <input
@@ -272,7 +272,7 @@ export async function renderAparencia() {
             <div class="form-field full">
 
               <label>
-                Texto da se��o Sobre
+                Texto da seção Sobre
               </label>
 
               <textarea
@@ -286,7 +286,7 @@ export async function renderAparencia() {
             <div class="form-field full">
 
               <label>
-                Texto do rodap�
+                Texto do rodapé
               </label>
 
               <input
@@ -306,7 +306,7 @@ export async function renderAparencia() {
 
           <div class="form-card-title">
 
-            <span>??</span>
+            <span>🎨</span>
 
             <div>
               <h2>Cores</h2>
@@ -430,7 +430,7 @@ export async function renderAparencia() {
             type="submit"
             class="button primary"
           >
-            ?? Salvar altera��es
+            💾 Salvar alterações
           </button>
 
         </div>
@@ -441,13 +441,13 @@ export async function renderAparencia() {
 
         <div class="aparencia-preview-header">
           <div>
-            <span class="eyebrow">PR�VIA</span>
-            <h2>Como o Atlas ficar�</h2>
+             <span class="eyebrow">PRÉVIA</span>
+             <h2>Como o Atlas ficará</h2>
           </div>
 
-          <span class="preview-live">
-            ? AO VIVO
-          </span>
+             <span class="preview-live">
+             ● AO VIVO
+           </span>
         </div>
 
         <div
@@ -460,7 +460,7 @@ export async function renderAparencia() {
             <div class="preview-brand">
 
               <span class="preview-logo">
-                ??
+                🔬
               </span>
 
               <span>
@@ -469,15 +469,15 @@ export async function renderAparencia() {
                 </strong>
 
                 <small id="preview-subtitulo">
-                  Histol�gico
+                  Histológico
                 </small>
               </span>
 
             </div>
 
             <nav class="preview-nav">
-              <span>In�cio</span>
-              <span>L�minas</span>
+               <span>Início</span>
+               <span>Lâminas</span>
               <span>Sobre</span>
             </nav>
 
@@ -487,16 +487,16 @@ export async function renderAparencia() {
           <section class="preview-hero">
 
             <span class="preview-eyebrow">
-              ?? MICROSCOPIA � ESTUDO � EXPLORA��O
+              🔬 MICROSCOPIA • ESTUDO • EXPLORAÇÃO
             </span>
 
             <h1 id="preview-titulo">
-              Explore o mundo microsc�pico.
+              Explore o mundo microscópico.
             </h1>
 
             <p id="preview-descricao">
               Um atlas de histologia interativo para explorar
-              tecidos, estruturas e l�minas histol�gicas.
+              tecidos, estruturas e lâminas histológicas.
             </p>
 
             <div class="preview-actions">
@@ -514,7 +514,7 @@ export async function renderAparencia() {
                 id="preview-botao-secundario"
                 class="preview-button preview-secondary"
               >
-                Conhe�a o projeto
+                Conheça o projeto
               </button>
 
             </div>
@@ -541,14 +541,14 @@ function atualizarPreviewAparencia() {
     pegar('#config-nome') || 'Atlas'
 
   const subtitulo =
-    pegar('#config-subtitulo') || 'Histol�gico'
+    pegar('#config-subtitulo') || 'Histológico'
 
   const titulo =
-    pegar('#config-titulo') || 'Explore o mundo microsc�pico.'
+    pegar('#config-titulo') || 'Explore o mundo microscópico.'
 
   const descricao =
     pegar('#config-descricao') ||
-    'Um atlas de histologia interativo para explorar tecidos, estruturas e l�minas histol�gicas.'
+    'Um atlas de histologia interativo para explorar tecidos, estruturas e lâminas histológicas.'
 
   const botao =
     pegar('#config-botao') ||
@@ -556,7 +556,7 @@ function atualizarPreviewAparencia() {
 
   const botaoSecundario =
     pegar('#config-botao-secundario') ||
-    'Conhe�a o projeto'
+    'Conheça o projeto'
 
   const preview = document.querySelector('#aparencia-preview')
 
@@ -822,7 +822,7 @@ function configurarLogoPreview() {
     if (!logoUrl) {
 
       nome.textContent =
-        'N�o foi poss�vel obter a URL da logo'
+        'Não foi possível obter a URL da logo'
 
       return
     }
@@ -856,7 +856,7 @@ function configurarLogoPreview() {
       arquivo.name
 
 
-    /* Mostra tamb�m na pr�via do site */
+    /* Mostra também na prévia do site */
 
     const previewLogo =
       document.querySelector('.preview-logo')
@@ -904,7 +904,7 @@ function configurarLogoPreview() {
     logoUrlAtual = ''
 
     preview.innerHTML =
-      '??'
+      '🔬'
 
     nome.textContent =
       'Nenhuma logo selecionada'
@@ -914,7 +914,7 @@ function configurarLogoPreview() {
       document.querySelector('.preview-logo')
 
     if (previewLogo) {
-      previewLogo.innerHTML = '??'
+      previewLogo.innerHTML = '🔬'
     }
 
   })
@@ -1135,7 +1135,7 @@ export function setupAparencia() {
 
 
         status.textContent =
-          'Configura��es salvas com sucesso!'
+          'Configurações salvas com sucesso!'
 
         status.className =
           'form-status success'
