@@ -30,7 +30,7 @@ export async function getCurrentSession() {
     return null
   }
 
-  return data?.session || null
+  return data.session || null
 }
 
 /**
@@ -45,7 +45,7 @@ export async function getCurrentUser() {
     return null
   }
 
-  return data?.user || null
+  return data.user || null
 }
 
 export async function isAdmin(user = null) {
