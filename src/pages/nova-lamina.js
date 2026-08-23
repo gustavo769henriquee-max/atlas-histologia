@@ -1,15 +1,22 @@
-import { supabase } from '../lib/supabase.js'
+import { supabase } from "../lib/supabase.js";
+import { extrairCaminhoArmazenamento } from "../lib/storage-path.js";
+
+let resizeHandlerNovaLamina = null;
+
+/*
+ * Estado de imagens múltiplas (Fase 18) — escopo de módulo para ser
+ * acessível tanto pelo setup do formulário quanto por carregarLamina
+ * e salvarLamina.
+ * Cada item: { id, url, ordem, path } (existente, já no banco)
+ *         ou { file, previewUrl, localId } (novo, ainda não enviado).
+ * A ordem do array == ordem exibida (índice 0 = principal).
+ */
+let imagens = [];
 
 export function renderNovaLamina() {
+  const params = new URLSearchParams(window.location.hash.split("?")[1] || "");
 
-  const params =
-    new URLSearchParams(
-      window.location.hash.split('?')[1] || ''
-    )
-
-  const editarId =
-    params.get('editar')
-
+  const editarId = params.get("editar");
 
   return `
     <header class="header">
@@ -72,20 +79,18 @@ export function renderNovaLamina() {
           <div class="form-header">
 
             <span class="eyebrow">
-              ${editarId ? 'EDIÇÃO' : 'CADASTRO'}
+              ${editarId ? "EDIÇÃO" : "CADASTRO"}
             </span>
 
             <h1>
-              ${editarId
-                ? 'Editar lâmina'
-                : 'Nova lâmina'}
+              ${editarId ? "Editar lâmina" : "Nova lâmina"}
             </h1>
 
             <p>
               ${
                 editarId
-                  ? 'Altere as informações desta lâmina.'
-                  : 'Cadastre uma nova lâmina no Atlas Histológico.'
+                  ? "Altere as informações desta lâmina."
+                  : "Cadastre uma nova lâmina no Atlas Histológico."
               }
             </p>
 
@@ -101,7 +106,7 @@ export function renderNovaLamina() {
           <form
             id="lamina-form"
             class="lamina-form"
-            data-editar-id="${editarId || ''}"
+            data-editar-id="${editarId || ""}"
           >
 
             <div class="form-card">
@@ -163,7 +168,7 @@ export function renderNovaLamina() {
                 </div>
 
 
-                
+
 <div class="form-field">
 
   <label for="categoria">
@@ -235,70 +240,95 @@ export function renderNovaLamina() {
 
                   </select>
 
-                </div>
+                   </div>
 
-              </div>
+               </div>
 
-            </div>
+               <div class="form-grid">
 
+                 <div class="form-field full">
 
-            <div class="form-card">
+                   <label for="aumento">
+                     Aumento
+                   </label>
 
-              <div class="form-card-title">
+                   <input
+                     id="aumento"
+                     name="aumento"
+                     type="text"
+                     placeholder="Ex.: 400×"
+                   >
 
-                <span>
-                  🖼️
-                </span>
+                   <small>
+                     Aumento real da observação (ex.: 40×, 1000× óleo).
+                   </small>
 
-                <div>
+                 </div>
 
-                  <h2>
-                    Imagem
-                  </h2>
+               </div>
 
-                  <p>
-                    Imagem utilizada para visualizar a lâmina.
-                  </p>
-
-                </div>
-
-              </div>
-
-
-              <div
-                id="current-image"
-                class="current-image"
-              ></div>
+             </div>
 
 
-              <div class="upload-area">
 
-                <input
-                  id="imagem"
-                  name="imagem"
-                  type="file"
-                  accept="image/*"
-                >
+             <div class="form-card">
 
-                <label for="imagem">
+               <div class="form-card-title">
 
-                  <span class="upload-icon">
-                    📤
-                  </span>
+                 <span>
+                   🖼️
+                 </span>
 
-                  <strong>
-                    Escolher imagem
-                  </strong>
+                 <div>
 
-                  <small>
-                    PNG, JPG ou WEBP
-                  </small>
+                   <h2>
+                     Imagens
+                   </h2>
 
-                </label>
+                   <p>
+                     Uma ou mais imagens da lâmina. A primeira é a principal.
+                   </p>
 
-              </div>
+                 </div>
 
-            </div>
+               </div>
+
+
+               <div
+                 id="imagens-preview"
+                 class="imagens-preview"
+               ></div>
+
+
+               <div class="upload-area">
+
+                 <input
+                   id="imagem"
+                   type="file"
+                   accept="image/*"
+                   multiple
+                 >
+
+                 <label for="imagem">
+
+                   <span class="upload-icon">
+                     📤
+                   </span>
+
+                   <strong>
+                     Selecionar imagens
+                   </strong>
+
+                   <small>
+                     PNG, JPG ou WEBP — selecione uma ou várias
+                   </small>
+
+                 </label>
+
+               </div>
+
+             </div>
+
 
 
             <div class="form-card estruturas-editor-card">
@@ -343,7 +373,7 @@ export function renderNovaLamina() {
                     <input
                       id="estrutura-nome"
                       type="text"
-                      placeholder="Ex.: NÃºcleo"
+                      placeholder="Ex.: Núcleo"
                     >
 
                   </div>
@@ -352,13 +382,13 @@ export function renderNovaLamina() {
                   <div class="form-field">
 
                     <label for="estrutura-descricao">
-                      DescriÃ§Ã£o
+                      Descrição
                     </label>
 
                     <input
                       id="estrutura-descricao"
                       type="text"
-                      placeholder="Ex.: RegiÃ£o central da cÃ©lula"
+                      placeholder="Ex.: Região central da célula"
                     >
 
                   </div>
@@ -369,7 +399,7 @@ export function renderNovaLamina() {
                 <div class="form-field">
 
                   <label>
-                    Tipo de marcaÃ§Ã£o
+                    Tipo de marcação
                   </label>
 
                   <div
@@ -382,7 +412,7 @@ export function renderNovaLamina() {
                       class="estrutura-tool active"
                       data-estrutura-tool="ponto"
                     >
-                      ðŸ“ Ponto
+                      📍 Ponto
                     </button>
 
                     <button
@@ -390,7 +420,7 @@ export function renderNovaLamina() {
                       class="estrutura-tool"
                       data-estrutura-tool="retangulo"
                     >
-                      â–­ RetÃ¢ngulo
+                      ▬ Retângulo
                     </button>
 
                     <button
@@ -398,7 +428,7 @@ export function renderNovaLamina() {
                       class="estrutura-tool"
                       data-estrutura-tool="seta"
                     >
-                      âžœ Seta
+                      ➜ Seta
                     </button>
 
                     <button
@@ -421,7 +451,7 @@ export function renderNovaLamina() {
 
                   <div class="estrutura-imagem-placeholder">
 
-                    Escolha uma imagem da lÃ¢mina para comeÃ§ar
+                    Escolha uma imagem da lâmina para começar
                     a apontar as estruturas.
 
                   </div>
@@ -438,13 +468,13 @@ export function renderNovaLamina() {
                   <div class="form-field">
 
                     <label for="estrutura-texto">
-                      Texto da marcaÃ§Ã£o
+                      Texto da marcação
                     </label>
 
                     <input
                       id="estrutura-texto"
                       type="text"
-                      placeholder="Ex.: LÃºmen"
+                      placeholder="Ex.: Lúmen"
                     >
 
                   </div>
@@ -470,12 +500,6 @@ export function renderNovaLamina() {
                 </button>
 
 
-                <div
-                  id="estruturas-lista"
-                  class="estruturas-lista"
-                ></div>
-
-              </div>
 
 
               </div>
@@ -496,11 +520,7 @@ export function renderNovaLamina() {
                 class="button primary"
                 id="save-lamina"
               >
-                ${
-                  editarId
-                    ? 'Salvar alterações'
-                    : 'Cadastrar lâmina'
-                }
+                ${editarId ? "Salvar alterações" : "Cadastrar lâmina"}
               </button>
 
             </div>
@@ -512,67 +532,103 @@ export function renderNovaLamina() {
       </section>
 
     </main>
-  `
+  `;
 }
 
-
 export async function setupNovaLamina() {
+  let estruturas = [];
 
-  await carregarCategoriasLamina()
+  /*
+   * Reseta o estado de imagens a cada entrada no formulário (regra 13):
+   * evita que imagens de uma edição anterior "vazem" para uma nova lâmina.
+   */
+  imagens = [];
 
+  const form = document.querySelector("#lamina-form");
 
-  let estruturas = []
+  if (!form) {
+    console.error("[ATLAS] formulário #lamina-form não encontrado");
+    return;
+  }
 
+  const editarId = form.dataset.editarId || null;
 
-  const form =
-    document.querySelector('#lamina-form')
+  /*
+   * PRIORIDADE: o listener de submit é registrado
+   * ANTES de qualquer componente auxiliar
+   * (categorias / editor / carregamento de edição),
+   * para que nenhuma falha secundária impeça
+   * o salvamento da lâmina.
+   */
 
-  if (!form) return
+  let salvandoLamina = false;
 
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-  const editarId =
-    form.dataset.editarId || null
+    if (salvandoLamina) {
+      return;
+    }
 
+    salvandoLamina = true;
+
+    try {
+      await salvarLamina(form, editarId, estruturas, imagens);
+    } finally {
+      salvandoLamina = false;
+    }
+  });
+
+  try {
+    await carregarCategoriasLamina();
+  } catch (erro) {
+    console.error("[ATLAS] Erro ao carregar categorias:", erro);
+  }
+
+  /*
+   * Componentes auxiliares do editor são
+   * inicializados com segurança: uma falha
+   * visual NÃO pode impedir o salvamento.
+   */
+
+  function iniciarComSeguranca(rotulo, inicializar) {
+    try {
+      inicializar();
+    } catch (erro) {
+      console.error("[ATLAS] Erro ao inicializar " + rotulo + ":", erro);
+    }
+  }
 
   /*
    * ============================================================
    * TODAS AS ESTRUTURAS DA LÂMINA
    * ============================================================
    */
-  const listaEstruturas =
-    document.querySelector('#estruturas-lista')
-
+  const listaEstruturas = document.querySelector("#estruturas-lista");
 
   function renderizarEstruturas() {
-
-    if (!listaEstruturas) return
-
+    if (!listaEstruturas) return;
 
     if (!estruturas.length) {
-
       listaEstruturas.innerHTML = `
         <div class="estrutura-vazia">
           Nenhuma estrutura adicionada ainda.
         </div>
-      `
+      `;
 
-      return
+      return;
     }
 
-
-    listaEstruturas.innerHTML =
-      estruturas
-        .map(
-          (estrutura, index) => `
+    listaEstruturas.innerHTML = estruturas
+      .map(
+        (estrutura, index) => `
 
             <div class="estrutura-item">
 
               <div class="estrutura-item-info">
 
                 <strong>
-                  ${escapeHtml(
-                    estrutura.nome || 'Estrutura'
-                  )}
+                  ${escapeHtml(estrutura.nome || "Estrutura")}
                 </strong>
 
 
@@ -580,20 +636,34 @@ export async function setupNovaLamina() {
                   estrutura.descricao
                     ? `
                       <small>
-                        ${escapeHtml(
-                          estrutura.descricao
-                        )}
+                        ${escapeHtml(estrutura.descricao)}
                       </small>
                     `
-                    : ''
+                    : ""
+                }
+
+
+                ${
+                  estrutura.texto
+                    ? `
+                      <small>
+                        Texto: ${escapeHtml(estrutura.texto)}
+                      </small>
+                    `
+                    : ""
                 }
 
 
                 <small>
-                  X: ${estrutura.x}
-                  • Y: ${estrutura.y}
-                  • L: ${estrutura.largura}
-                  • A: ${estrutura.altura}
+                  ${rotuloTipo(estrutura.tipo)}
+                  • X: ${Number(estrutura.x).toFixed(3)}
+                  • Y: ${Number(estrutura.y).toFixed(3)}${
+                    estrutura.tipo === "retangulo"
+                      ? `
+                  • L: ${Number(estrutura.largura).toFixed(3)}
+                  • A: ${Number(estrutura.altura).toFixed(3)}`
+                      : ""
+                  }
                 </small>
 
               </div>
@@ -608,52 +678,708 @@ export async function setupNovaLamina() {
               </button>
 
             </div>
-          `
-        )
-        .join('')
-
+          `,
+      )
+      .join("");
 
     listaEstruturas
-      .querySelectorAll(
-        '[data-remover-estrutura]'
-      )
-      .forEach(
-        botao => {
+      .querySelectorAll("[data-remover-estrutura]")
+      .forEach((botao) => {
+        botao.addEventListener("click", () => {
+          const index = Number(botao.dataset.removerEstrutura);
 
-          botao.addEventListener(
-            'click',
-            () => {
+          if (Number.isNaN(index)) {
+            return;
+          }
 
-              const index =
-                Number(
-                  botao.dataset
-                    .removerEstrutura
-                )
+          estruturas.splice(index, 1);
 
-
-              if (
-                Number.isNaN(index)
-              ) {
-                return
-              }
-
-
-              estruturas.splice(
-                index,
-                1
-              )
-
-
-              renderizarEstruturas()
-
-            }
-          )
-
-        }
-      )
-
+          renderizarEstruturas();
+        });
+      });
   }
 
+  /*
+   * ============================================================
+   * EDITOR VISUAL DAS MARCAÇÕES
+   * Ferramentas: Ponto, Retângulo, Seta e Texto.
+   * As coordenadas X/Y são definidas clicando ou arrastando
+   * sobre a imagem — nunca por digitação manual.
+   * ============================================================
+   */
+
+  let ferramentaAtual = "ponto";
+
+  let marcacaoPendente = null;
+
+  let origemArrasto = null;
+
+  let arrastando = false;
+
+  let imagemEditorUrl = null;
+
+  let imagemEditorUrlCriado = false;
+
+  const imagemEditor = document.querySelector("#estrutura-imagem-editor");
+
+  const ajudaEditor = document.querySelector("#estrutura-editor-ajuda");
+
+  const campoTextoEditor = document.querySelector("#estrutura-texto-editor");
+
+  const textosAjuda = {
+    ponto:
+      "Ferramenta Ponto: clique sobre a imagem para marcar a posição da estrutura.",
+
+    retangulo:
+      "Ferramenta Retângulo: clique e arraste sobre a imagem para delimitar a área.",
+
+    seta: "Ferramenta Seta: clique e arraste sobre a imagem, do início ao fim da seta.",
+
+    texto:
+      "Ferramenta Texto: clique sobre a imagem e informe o texto da marcação.",
+  };
+
+  function atualizarAjudaEditor() {
+    if (!ajudaEditor) return;
+
+    ajudaEditor.textContent = textosAjuda[ferramentaAtual] || textosAjuda.ponto;
+  }
+
+  function selecionarFerramenta(ferramenta) {
+    ferramentaAtual = ferramenta;
+
+    marcacaoPendente = null;
+
+    origemArrasto = null;
+
+    arrastando = false;
+
+    document.querySelectorAll("[data-estrutura-tool]").forEach((botao) => {
+      botao.classList.toggle(
+        "active",
+        botao.dataset.estruturaTool === ferramenta,
+      );
+    });
+
+    if (campoTextoEditor) {
+      campoTextoEditor.hidden = ferramenta !== "texto";
+    }
+
+    atualizarAjudaEditor();
+
+    desenharMarcacoes();
+  }
+
+  iniciarComSeguranca("ferramentas do editor", () => {
+    document.querySelectorAll("[data-estrutura-tool]").forEach((botao) => {
+      botao.addEventListener("click", () => {
+        selecionarFerramenta(botao.dataset.estruturaTool || "ponto");
+      });
+    });
+  });
+
+  function obterImagemEditor() {
+    return imagemEditorUrl || null;
+  }
+
+  function renderizarImagemEditor() {
+    if (!imagemEditor) return;
+
+    const src = obterImagemEditor();
+
+    imagemEditor.classList.toggle("com-imagem", Boolean(src));
+
+    if (!src) {
+      /*
+       * Sem imagem: devolve a altura mínima
+       * padrão do placeholder ao container.
+       */
+
+      imagemEditor.style.minHeight = "";
+
+      imagemEditor.innerHTML = `
+        <div class="estrutura-imagem-placeholder">
+
+          Escolha uma imagem da lâmina para começar
+          a apontar as estruturas.
+
+        </div>
+      `;
+
+      return;
+    }
+
+    /*
+     * Geometria crítica EMBUTIDA INLINE:
+     * stage, imagem e overlay compartilham
+     * exatamente a mesma área renderizada,
+     * independente de qualquer folha de
+     * estilo externa (cascade/especificidade).
+     *
+     * O stage (.estrutura-imagem-area) tem sua
+     * altura determinada unicamente pela imagem
+     * (display:block; width:100%; height:auto)
+     * e o overlay fica absoluto sobre ela.
+     */
+
+    imagemEditor.style.minHeight = "0";
+
+    imagemEditor.innerHTML = `
+      <div
+        class="estrutura-imagem-area"
+        style="position: relative; line-height: 0;"
+      >
+
+        <img
+          class="estrutura-imagem-img"
+          src="${escapeHtml(src)}"
+          alt="Imagem da lâmina para marcação"
+          draggable="false"
+          style="display: block; width: 100%; height: auto; pointer-events: none;"
+        >
+
+        <svg
+          class="estrutura-imagem-overlay"
+          aria-hidden="true"
+          style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; display: block;"
+        ></svg>
+
+      </div>
+    `;
+
+    /*
+     * Redesenha quando a imagem terminar de carregar,
+     * pois a altura só é conhecida após o load.
+     */
+
+    imagemEditor
+      .querySelector(".estrutura-imagem-img")
+      ?.addEventListener("load", () => {
+        desenharMarcacoes();
+      });
+
+    /*
+     * Vincula os eventos ao wrapper que coincide
+     * exatamente com a imagem.
+     */
+
+    vincularEventosDaImagem();
+
+    desenharMarcacoes();
+  }
+
+  function coordenadasRelativas(event) {
+    /*
+     * Usa SEMPRE o DOMRect real da imagem,
+     * nunca o retângulo de um container externo.
+     */
+
+    const imagem = imagemEditor.querySelector(".estrutura-imagem-img");
+
+    if (!imagem) {
+      return { x: 0, y: 0 };
+    }
+
+    const rect = imagem.getBoundingClientRect();
+
+    const x = (event.clientX - rect.left) / (rect.width || 1);
+
+    const y = (event.clientY - rect.top) / (rect.height || 1);
+
+    return {
+      x: Math.max(0, Math.min(1, x)),
+
+      y: Math.max(0, Math.min(1, y)),
+    };
+  }
+
+  function desenharMarcacoes() {
+    if (!imagemEditor) return;
+
+    const svg = imagemEditor.querySelector(".estrutura-imagem-overlay");
+
+    if (!svg) return;
+
+    const imagem = imagemEditor.querySelector(".estrutura-imagem-img");
+
+    if (!imagem) return;
+
+    const retangulo = imagem.getBoundingClientRect();
+
+    const larguraPx = Math.round(retangulo.width);
+
+    const alturaPx = Math.round(retangulo.height);
+
+    if (!larguraPx || !alturaPx) return;
+
+    const itens = [
+      ...estruturas,
+      ...(marcacaoPendente ? [marcacaoPendente] : []),
+    ];
+
+    svg.setAttribute("viewBox", `0 0 ${larguraPx} ${alturaPx}`);
+
+    svg.innerHTML = itens
+      .map((item, indice) => {
+        const cx = item.x * larguraPx;
+
+        const cy = item.y * alturaPx;
+
+        const pendente = item === marcacaoPendente;
+
+        const cor = pendente ? "#f39c12" : "#d9534f";
+
+        if (item.tipo === "retangulo") {
+          const l = (item.largura ?? 0.08) * larguraPx;
+
+          const a = (item.altura ?? 0.08) * alturaPx;
+
+          return `
+            <rect
+              x="${cx}"
+              y="${cy}"
+              width="${l}"
+              height="${a}"
+              fill="${cor}26"
+              stroke="${cor}"
+              stroke-width="2"
+              rx="3"
+            ></rect>
+          `;
+        }
+
+        if (item.tipo === "seta") {
+          const fx = (item.x2 ?? item.x) * larguraPx;
+
+          const fy = (item.y2 ?? item.y) * alturaPx;
+
+          const angulo = Math.atan2(fy - cy, fx - cx);
+
+          const ponta = 13;
+
+          const asa1x = fx - ponta * Math.cos(angulo - Math.PI / 7);
+
+          const asa1y = fy - ponta * Math.sin(angulo - Math.PI / 7);
+
+          const asa2x = fx - ponta * Math.cos(angulo + Math.PI / 7);
+
+          const asa2y = fy - ponta * Math.sin(angulo + Math.PI / 7);
+
+          return `
+            <line
+              x1="${cx}"
+              y1="${cy}"
+              x2="${fx}"
+              y2="${fy}"
+              stroke="${cor}"
+              stroke-width="2.5"
+            ></line>
+
+            <polygon
+              points="${fx},${fy} ${asa1x},${asa1y} ${asa2x},${asa2y}"
+              fill="${cor}"
+            ></polygon>
+          `;
+        }
+
+        if (item.tipo === "texto") {
+          const rotulo = item.texto || item.nome || "Texto";
+
+          return `
+            <text
+              x="${cx}"
+              y="${cy}"
+              fill="${cor}"
+              font-size="14"
+              font-weight="700"
+              paint-order="stroke"
+              stroke="#ffffff"
+              stroke-width="4"
+            >${escapeHtml(rotulo)}</text>
+          `;
+        }
+
+        /*
+         * Ponto (padrão).
+         */
+
+        return `
+          <circle
+            cx="${cx}"
+            cy="${cy}"
+            r="7"
+            fill="${cor}"
+            stroke="#ffffff"
+            stroke-width="2"
+          ></circle>
+        `;
+      })
+      .join("");
+  }
+
+  function ponteiroDentroDaImagem(event) {
+    /*
+     * Só permite marcar quando o ponteiro está
+     * dentro do retângulo físico real da imagem.
+     */
+
+    const imagem = imagemEditor.querySelector(".estrutura-imagem-img");
+
+    if (!imagem) return false;
+
+    const rect = imagem.getBoundingClientRect();
+
+    if (!rect.width || !rect.height) return false;
+
+    return (
+      event.clientX >= rect.left &&
+      event.clientX <= rect.right &&
+      event.clientY >= rect.top &&
+      event.clientY <= rect.bottom
+    );
+  }
+
+  function finalizarArrasto() {
+    /*
+     * Encerra o arrasto corrente (pointerup) e
+     * redesenha a marcação pendente como definitiva.
+     */
+
+    if (!arrastando) return;
+
+    arrastando = false;
+
+    desenharMarcacoes();
+  }
+
+  function vincularEventosDaImagem() {
+    /*
+     * Os eventos de pointer são vinculados ao wrapper
+     * que ocupa EXATAMENTE o retângulo da imagem.
+     */
+
+    const area = imagemEditor?.querySelector(".estrutura-imagem-area");
+
+    if (!area) return;
+
+    area.addEventListener("pointerdown", (event) => {
+      if (!obterImagemEditor()) return;
+
+      if (event.button !== 0) return;
+
+      if (!ponteiroDentroDaImagem(event)) return;
+
+      const { x, y } = coordenadasRelativas(event);
+
+      if (ferramentaAtual === "retangulo" || ferramentaAtual === "seta") {
+        arrastando = true;
+
+        origemArrasto = { x, y };
+
+        marcacaoPendente = {
+          tipo: ferramentaAtual,
+
+          x,
+
+          y,
+
+          x2: x,
+
+          y2: y,
+
+          largura: 0.01,
+
+          altura: 0.01,
+        };
+      } else {
+        arrastando = false;
+
+        origemArrasto = null;
+
+        const textoInput = document.querySelector("#estrutura-texto");
+
+        marcacaoPendente = {
+          tipo: ferramentaAtual,
+
+          x,
+
+          y,
+
+          largura: 0.01,
+
+          altura: 0.01,
+
+          texto: textoInput?.value.trim() || "",
+        };
+      }
+
+      if (ferramentaAtual === "texto" && campoTextoEditor) {
+        campoTextoEditor.hidden = false;
+      }
+
+      try {
+        area.setPointerCapture(event.pointerId);
+      } catch (erro) {
+        /*
+         * Captura de ponteiro é opcional.
+         */
+      }
+
+      desenharMarcacoes();
+    });
+
+    area.addEventListener("pointermove", (event) => {
+      if (!arrastando) return;
+
+      if (!marcacaoPendente) return;
+
+      if (!origemArrasto) return;
+
+      const { x, y } = coordenadasRelativas(event);
+
+      if (marcacaoPendente.tipo === "retangulo") {
+        marcacaoPendente.x = Math.min(origemArrasto.x, x);
+
+        marcacaoPendente.y = Math.min(origemArrasto.y, y);
+
+        marcacaoPendente.largura = Math.max(
+          0.005,
+          Math.abs(x - origemArrasto.x),
+        );
+
+        marcacaoPendente.altura = Math.max(
+          0.005,
+          Math.abs(y - origemArrasto.y),
+        );
+      } else if (marcacaoPendente.tipo === "seta") {
+        marcacaoPendente.x2 = x;
+
+        marcacaoPendente.y2 = y;
+      }
+
+      desenharMarcacoes();
+    });
+
+    area.addEventListener("pointerup", finalizarArrasto);
+
+    area.addEventListener("pointercancel", () => {
+      arrastando = false;
+    });
+  }
+
+  iniciarComSeguranca("preview de imagens", () => {
+    const inputImagem = document.querySelector("#imagem");
+
+    inputImagem?.addEventListener("change", () => {
+      const arquivos = Array.from(inputImagem.files || []);
+
+      arquivos.forEach((arquivo) => {
+        if (!arquivo || !arquivo.type.startsWith("image/")) {
+          return;
+        }
+
+        imagens.push({
+          file: arquivo,
+
+          previewUrl: URL.createObjectURL(arquivo),
+
+          localId: gerarNomeArquivoUnico(
+            arquivo.name.split(".").pop() || "png",
+          ).replace(/\.[^.]+$/, ""),
+        });
+      });
+
+      inputImagem.value = "";
+
+      renderizarImagensPreview();
+
+      atualizarImagemEditor();
+    });
+  });
+
+  /*
+   * Renderiza a lista de miniaturas com remoção e reordenação.
+   */
+  function renderizarImagensPreview() {
+    const container = document.querySelector("#imagens-preview");
+
+    if (!container) return;
+
+    if (!imagens.length) {
+      container.innerHTML = `
+        <div class="imagens-vazia">
+          Nenhuma imagem selecionada.
+        </div>
+      `;
+
+      return;
+    }
+
+    container.innerHTML = imagens
+      .map((imagem, index) => {
+        const src = imagem.previewUrl || imagem.url;
+
+        return `
+          <div class="imagem-item" data-imagem-index="${index}">
+
+            <img
+              class="imagem-item-thumb"
+              src="${escapeHtml(src)}"
+              alt="Imagem ${index + 1}"
+            >
+
+            ${
+              index === 0
+                ? `<span class="imagem-item-principal">Principal</span>`
+                : ""
+            }
+
+            <div class="imagem-item-acoes">
+
+              <button
+                type="button"
+                class="imagem-mover"
+                data-mover="${index}"
+                data-direcao="cima"
+                title="Mover para cima"
+                ${index === 0 ? "disabled" : ""}
+              >↑</button>
+
+              <button
+                type="button"
+                class="imagem-mover"
+                data-mover="${index}"
+                data-direcao="baixo"
+                title="Mover para baixo"
+                ${index === imagens.length - 1 ? "disabled" : ""}
+              >↓</button>
+
+              <button
+                type="button"
+                class="imagem-remover"
+                data-remover="${index}"
+                title="Remover"
+              >×</button>
+
+            </div>
+
+          </div>
+        `;
+      })
+      .join("");
+
+    container.querySelectorAll(".imagem-remover").forEach((botao) => {
+      botao.addEventListener("click", () => {
+        const index = Number(botao.dataset.remover);
+
+        if (Number.isNaN(index)) return;
+
+        const removida = imagens[index];
+
+        /*
+         * Limpa o ObjectURL do arquivo novo para não vazar memória
+         * (regra 24).
+         */
+        if (removida && removida.previewUrl) {
+          URL.revokeObjectURL(removida.previewUrl);
+        }
+
+        imagens.splice(index, 1);
+
+        renderizarImagensPreview();
+
+        atualizarImagemEditor();
+      });
+    });
+
+    container.querySelectorAll(".imagem-mover").forEach((botao) => {
+      botao.addEventListener("click", () => {
+        const index = Number(botao.dataset.mover);
+
+        const direcao = botao.dataset.direcao;
+
+        if (Number.isNaN(index)) return;
+
+        const novoIndex = direcao === "cima" ? index - 1 : index + 1;
+
+        if (novoIndex < 0 || novoIndex >= imagens.length) return;
+
+        const temp = imagens[index];
+
+        imagens[index] = imagens[novoIndex];
+
+        imagens[novoIndex] = temp;
+
+        renderizarImagensPreview();
+
+        atualizarImagemEditor();
+      });
+    });
+  }
+
+  /*
+   * A imagem do editor de marcações é sempre a principal (índice 0),
+   * a mesma sobre a qual as estruturas serão exibidas no visualizador.
+   */
+  function atualizarImagemEditor() {
+    const principal = imagens[0];
+
+    if (imagemEditorUrl && imagemEditorUrlCriado) {
+      URL.revokeObjectURL(imagemEditorUrl);
+
+      imagemEditorUrl = null;
+
+      imagemEditorUrlCriado = false;
+    }
+
+    imagemEditorUrl = principal
+      ? principal.previewUrl || principal.url || null
+      : null;
+
+    /*
+     * Só marcamos como "criado" (e portanto elegível a revoke) os
+     * ObjectURLs locais. URLs remotas de imagens existentes não são
+     * revogadas.
+     */
+    imagemEditorUrlCriado = Boolean(principal && principal.previewUrl);
+
+    renderizarImagemEditor();
+  }
+
+  iniciarComSeguranca("redimensionamento", () => {
+    if (resizeHandlerNovaLamina) {
+      window.removeEventListener("resize", resizeHandlerNovaLamina);
+    }
+
+    resizeHandlerNovaLamina = () => {
+      desenharMarcacoes();
+    };
+
+    window.addEventListener("resize", resizeHandlerNovaLamina);
+  });
+
+  /*
+   * Limpa os ObjectURLs ao sair do formulário (navegação), evitando
+   * vazamento de memória (regra 24). Auto-remove-se: qualquer hashchange
+   * significa que se está deixando #nova-lamina.
+   */
+  const limparObjectUrls = () => {
+    window.removeEventListener("hashchange", limparObjectUrls);
+
+    imagens.forEach((imagem) => {
+      if (imagem.previewUrl) {
+        URL.revokeObjectURL(imagem.previewUrl);
+      }
+    });
+
+    if (imagemEditorUrl && imagemEditorUrlCriado) {
+      URL.revokeObjectURL(imagemEditorUrl);
+      imagemEditorUrl = null;
+      imagemEditorUrlCriado = false;
+    }
+  };
+
+  window.addEventListener("hashchange", limparObjectUrls);
 
   /*
    * ============================================================
@@ -661,190 +1387,104 @@ export async function setupNovaLamina() {
    * ============================================================
    */
 
-  const adicionarEstrutura =
-    document.querySelector(
-      '#adicionar-estrutura'
-    )
+  iniciarComSeguranca("botão adicionar estrutura", () => {
+    const adicionarEstrutura = document.querySelector("#adicionar-estrutura");
 
+    adicionarEstrutura?.addEventListener("click", () => {
+      const nomeInput = document.querySelector("#estrutura-nome");
 
-  adicionarEstrutura?.addEventListener(
-    'click',
-    () => {
+      const descricaoInput = document.querySelector("#estrutura-descricao");
 
-      const nomeInput =
-        document.querySelector(
-          '#estrutura-nome'
-        )
+      const textoInput = document.querySelector("#estrutura-texto");
 
+      const nome = nomeInput?.value.trim() || "";
 
-      const descricaoInput =
-        document.querySelector(
-          '#estrutura-descricao'
-        )
+      const descricao = descricaoInput?.value.trim() || "";
 
-
-      const xInput =
-        document.querySelector(
-          '#estrutura-x'
-        )
-
-
-      const yInput =
-        document.querySelector(
-          '#estrutura-y'
-        )
-
-
-      const larguraInput =
-        document.querySelector(
-          '#estrutura-largura'
-        )
-
-
-      const alturaInput =
-        document.querySelector(
-          '#estrutura-altura'
-        )
-
-
-      const nome =
-        nomeInput?.value.trim() || ''
-
-
-      const descricao =
-        descricaoInput?.value.trim() || ''
-
-
-      const x =
-        Number(
-          xInput?.value || 0.5
-        )
-
-
-      const y =
-        Number(
-          yInput?.value || 0.5
-        )
-
-
-      const largura =
-        Number(
-          larguraInput?.value || 0.08
-        )
-
-
-      const altura =
-        Number(
-          alturaInput?.value || 0.08
-        )
-
+      const texto = textoInput?.value.trim() || "";
 
       if (!nome) {
+        mostrarStatus("Digite o nome da estrutura.", "error");
 
-        mostrarStatus(
-          'Digite o nome da estrutura.',
-          'error'
-        )
+        nomeInput?.focus();
 
-        nomeInput?.focus()
-
-        return
+        return;
       }
 
-
-      if (
-        !Number.isFinite(x) ||
-        !Number.isFinite(y) ||
-        !Number.isFinite(largura) ||
-        !Number.isFinite(altura)
-      ) {
-
+      if (!marcacaoPendente) {
         mostrarStatus(
-          'Verifique as posições e dimensões da estrutura.',
-          'error'
-        )
+          "Marque a posição na imagem usando a ferramenta selecionada.",
+          "error",
+        );
 
-        return
+        return;
       }
 
+      const marcacao = marcacaoPendente;
+
+      const largura =
+        marcacao.tipo === "seta"
+          ? Math.abs(marcacao.x2 - marcacao.x)
+          : marcacao.largura;
+
+      const altura =
+        marcacao.tipo === "seta"
+          ? Math.abs(marcacao.y2 - marcacao.y)
+          : marcacao.altura;
 
       estruturas.push({
-
         nome,
 
         descricao,
 
-        x: Math.max(
-          0,
-          Math.min(1, x)
-        ),
+        tipo: marcacao.tipo,
 
-        y: Math.max(
-          0,
-          Math.min(1, y)
-        ),
+        texto: marcacao.tipo === "texto" ? texto : "",
 
-        largura: Math.max(
-          0.01,
-          Math.min(1, largura)
-        ),
+        x: Math.max(0, Math.min(1, marcacao.x)),
 
-        altura: Math.max(
-          0.01,
-          Math.min(1, altura)
-        )
+        y: Math.max(0, Math.min(1, marcacao.y)),
 
-      })
+        ...(marcacao.tipo === "seta"
+          ? {
+              x2: Math.max(0, Math.min(1, marcacao.x2)),
 
+              y2: Math.max(0, Math.min(1, marcacao.y2)),
+            }
+          : {}),
 
-      renderizarEstruturas()
+        largura: Math.max(0.01, Math.min(1, largura)),
 
+        altura: Math.max(0.01, Math.min(1, altura)),
+      });
+
+      renderizarEstruturas();
 
       /*
-       * Limpa os campos de texto.
+       * Limpa os campos e a marcação pendente.
        */
 
       if (nomeInput) {
-        nomeInput.value = ''
+        nomeInput.value = "";
       }
-
 
       if (descricaoInput) {
-        descricaoInput.value = ''
+        descricaoInput.value = "";
       }
 
-
-      if (xInput) {
-        xInput.value = '0.5'
+      if (textoInput) {
+        textoInput.value = "";
       }
 
+      marcacaoPendente = null;
 
-      if (yInput) {
-        yInput.value = '0.5'
-      }
+      desenharMarcacoes();
 
+      nomeInput?.focus();
 
-      if (larguraInput) {
-        larguraInput.value = '0.08'
-      }
-
-
-      if (alturaInput) {
-        alturaInput.value = '0.08'
-      }
-
-
-      nomeInput?.focus()
-
-
-      mostrarStatus(
-        'Estrutura adicionada.',
-        'success'
-      )
-
-    }
-  )
-
+      mostrarStatus("Estrutura adicionada.", "success");
+    });
+  });
 
   /*
    * ============================================================
@@ -853,748 +1493,805 @@ export async function setupNovaLamina() {
    */
 
   if (editarId) {
+    try {
+      const carregada = await carregarLamina(editarId);
 
-    const carregada =
-      await carregarLamina(
-        editarId
-      )
-
-
-    if (
-      carregada &&
-      Array.isArray(
-        carregada.estruturas
-      )
-    ) {
-
-      estruturas =
-        Array.isArray(carregada.estruturas)
+      if (carregada && Array.isArray(carregada.estruturas)) {
+        estruturas = Array.isArray(carregada.estruturas)
           ? carregada.estruturas.map(normalizarEstrutura)
-          : []
+          : [];
 
-      renderizarEstruturas()
+        renderizarEstruturas();
+      }
 
+      /*
+       * Atualiza a lista de imagens e o editor após o carregamento,
+       * tanto para edição (imagens do banco) quanto para nova lâmina.
+       */
+      renderizarImagensPreview();
+
+      atualizarImagemEditor();
+    } catch (erro) {
+      console.error("[ATLAS] Erro ao carregar lâmina para edição:", erro);
     }
-
   }
 
+  atualizarAjudaEditor();
 
-  /*
-   * ============================================================
-   * SALVAR
-   * ============================================================
-   */
+  renderizarImagemEditor();
 
-  form.addEventListener(
-    'submit',
-    async event => {
-
-      event.preventDefault()
-
-
-      await salvarLamina(
-        form,
-        editarId,
-        estruturas
-      )
-
-    }
-  )
-
-
-  renderizarEstruturas()
-
+  renderizarEstruturas();
 }
 
+const TIPOS_ESTRUTURA = ["ponto", "retangulo", "seta", "texto"];
 
+function rotuloTipo(tipo) {
+  switch (tipo) {
+    case "retangulo":
+      return "Retângulo";
 
-function normalizarEstrutura(
-  estrutura = {}
-) {
+    case "seta":
+      return "Seta";
+
+    case "texto":
+      return "Texto";
+
+    default:
+      return "Ponto";
+  }
+}
+
+function normalizarEstrutura(estrutura = {}) {
+  const tipo = TIPOS_ESTRUTURA.includes(estrutura.tipo)
+    ? estrutura.tipo
+    : "ponto";
 
   return {
+    nome: String(estrutura.nome || "").trim(),
 
-    nome:
-      String(
-        estrutura.nome || ''
-      ).trim(),
+    descricao: String(estrutura.descricao || "").trim(),
 
-    descricao:
-      String(
-        estrutura.descricao || ''
-      ).trim(),
+    tipo,
 
-    x:
-      Math.max(
-        0,
-        Math.min(
-          1,
-          Number(
-            estrutura.x ?? 0.5
-          )
-        )
-      ),
+    texto: String(estrutura.texto || "").trim(),
 
-    y:
-      Math.max(
-        0,
-        Math.min(
-          1,
-          Number(
-            estrutura.y ?? 0.5
-          )
-        )
-      ),
+    x: Math.max(0, Math.min(1, Number(estrutura.x ?? 0.5))),
 
-    largura:
-      Math.max(
-        0.01,
-        Math.min(
-          1,
-          Number(
-            estrutura.largura ?? 0.08
-          )
-        )
-      ),
+    y: Math.max(0, Math.min(1, Number(estrutura.y ?? 0.5))),
 
-    altura:
-      Math.max(
-        0.01,
-        Math.min(
-          1,
-          Number(
-            estrutura.altura ?? 0.08
-          )
-        )
-      )
+    ...(tipo === "seta"
+      ? {
+          x2: Math.max(0, Math.min(1, Number(estrutura.x2 ?? estrutura.x))),
 
-  }
+          y2: Math.max(0, Math.min(1, Number(estrutura.y2 ?? estrutura.y))),
+        }
+      : {}),
 
+    largura: Math.max(0.01, Math.min(1, Number(estrutura.largura ?? 0.08))),
+
+    altura: Math.max(0.01, Math.min(1, Number(estrutura.altura ?? 0.08))),
+  };
 }
 async function carregarLamina(id) {
+  mostrarStatus("Carregando informações da lâmina...", "loading");
 
-  mostrarStatus(
-    'Carregando informações da lâmina...',
-    'loading'
-  )
-
-
-  const {
-    data,
-    error
-  } =
-    await supabase
-      .from('laminas')
-      .select('*')
-      .eq('id', id)
-      .single()
-
+  const { data, error } = await supabase
+    .from("laminas")
+    .select("*")
+    .eq("id", id)
+    .single();
 
   if (error || !data) {
+    console.error("Erro ao carregar lâmina:", error);
 
-    console.error(
-      'Erro ao carregar lâmina:',
-      error
-    )
+    mostrarStatus("Não foi possível carregar esta lâmina.", "error");
 
-
-    mostrarStatus(
-      'Não foi possível carregar esta lâmina.',
-      'error'
-    )
-
-    return
+    return;
   }
 
+  document.querySelector("#nome").value = data.nome || "";
 
-  document.querySelector('#nome').value =
-    data.nome || ''
+  document.querySelector("#descricao").value = data.descricao || "";
 
+  await carregarCategoriasLamina(data.categoria_id || "", data.categoria || "");
 
-  document.querySelector('#descricao').value =
-    data.descricao || ''
+  document.querySelector("#tecnica").value = data.tecnica || "";
 
+  document.querySelector("#coloracao").value = data.coloracao || "";
 
-  await carregarCategoriasLamina(
-    data.categoria_id || '',
-    data.categoria || ''
-  )
+  document.querySelector("#publicado").value =
+    data.publicado === false ? "false" : "true";
 
+  const campoAumento = document.querySelector("#aumento");
 
-  document.querySelector('#tecnica').value =
-    data.tecnica || ''
-
-
-  document.querySelector('#coloracao').value =
-    data.coloracao || ''
-
-
-  document.querySelector('#publicado').value =
-    data.publicado === false
-      ? 'false'
-      : 'true'
-
-
-
-  if (data.imagem_url) {
-
-    document.querySelector(
-      '#current-image'
-    ).innerHTML = `
-
-      <div class="current-image-preview">
-
-        <span>
-          Imagem atual
-        </span>
-
-        <img
-          src="${escapeHtml(data.imagem_url)}"
-          alt="Imagem atual da lâmina"
-        >
-
-      </div>
-
-    `
+  if (campoAumento) {
+    campoAumento.value = data.aumento || "";
   }
 
+  /*
+   * Carrega imagens existentes: lamina_imagens (ordenada) ou, em
+   * lâminas antigas, apenas laminas.imagem_url como fallback (regra 14).
+   */
+  await carregarImagensLamina(id, data);
 
-  mostrarStatus(
-    '',
-    ''
-  )
+  mostrarStatus("", "");
 
-  return data
-
+  return data;
 }
 
-
-async function salvarLamina(
-  form,
-  editarId,
-  estruturas = []
-) {
-
-  const button =
-    document.querySelector('#save-lamina')
-
-
-  button.disabled = true
-
-
-  button.textContent =
-    editarId
-      ? 'Salvando alterações...'
-      : 'Cadastrando...'
-
-
-  mostrarStatus(
-    'Salvando informações...',
-    'loading'
-  )
-
+async function carregarImagensLamina(id, dadosBasicos) {
+  imagens = [];
 
   try {
+    const { data, error } = await supabase
+      .from("lamina_imagens")
+      .select("*")
+      .eq("lamina_id", id)
+      .order("ordem", { ascending: true })
+      .order("created_at", { ascending: true });
 
-    const formData =
-      new FormData(form)
-
-
-    const nome =
-      String(
-        formData.get('nome') || ''
-      ).trim()
-
-
-    if (!nome) {
-
-      throw new Error(
-        'Digite o nome da lâmina.'
-      )
-
+    if (error) {
+      throw error;
     }
 
+    if (data && data.length) {
+      data.forEach((imagem, index) => {
+        imagens.push({
+          id: imagem.id,
 
-    const descricao =
-      String(
-        formData.get('descricao') || ''
-      ).trim()
+          url: imagem.imagem_url,
 
+          ordem: Number(imagem.ordem) || index,
 
-    const categoriaId =
-      String(
-        formData.get('categoria') || ''
-      ).trim()
+          path: imagem.imagem_url
+            ? extrairCaminhoArmazenamento(imagem.imagem_url)
+            : null,
+        });
+      });
 
-
-    const tecnica =
-      String(
-        formData.get('tecnica') || ''
-      ).trim()
-
-
-    const coloracao =
-      String(
-        formData.get('coloracao') || ''
-      ).trim()
-
-
-    const publicado =
-      formData.get('publicado') === 'true'
-
-
-    const arquivo =
-      formData.get('imagem')
-
-    if (
-      arquivo &&
-      arquivo instanceof File &&
-      arquivo.size > 0
-    ) {
-
-      if (
-        !arquivo.type.startsWith('image/')
-      ) {
-
-        throw new Error(
-          'O arquivo selecionado não é uma imagem válida.'
-        )
-
-      }
-
-      const tamanhoMaximo =
-        20 * 1024 * 1024
-
-      if (
-        arquivo.size > tamanhoMaximo
-      ) {
-
-        throw new Error(
-          'A imagem deve ter no máximo 20 MB.'
-        )
-
-      }
-
+      return;
     }
-
-
-    let imagemUrl =
-      null
-
-
-    /*
-     * Se estiver editando e não escolher
-     * uma nova imagem, mantém a imagem atual.
-     */
-
-    if (editarId) {
-
-      const {
-        data: atual
-      } =
-        await supabase
-          .from('laminas')
-          .select('imagem_url')
-          .eq('id', editarId)
-          .single()
-
-
-      imagemUrl =
-        atual?.imagem_url || null
-
-    }
-
-
-    /*
-     * Upload de uma nova imagem
-     */
-
-    if (
-      arquivo &&
-      arquivo instanceof File &&
-      arquivo.size > 0
-    ) {
-
-      const extensao =
-        arquivo.name
-          .split('.')
-          .pop()
-          .toLowerCase()
-
-
-      const nomeArquivo =
-        `${crypto.randomUUID()}.${extensao}`
-
-
-      const caminho =
-        `laminas/${nomeArquivo}`
-
-
-      const {
-        error: uploadError
-      } =
-        await supabase
-          .storage
-          .from('laminas')
-          .upload(
-            caminho,
-            arquivo,
-            {
-              cacheControl: '3600',
-              upsert: false
-            }
-          )
-
-
-      if (uploadError) {
-
-        console.error(
-          'Erro no upload:',
-          uploadError
-        )
-
-        throw new Error(
-          `Erro ao enviar a imagem: ${uploadError.message}`
-        )
-
-      }
-
-
-      const {
-        data: publicUrl
-      } =
-        supabase
-          .storage
-          .from('laminas')
-          .getPublicUrl(caminho)
-
-
-      imagemUrl =
-        publicUrl.publicUrl
-
-    }
-
-
-    let categoriaNome = ''
-
-
-if (categoriaId) {
-
-  const {
-    data: categoriaData,
-    error: categoriaError
-  } =
-    await supabase
-      .from('categorias')
-      .select('id, nome')
-      .eq('id', categoriaId)
-      .eq('ativo', true)
-      .maybeSingle()
-
-
-  if (categoriaError) {
-
-    console.error(
-      'Erro ao verificar categoria:',
-      categoriaError
-    )
-
-    throw new Error(
-      'Não foi possível verificar a categoria selecionada.'
-    )
-
+  } catch (erro) {
+    console.error("[ATLAS] Erro ao carregar imagens da lâmina:", erro);
   }
 
+  /*
+   * Fallback: lâmina antiga com apenas imagem_url.
+   */
+  if (dadosBasicos && dadosBasicos.imagem_url) {
+    imagens.push({
+      id: null,
 
-  if (!categoriaData) {
+      url: dadosBasicos.imagem_url,
 
-    throw new Error(
-      'A categoria selecionada não existe ou está inativa.'
-    )
+      ordem: 0,
 
+      path: extrairCaminhoArmazenamento(dadosBasicos.imagem_url),
+    });
   }
-
-
-  categoriaNome =
-    categoriaData.nome
-
 }
 
-const estruturasNormalizadas =
-      Array.isArray(estruturas)
-        ? estruturas
-            .map(normalizarEstrutura)
-            .filter(estrutura => estrutura.nome)
-        : []
+/*
+ * Erro já traduzido para o usuário:
+ * o catch exibe a mensagem sem prefixos extras.
+ */
+
+function erroAmigavel(mensagem) {
+  const erro = new Error(mensagem);
+
+  erro.amigavel = true;
+
+  return erro;
+}
+
+/*
+ * Nome único para o arquivo no Storage.
+ * Fallback para contextos sem randomUUID
+ * (ex.: páginas servidas sem HTTPS).
+ */
+
+function gerarNomeArquivoUnico(extensao) {
+  if (
+    typeof crypto !== "undefined" &&
+    typeof crypto.randomUUID === "function"
+  ) {
+    return `${crypto.randomUUID()}.${extensao}`;
+  }
+
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+
+  const hex = Array.from(bytes)
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}.${extensao}`;
+}
+
+async function salvarLamina(form, editarId, estruturas = [], imagens = []) {
+  const button = document.querySelector("#save-lamina");
+
+  button.disabled = true;
+
+  button.textContent = editarId ? "Salvando alterações..." : "Cadastrando...";
+
+  mostrarStatus("Salvando informações...", "loading");
+
+  try {
+    /*
+     * O upload no Storage e o INSERT/UPDATE na tabela
+     * exigem sessão autenticada (políticas RLS).
+     * Sem sessão, o Supabase bloqueia a operação
+     * com um erro genérico — verificamos antes
+     * para dar um feedback claro ao usuário.
+     */
+
+    const { data: sessao } = await supabase.auth.getUser();
+
+    if (!sessao?.user) {
+      throw erroAmigavel(
+        "Sua sessão expirou. Faça login novamente para salvar a lâmina.",
+      );
+    }
+
+    const formData = new FormData(form);
+
+    const nome = String(formData.get("nome") || "").trim();
+
+    if (!nome) {
+      throw erroAmigavel("Digite o nome da lâmina.");
+    }
+
+    const descricao = String(formData.get("descricao") || "").trim();
+
+    const categoriaId = String(formData.get("categoria") || "").trim();
+
+    const tecnica = String(formData.get("tecnica") || "").trim();
+
+    const coloracao = String(formData.get("coloracao") || "").trim();
+
+    const publicado = formData.get("publicado") === "true";
+
+    const aumento = String(formData.get("aumento") || "").trim();
+
+    /*
+     * Imagens múltiplas (Fase 18). O estado `imagens` (array em ordem
+     * de exibição, índice 0 = principal) contém itens existentes
+     * { id, url, ordem, path } e itens novos { file, previewUrl, localId }.
+     * Faz o upload dos novos, define a url primária e rastreia os
+     * enviados para permitir rollback em caso de falha (regra 22).
+     */
+
+    const uploadsParaLimpar = [];
+
+    let imagemUrl = null;
+
+    try {
+      imagemUrl = await processarImagens(editarId, imagens, uploadsParaLimpar);
+    } catch (erroUpload) {
+      /*
+       * Falha no upload: remove os objetos já enviados para não deixar
+       * arquivos órfãos no Storage.
+       */
+
+      await rollbackStorage(uploadsParaLimpar);
+
+      throw erroUpload;
+    }
+
+    let categoriaNome = "";
+
+    if (categoriaId) {
+      const { data: categoriaData, error: categoriaError } = await supabase
+        .from("categorias")
+        .select("id, nome")
+        .eq("id", categoriaId)
+        .eq("ativo", true)
+        .maybeSingle();
+
+      if (categoriaError) {
+        console.error("Erro ao verificar categoria:", categoriaError);
+
+        throw erroAmigavel(
+          "Não foi possível verificar a categoria selecionada.",
+        );
+      }
+
+      if (!categoriaData) {
+        throw erroAmigavel(
+          "A categoria selecionada não existe ou está inativa.",
+        );
+      }
+
+      categoriaNome = categoriaData.nome;
+    }
+
+    const estruturasNormalizadas = Array.isArray(estruturas)
+      ? estruturas
+          .map(normalizarEstrutura)
+          .filter((estrutura) => estrutura.nome)
+      : [];
 
     const dados = {
-
       nome,
 
       descricao,
 
-      categoria:
-        categoriaNome,
+      categoria: categoriaNome,
 
-      categoria_id:
-        categoriaId || null,
+      categoria_id: categoriaId || null,
 
       tecnica,
 
       coloracao,
 
+      aumento: aumento || null,
+
       publicado,
 
-      estruturas:
-        estruturasNormalizadas,
+      estruturas: estruturasNormalizadas,
 
-      updated_at:
-        new Date().toISOString()
-
-    }
-
+      updated_at: new Date().toISOString(),
+    };
 
     if (imagemUrl) {
-
-      dados.imagem_url =
-        imagemUrl
-
+      dados.imagem_url = imagemUrl;
     }
 
-
-    let resultado
-
+    let resultado;
 
     if (editarId) {
+      resultado = await supabase
+        .from("laminas")
+        .update(dados)
+        .eq("id", editarId);
 
-      resultado =
-        await supabase
-          .from('laminas')
-          .update(dados)
-          .eq('id', editarId)
+      /*
+       * FASE 20 — Fallback para anomalia de RLS da plataforma: alguns
+       * projetos rejeitam UPDATE que altera `publicado` (42501 "new row
+       * violates row-level security policy") mesmo com policy permissiva.
+       * Nesse caso: atualiza sem o campo e define a publicação via RPC
+       * privilegiada admin_definir_publicacao (security definer).
+       */
+      if (
+        resultado.error &&
+        /row-level security/i.test(resultado.error.message || "") &&
+        Object.prototype.hasOwnProperty.call(dados, "publicado")
+      ) {
+        const { publicado: publicadoAlvo, ...dadosSemPublicacao } = dados;
 
+        const retry = await supabase
+          .from("laminas")
+          .update(dadosSemPublicacao)
+          .eq("id", editarId);
+
+        if (!retry.error) {
+          const { error: erroRpc } = await supabase.rpc(
+            "admin_definir_publicacao",
+            {
+              p_lamina_id: editarId,
+              p_publicado: Boolean(publicadoAlvo),
+            },
+          );
+
+          resultado = erroRpc ? { error: erroRpc } : retry;
+        } else {
+          resultado = retry;
+        }
+      }
     } else {
-
-      resultado =
-        await supabase
-          .from('laminas')
-          .insert(dados)
-
+      /*
+       * .select("id") garante o retorno do id recém-criado, necessário
+       * para vincular as imagens em lamina_imagens (FK).
+       */
+      resultado = await supabase.from("laminas").insert(dados).select("id");
     }
-
 
     if (resultado.error) {
+      console.error("Erro ao salvar:", resultado.error);
 
-      console.error(
-        'Erro ao salvar:',
-        resultado.error
-      )
+      /*
+       * Falha ao persistir a lâmina: remove os objetos de imagem que
+       * haviam sido enviados para não deixar arquivos órfãos.
+       */
 
-      throw new Error(
-        `Erro ao salvar a lâmina: ${resultado.error.message}`
-      )
+      await rollbackStorage(uploadsParaLimpar);
 
+      /*
+       * Registra o erro completo no console para
+       * diagnóstico e mostra uma mensagem clara,
+       * incluindo detalhes/hints do PostgREST
+       * quando disponíveis (sem dados sensíveis).
+       */
+
+      const detalhes = [resultado.error.details, resultado.error.hint]
+        .filter(Boolean)
+        .join(" ");
+
+      throw erroAmigavel(
+        `Não foi possível ${
+          editarId ? "salvar as alterações" : "cadastrar"
+        } a lâmina: ${resultado.error.message}${
+          detalhes ? ` (${detalhes})` : ""
+        }`,
+      );
     }
 
+    /*
+     * Critério de sucesso: ausência de erro.
+     * A inserção precisa retornar o id para vincular as imagens; por
+     * isso usamos .select() no insert (lamina_imagens depende da FK).
+     */
+
+    const registro = Array.isArray(resultado.data)
+      ? resultado.data[0]
+      : resultado.data;
+
+    const laminaId = editarId || registro?.id;
+
+    /*
+     * Persiste o conjunto ordenado de imagens em lamina_imagens e
+     * reconcilia (remove as que o usuário excluiu) na edição.
+     */
+    if (laminaId) {
+      try {
+        await reconciliarImagens(laminaId, imagens, editarId, imagemUrl);
+      } catch (erroImagens) {
+        console.error("[ATLAS] Erro ao salvar imagens:", erroImagens);
+
+        throw erroAmigavel(
+          `A lâmina foi salva, mas não foi possível ${
+            editarId ? "atualizar as imagens" : "anexar as imagens"
+          }.`,
+        );
+      }
+    }
+
+    if (registro && registro.id) {
+      console.log(
+        editarId ? "Lâmina atualizada, id:" : "Lâmina cadastrada, id:",
+        registro.id,
+      );
+    }
 
     mostrarStatus(
       editarId
-        ? 'Lâmina atualizada com sucesso!'
-        : 'Lâmina cadastrada com sucesso!',
-      'success'
-    )
+        ? "Lâmina atualizada com sucesso!"
+        : "Lâmina cadastrada com sucesso!",
+      "success",
+    );
 
-
-    setTimeout(
-      () => {
-
-        window.location.hash =
-          '#admin'
-
-      },
-      1000
-    )
-
+    setTimeout(() => {
+      window.location.hash = "#admin";
+    }, 1000);
   } catch (error) {
+    console.error(error);
 
-    console.error(error)
+    const mensagem =
+      error && error.amigavel && error.message
+        ? error.message
+        : `Não foi possível salvar a lâmina: ${
+            (error && error.message) ||
+            "erro inesperado. Verifique o console para mais detalhes."
+          }`;
 
+    mostrarStatus(mensagem, "error");
 
-    mostrarStatus(
-      error.message ||
-      'Ocorreu um erro ao salvar.',
-      'error'
-    )
+    button.disabled = false;
 
-
-    button.disabled = false
-
-
-    button.textContent =
-      editarId
-        ? 'Salvar alterações'
-        : 'Cadastrar lâmina'
-
+    button.textContent = editarId ? "Salvar alterações" : "Cadastrar lâmina";
   }
-
 }
 
+/*
+ * Faz o upload dos arquivos novos (os que possuem `file`) na ordem em que
+ * aparecem em `imagens`. Retorna a URL da imagem principal (índice 0),
+ * usada como laminas.imagem_url (fallback/catálogo/admin).
+ * Em caso de falha, quem chama deve invocar rollbackStorage().
+ */
+async function processarImagens(editarId, imagens, uploadsParaLimpar) {
+  let urlPrincipal = null;
 
+  for (let index = 0; index < imagens.length; index += 1) {
+    const imagem = imagens[index];
 
-async function carregarCategoriasLamina(
-  categoriaIdAtual = '',
-  categoriaNomeAtual = ''
-) {
+    if (!imagem.file) {
+      /*
+       * Imagem já existente (veio do banco): apenas garante `path`
+       * (para possível remoção futura) e registra a principal.
+       */
+      if (!imagem.path && imagem.url) {
+        imagem.path = extrairCaminhoArmazenamento(imagem.url);
+      }
 
-  const select =
-    document.querySelector(
-      '#categoria'
-    )
+      if (urlPrincipal === null && imagem.url) {
+        urlPrincipal = imagem.url;
+      }
 
-  if (!select) return
+      continue;
+    }
 
+    const arquivo = imagem.file;
 
-  const {
-    data,
-    error
-  } =
-    await supabase
-      .from('categorias')
-      .select(
-        'id, nome, ativo, ordem'
-      )
-      .eq(
-        'ativo',
-        true
-      )
-      .order(
-        'ordem',
-        {
-          ascending: true
-        }
-      )
-      .order(
-        'nome',
-        {
-          ascending: true
-        }
-      )
+    if (!arquivo.type.startsWith("image/")) {
+      throw erroAmigavel(
+        "Um dos arquivos selecionados não é uma imagem válida.",
+      );
+    }
 
+    const tamanhoMaximo = 20 * 1024 * 1024;
 
-  if (error) {
+    if (arquivo.size > tamanhoMaximo) {
+      throw erroAmigavel("Uma das imagens excede o máximo de 20 MB.");
+    }
 
-    console.error(
-      'Erro ao carregar categorias:',
-      error
-    )
+    const extensao = arquivo.name.split(".").pop().toLowerCase();
 
-    mostrarStatus(
-      'Não foi possível carregar as categorias.',
-      'error'
-    )
+    const nomeArquivo = gerarNomeArquivoUnico(extensao);
 
-    return
+    const caminho = `laminas/${nomeArquivo}`;
 
+    const { error: uploadError } = await supabase.storage
+      .from("laminas")
+      .upload(caminho, arquivo, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    if (uploadError) {
+      console.error("Erro no upload:", uploadError);
+
+      throw erroAmigavel(
+        `Não foi possível enviar uma das imagens: ${uploadError.message}`,
+      );
+    }
+
+    const { data: publicUrl } = supabase.storage
+      .from("laminas")
+      .getPublicUrl(caminho);
+
+    imagem.url = publicUrl.publicUrl;
+
+    imagem.path = caminho;
+
+    uploadsParaLimpar.push(caminho);
+
+    if (urlPrincipal === null) {
+      urlPrincipal = publicUrl.publicUrl;
+    }
   }
 
+  /*
+   * Edição sem novas imagens e sem alterações: preserva a URL principal
+   * que já está no banco (fallback).
+   */
+  if (urlPrincipal === null && editarId) {
+    const { data: atual } = await supabase
+      .from("laminas")
+      .select("imagem_url")
+      .eq("id", editarId)
+      .single();
+
+    urlPrincipal = atual?.imagem_url || null;
+  }
+
+  return urlPrincipal;
+}
+
+/*
+ * Remove do Storage os objetos enviados numa tentativa que falhou, para
+ * não deixar arquivos órfãos (regra 22).
+ */
+async function rollbackStorage(uploadsParaLimpar) {
+  if (!uploadsParaLimpar.length) return;
+
+  try {
+    await supabase.storage.from("laminas").remove(uploadsParaLimpar);
+  } catch (erro) {
+    console.error("[ATLAS] Falha no rollback de uploads:", erro);
+  }
+}
+
+/*
+ * Persiste o conjunto ordenado de imagens em lamina_imagens.
+ * - Nova lâmina: insere todas na ordem atual.
+ * - Edição: remove as que o usuário excluiu (e seus arquivos no Storage),
+ *   inclui as novas e atualiza a ordem das que foram mantidas.
+ * Estruturas só existem na imagem principal (índice 0), que é a primeira
+ * do array — preservada na reordenação apenas se o usuário não a mover.
+ */
+/*
+ * imagemUrlAtual: URL que permanecerá em laminas.imagem_url após o
+ * salvamento (fallback/catálogo). O arquivo correspondente NUNCA é
+ * removido do Storage, mesmo quando sua linha é excluída da
+ * reconciliação — caso contrário a lâmina ficaria com imagem morta
+ * (regra 21: não remover a imagem_url antiga acidentalmente).
+ */
+async function reconciliarImagens(
+  laminaId,
+  imagens,
+  editarId,
+  imagemUrlAtual = null,
+) {
+  const itensFinais = imagens
+    .map((imagem, index) => ({
+      ...imagem,
+      ordem: index,
+    }))
+    .filter((imagem) => imagem.url);
+
+  if (editarId) {
+    const { data: existentes, error: erroConsulta } = await supabase
+      .from("lamina_imagens")
+      .select("id, imagem_url")
+      .eq("lamina_id", laminaId);
+
+    if (erroConsulta) {
+      throw erroConsulta;
+    }
+
+    const idsMantidos = new Set(
+      imagens.filter((imagem) => imagem.id).map((imagem) => imagem.id),
+    );
+
+    const paraExcluir = (existentes || []).filter(
+      (item) => !idsMantidos.has(item.id),
+    );
+
+    if (paraExcluir.length) {
+      const { error: erroExcluir } = await supabase
+        .from("lamina_imagens")
+        .delete()
+        .in(
+          "id",
+          paraExcluir.map((item) => item.id),
+        );
+
+      if (erroExcluir) {
+        throw erroExcluir;
+      }
+
+      /*
+       * Remove do Storage os arquivos das imagens excluídas pelo usuário.
+       * Só remove objetos que pertencem a esta lâmina (path derivado da
+       * própria linha), nunca a imagem_url de outra lâmina (regra 21).
+       */
+      const urlsPreservadas = new Set(imagemUrlAtual ? [imagemUrlAtual] : []);
+
+      const caminhosExcluidos = paraExcluir
+        .filter((item) => !urlsPreservadas.has(item.imagem_url))
+        .map((item) => extrairCaminhoArmazenamento(item.imagem_url))
+        .filter(Boolean);
+
+      if (caminhosExcluidos.length) {
+        try {
+          await supabase.storage.from("laminas").remove(caminhosExcluidos);
+        } catch (erro) {
+          console.error(
+            "[ATLAS] Falha ao remover imagens excluídas do Storage:",
+            erro,
+          );
+        }
+      }
+    }
+  }
+
+  /*
+   * Insere as imagens novas (sem id) e atualiza ordem/url das mantidas.
+   */
+  for (const imagem of itensFinais) {
+    if (!imagem.id) {
+      /*
+       * .select("id") devolve o id da linha criada. Em uma nova
+       * tentativa após falha parcial (regra 22), o item já possui
+       * id e passa pelo caminho de UPDATE abaixo — sem duplicar
+       * linhas em lamina_imagens.
+       */
+      const { data: inserida, error: erroInserir } = await supabase
+        .from("lamina_imagens")
+        .insert({
+          lamina_id: laminaId,
+          imagem_url: imagem.url,
+          ordem: imagem.ordem,
+        })
+        .select("id");
+
+      if (erroInserir) {
+        throw erroInserir;
+      }
+
+      if (inserida && inserida[0] && inserida[0].id) {
+        imagem.id = inserida[0].id;
+      }
+
+      continue;
+    }
+
+    const { error: erroAtualizar } = await supabase
+      .from("lamina_imagens")
+      .update({
+        imagem_url: imagem.url,
+        ordem: imagem.ordem,
+      })
+      .eq("id", imagem.id);
+
+    if (erroAtualizar) {
+      throw erroAtualizar;
+    }
+  }
+}
+
+async function carregarCategoriasLamina(
+  categoriaIdAtual = "",
+  categoriaNomeAtual = "",
+) {
+  const select = document.querySelector("#categoria");
+
+  if (!select) return;
+
+  const { data, error } = await supabase
+    .from("categorias")
+    .select("id, nome, ativo, ordem")
+    .eq("ativo", true)
+    .order("ordem", {
+      ascending: true,
+    })
+    .order("nome", {
+      ascending: true,
+    });
+
+  if (error) {
+    console.error("Erro ao carregar categorias:", error);
+
+    mostrarStatus("Não foi possível carregar as categorias.", "error");
+
+    return;
+  }
 
   select.innerHTML = `
     <option value="">
       Selecione uma categoria
     </option>
-  `
+  `;
+  (data || []).forEach((categoria) => {
+    const option = document.createElement("option");
 
+    option.value = categoria.id;
 
-  ;(data || [])
-    .forEach(
-      categoria => {
+    option.textContent = categoria.nome;
 
-        const option =
-          document.createElement(
-            'option'
-          )
+    if (categoria.id === categoriaIdAtual) {
+      option.selected = true;
+    } else if (!categoriaIdAtual && categoria.nome === categoriaNomeAtual) {
+      option.selected = true;
+    }
 
-
-        option.value =
-          categoria.id
-
-
-        option.textContent =
-          categoria.nome
-
-
-        if (
-          categoria.id ===
-          categoriaIdAtual
-        ) {
-
-          option.selected = true
-
-        } else if (
-          !categoriaIdAtual &&
-          categoria.nome ===
-          categoriaNomeAtual
-        ) {
-
-          option.selected = true
-
-        }
-
-
-        select.appendChild(
-          option
-        )
-
-      }
-    )
-
+    select.appendChild(option);
+  });
 }
 
+function mostrarStatus(mensagem, tipo) {
+  const elemento = document.querySelector("#lamina-form-status");
 
-function mostrarStatus(
-  mensagem,
-  tipo
-) {
+  if (!elemento) return;
 
-  const elemento =
-    document.querySelector(
-      '#lamina-form-status'
-    )
+  elemento.textContent = mensagem;
 
-
-  if (!elemento) return
-
-
-  elemento.textContent =
-    mensagem
-
-
-  elemento.className =
-    `form-status ${tipo || ''}`
-
+  elemento.className = `form-status ${tipo || ""}`;
 }
 
-
-function escapeHtml(value = '') {
-
+function escapeHtml(value = "") {
   return String(value)
+    .replaceAll("&", "&amp;")
 
-    .replaceAll('&', '&amp;')
+    .replaceAll("<", "&lt;")
 
-    .replaceAll('<', '&lt;')
+    .replaceAll(">", "&gt;")
 
-    .replaceAll('>', '&gt;')
+    .replaceAll('"', "&quot;")
 
-    .replaceAll('"', '&quot;')
-
-    .replaceAll("'", '&#039;')
+    .replaceAll("'", "&#039;");
 }
-
-
-
-
-
-
-
-
-

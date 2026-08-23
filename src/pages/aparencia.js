@@ -25,6 +25,8 @@ export async function renderAparencia() {
 
   const logoUrlInicial = config.logo_url || ''
 
+  logoUrlAtual = logoUrlInicial
+
 
   return `
     <section id="admin-section-aparencia" class="admin-section active">
@@ -899,6 +901,8 @@ function configurarLogoPreview() {
 
     input.dataset.logoUrl = ''
 
+    logoUrlAtual = ''
+
     preview.innerHTML =
       '🔬'
 
@@ -1018,118 +1022,129 @@ export function setupAparencia() {
 
       event.preventDefault()
 
-      const status =
-        document.querySelector('#aparencia-status')
+      if (form.dataset.salvando === 'true') return
+      form.dataset.salvando = 'true'
 
-      status.textContent =
-        'Salvando...'
+      try {
 
-      status.className =
-        'form-status loading'
-
-
-      const dados = {
-
-        nome_site:
-          document.querySelector('#config-nome').value,
-
-        subtitulo:
-          document.querySelector('#config-subtitulo').value,
-
-        titulo_inicio:
-          document.querySelector('#config-titulo').value,
-
-        descricao_inicio:
-          document.querySelector('#config-descricao').value,
-
-        texto_botao_principal:
-          document.querySelector('#config-botao').value,
-
-        texto_botao_secundario:
-          document.querySelector('#config-botao-secundario').value,
-
-        texto_sobre:
-          document.querySelector('#config-sobre').value,
-
-        texto_rodape:
-          document.querySelector('#config-rodape').value,
-
-        cor_principal:
-          document.querySelector('#config-cor-principal').value,
-
-        cor_fundo:
-          document.querySelector('#config-cor-fundo').value,
-
-        cor_texto:
-          document.querySelector('#config-cor-texto').value,
-
-        cor_destaque:
-          document.querySelector('#config-cor-destaque').value,
-
-        logo_tamanho:
-          Number(document.querySelector('#config-logo-tamanho').value),
-
-        logo_url:
-          logoUrlAtual || document.querySelector('#config-logo').dataset.logoUrl || null,
-
-        atualizado_em:
-          new Date().toISOString()
-
-      }
-
-
-      const { data: existente } =
-        await supabase
-          .from('configuracoes_site')
-          .select('id')
-          .limit(1)
-          .maybeSingle()
-
-
-      let resultado
-
-
-      if (existente?.id) {
-
-        resultado =
-          await supabase
-            .from('configuracoes_site')
-            .update(dados)
-            .eq('id', existente.id)
-
-      } else {
-
-        resultado =
-          await supabase
-            .from('configuracoes_site')
-            .insert(dados)
-
-      }
-
-
-      if (resultado.error) {
-
-        console.error(
-          resultado.error
-        )
+        const status =
+          document.querySelector('#aparencia-status')
 
         status.textContent =
-          'Erro ao salvar: ' +
-          resultado.error.message
+          'Salvando...'
 
         status.className =
-          'form-status error'
+          'form-status loading'
 
-        return
+
+        const dados = {
+
+          nome_site:
+            document.querySelector('#config-nome').value,
+
+          subtitulo:
+            document.querySelector('#config-subtitulo').value,
+
+          titulo_inicio:
+            document.querySelector('#config-titulo').value,
+
+          descricao_inicio:
+            document.querySelector('#config-descricao').value,
+
+          texto_botao_principal:
+            document.querySelector('#config-botao').value,
+
+          texto_botao_secundario:
+            document.querySelector('#config-botao-secundario').value,
+
+          texto_sobre:
+            document.querySelector('#config-sobre').value,
+
+          texto_rodape:
+            document.querySelector('#config-rodape').value,
+
+          cor_principal:
+            document.querySelector('#config-cor-principal').value,
+
+          cor_fundo:
+            document.querySelector('#config-cor-fundo').value,
+
+          cor_texto:
+            document.querySelector('#config-cor-texto').value,
+
+          cor_destaque:
+            document.querySelector('#config-cor-destaque').value,
+
+          logo_tamanho:
+            Number(document.querySelector('#config-logo-tamanho').value),
+
+          logo_url:
+            logoUrlAtual || document.querySelector('#config-logo').dataset.logoUrl || null,
+
+          atualizado_em:
+            new Date().toISOString()
+
+        }
+
+
+        const { data: existente } =
+          await supabase
+            .from('configuracoes_site')
+            .select('id')
+            .limit(1)
+            .maybeSingle()
+
+
+        let resultado
+
+
+        if (existente?.id) {
+
+          resultado =
+            await supabase
+              .from('configuracoes_site')
+              .update(dados)
+              .eq('id', existente.id)
+
+        } else {
+
+          resultado =
+            await supabase
+              .from('configuracoes_site')
+              .insert(dados)
+
+        }
+
+
+        if (resultado.error) {
+
+          console.error(
+            resultado.error
+          )
+
+          status.textContent =
+            'Erro ao salvar: ' +
+            resultado.error.message
+
+          status.className =
+            'form-status error'
+
+          return
+
+        }
+
+
+        status.textContent =
+          'Configurações salvas com sucesso!'
+
+        status.className =
+          'form-status success'
+
+      } finally {
+
+        form.dataset.salvando = 'false'
 
       }
-
-
-      status.textContent =
-        'Configurações salvas com sucesso!'
-
-      status.className =
-        'form-status success'
 
     }
   )
@@ -1141,8 +1156,7 @@ export function setupAparencia() {
       'click',
       () => {
 
-        window.location.hash =
-          '#admin'
+        window.dispatchEvent(new Event('hashchange'))
 
       }
     )

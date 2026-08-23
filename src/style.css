@@ -5,7 +5,14 @@
   --cor-destaque: #22c55e;
 }
 :root {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   color: #17201d;
   background: #f5f7f5;
   font-synthesis: none;
@@ -182,7 +189,9 @@ a {
   border-radius: 10px;
   font-size: 14px;
   font-weight: 700;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .button:hover {
@@ -192,7 +201,7 @@ a {
 .button.primary {
   background: var(--green);
   color: white;
-  box-shadow: 0 12px 30px rgba(23, 76, 60, 0.18);
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--green) 22%, transparent);
 }
 
 .button.secondary {
@@ -285,7 +294,7 @@ a {
   gap: 8px;
   padding: 9px 13px;
   border-radius: 10px;
-  background: rgba(255,255,255,0.88);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(8px);
   box-shadow: 0 10px 30px rgba(40, 70, 60, 0.12);
   font-size: 12px;
@@ -319,7 +328,7 @@ a {
   width: 100%;
   height: 1px;
   top: 50%;
-  background: rgba(23, 76, 60, 0.12);
+  background: color-mix(in srgb, var(--green) 5%, transparent);
 }
 
 .section {
@@ -362,12 +371,14 @@ a {
   border: 1px solid var(--border);
   border-radius: 18px;
   background: var(--cream);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .tissue-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 18px 40px rgba(23, 76, 60, 0.09);
+  box-shadow: 0 18px 40px color-mix(in srgb, var(--green) 9%, transparent);
 }
 
 .card-number {
@@ -462,7 +473,7 @@ a {
 .footer .container {
   display: flex;
   justify-content: space-between;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255, 255, 255, 0.7);
   font-size: 12px;
 }
 
@@ -599,7 +610,7 @@ a {
   border: 1px solid var(--border);
   border-radius: 18px;
   background: #101513;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
 }
 
 .viewer {
@@ -856,7 +867,7 @@ a {
   border: 1px solid var(--border);
   border-radius: 20px;
   background: white;
-  box-shadow: 0 25px 70px rgba(0,0,0,.08);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.08);
 }
 
 .auth-logo {
@@ -1058,7 +1069,6 @@ a {
 }
 
 @media (max-width: 700px) {
-
   .admin-title {
     display: block;
   }
@@ -1078,7 +1088,6 @@ a {
   .auth-card {
     padding: 30px;
   }
-
 }
 
 .lamina-form {
@@ -1233,7 +1242,6 @@ a {
 }
 
 @media (max-width: 700px) {
-
   .form-grid {
     grid-template-columns: 1fr;
   }
@@ -1245,7 +1253,6 @@ a {
   .form-card {
     padding: 22px;
   }
-
 }
 
 .catalog-page {
@@ -1287,12 +1294,14 @@ a {
   background: white;
   border: 1px solid var(--border);
   border-radius: 18px;
-  transition: transform .2s ease, box-shadow .2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .lamina-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 15px 35px rgba(0,0,0,.08);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
 }
 
 .lamina-image {
@@ -1306,7 +1315,7 @@ a {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform .4s ease;
+  transition: transform 0.4s ease;
 }
 
 .lamina-card:hover .lamina-image img {
@@ -1319,7 +1328,7 @@ a {
   bottom: 12px;
   padding: 8px 11px;
   border-radius: 8px;
-  background: rgba(0,0,0,.72);
+  background: rgba(0, 0, 0, 0.72);
   color: white;
   font-size: 11px;
   font-weight: 700;
@@ -1374,26 +1383,20 @@ a {
 }
 
 @media (max-width: 900px) {
-
   .laminas-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
 }
 
 @media (max-width: 600px) {
-
   .laminas-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
 }
-
-}
-
-
 
 /* =========================================================
    LOGO DA PRÉVIA DO EDITOR DE APARÊNCIA
@@ -1419,7 +1422,7 @@ a {
   transform-origin: center center;
   transition: transform 0.15s ease;
 }
- 
+
 .logo-preview {
   width: 120px;
   height: 120px;
@@ -1440,7 +1443,6 @@ a {
   transition: transform 0.15s ease;
 }
 
-
 /* =========================================================
    APARÊNCIA — EDITOR MODERNO
    ========================================================= */
@@ -1460,7 +1462,7 @@ a {
   border: 1px solid #e4e9e7;
   border-radius: 18px;
   padding: 26px;
-  box-shadow: 0 4px 18px rgba(16,47,41,.04);
+  box-shadow: 0 4px 18px rgba(16, 47, 41, 0.04);
 }
 
 #aparencia-form .form-card-title {
@@ -1496,7 +1498,7 @@ a {
 
 #aparencia-form .form-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
 }
 
@@ -1524,7 +1526,7 @@ a {
   color: #17211f;
   font: inherit;
   outline: none;
-  transition: .18s ease;
+  transition: 0.18s ease;
 }
 
 #aparencia-form textarea {
@@ -1536,13 +1538,13 @@ a {
 #aparencia-form input[type="url"]:focus,
 #aparencia-form textarea:focus {
   background: #fff;
-  border-color: #1e6f5c;
-  box-shadow: 0 0 0 3px rgba(30,111,92,.10);
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 8%, transparent);
 }
 
 #aparencia-form input[type="range"] {
   width: 100%;
-  accent-color: #1e6f5c;
+  accent-color: var(--green);
   cursor: pointer;
 }
 
@@ -1551,7 +1553,7 @@ a {
   min-width: 55px;
   padding: 6px 9px;
   background: #edf6f2;
-  color: #1e6f5c;
+  color: var(--green);
   border-radius: 8px;
   text-align: center;
   font-size: 12px;
@@ -1635,14 +1637,14 @@ a {
   color: #14734d;
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: .5px;
+  letter-spacing: 0.5px;
 }
 
 .aparencia-preview {
   overflow: hidden;
   border: 1px solid #dfe6e3;
   border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(16,47,41,.08);
+  box-shadow: 0 10px 30px rgba(16, 47, 41, 0.08);
 }
 
 #aparencia-form .form-actions {
@@ -1652,11 +1654,11 @@ a {
   display: flex;
   justify-content: flex-end;
   padding: 14px 16px;
-  background: rgba(255,255,255,.94);
+  background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(12px);
   border: 1px solid #e1e7e4;
   border-radius: 14px;
-  box-shadow: 0 8px 30px rgba(16,47,41,.10);
+  box-shadow: 0 8px 30px rgba(16, 47, 41, 0.1);
 }
 
 @media (max-width: 750px) {
@@ -1672,7 +1674,6 @@ a {
     padding: 20px;
   }
 }
-
 
 /* =========================================================
    APARÊNCIA — EDITOR MODERNO
@@ -1693,7 +1694,7 @@ a {
   border: 1px solid #e4e9e7;
   border-radius: 18px;
   padding: 26px;
-  box-shadow: 0 4px 18px rgba(16,47,41,.04);
+  box-shadow: 0 4px 18px rgba(16, 47, 41, 0.04);
 }
 
 #aparencia-form .form-card-title {
@@ -1729,7 +1730,7 @@ a {
 
 #aparencia-form .form-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
 }
 
@@ -1757,7 +1758,7 @@ a {
   color: #17211f;
   font: inherit;
   outline: none;
-  transition: .18s ease;
+  transition: 0.18s ease;
 }
 
 #aparencia-form textarea {
@@ -1769,13 +1770,13 @@ a {
 #aparencia-form input[type="url"]:focus,
 #aparencia-form textarea:focus {
   background: #fff;
-  border-color: #1e6f5c;
-  box-shadow: 0 0 0 3px rgba(30,111,92,.10);
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 8%, transparent);
 }
 
 #aparencia-form input[type="range"] {
   width: 100%;
-  accent-color: #1e6f5c;
+  accent-color: var(--green);
   cursor: pointer;
 }
 
@@ -1784,7 +1785,7 @@ a {
   min-width: 55px;
   padding: 6px 9px;
   background: #edf6f2;
-  color: #1e6f5c;
+  color: var(--green);
   border-radius: 8px;
   text-align: center;
   font-size: 12px;
@@ -1868,14 +1869,14 @@ a {
   color: #14734d;
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: .5px;
+  letter-spacing: 0.5px;
 }
 
 .aparencia-preview {
   overflow: hidden;
   border: 1px solid #dfe6e3;
   border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(16,47,41,.08);
+  box-shadow: 0 10px 30px rgba(16, 47, 41, 0.08);
 }
 
 #aparencia-form .form-actions {
@@ -1885,11 +1886,11 @@ a {
   display: flex;
   justify-content: flex-end;
   padding: 14px 16px;
-  background: rgba(255,255,255,.94);
+  background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(12px);
   border: 1px solid #e1e7e4;
   border-radius: 14px;
-  box-shadow: 0 8px 30px rgba(16,47,41,.10);
+  box-shadow: 0 8px 30px rgba(16, 47, 41, 0.1);
 }
 
 @media (max-width: 750px) {
@@ -1905,7 +1906,6 @@ a {
     padding: 20px;
   }
 }
-
 
 /* =========================================================
    APARÊNCIA — EDITOR DE CORES
@@ -1928,27 +1928,25 @@ a {
   cursor: pointer;
 
   transition:
-    transform .15s ease,
-    border-color .15s ease,
-    box-shadow .15s ease;
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 #aparencia-form input[type="color"]:hover {
   transform: translateY(-1px);
 
-  border-color: #1e6f5c;
+  border-color: var(--green);
 
-  box-shadow:
-    0 4px 12px rgba(30,111,92,.12);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--green) 10%, transparent);
 }
 
 #aparencia-form input[type="color"]:focus {
   outline: none;
 
-  border-color: #1e6f5c;
+  border-color: var(--green);
 
-  box-shadow:
-    0 0 0 3px rgba(30,111,92,.12);
+  box-shadow: 0 0 0 3px rgba(30, 111, 92, 0.12);
 }
 
 #aparencia-form input[type="color"]::-webkit-color-swatch-wrapper {
@@ -1970,18 +1968,12 @@ a {
   flex: 1;
   min-width: 0;
 
-  font-family:
-    ui-monospace,
-    SFMono-Regular,
-    Menlo,
-    Monaco,
-    Consolas,
-    monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   font-size: 13px;
   font-weight: 700;
 
-  letter-spacing: .4px;
+  letter-spacing: 0.4px;
 
   text-transform: uppercase;
 }
@@ -2005,7 +1997,7 @@ a {
 
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: .6px;
+  letter-spacing: 0.6px;
 }
 
 #aparencia-form .form-field:has(input[type="color"]) {
@@ -2017,9 +2009,9 @@ a {
   background: #fbfcfc;
 
   transition:
-    border-color .18s ease,
-    background .18s ease,
-    box-shadow .18s ease;
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 #aparencia-form .form-field:has(input[type="color"]):hover {
@@ -2027,14 +2019,12 @@ a {
 
   border-color: #d5e1dc;
 
-  box-shadow:
-    0 4px 14px rgba(16,47,41,.04);
+  box-shadow: 0 4px 14px rgba(16, 47, 41, 0.04);
 }
 
 #aparencia-form .form-field:has(input[type="color"]) label {
   margin-bottom: 12px;
 }
-
 
 /* =========================================================
    APARÊNCIA — PREVIEW AO VIVO
@@ -2049,13 +2039,12 @@ a {
 
   background: var(--preview-fundo, #ffffff);
 
-  box-shadow:
-    0 18px 50px rgba(20, 45, 38, .10);
+  box-shadow: 0 18px 50px rgba(20, 45, 38, 0.1);
 
   transition:
-    background .2s ease,
-    border-color .2s ease,
-    box-shadow .2s ease;
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 /* Barra superior */
@@ -2069,19 +2058,14 @@ a {
 
   padding: 0 22px;
 
-  background:
-    color-mix(
-      in srgb,
-      var(--preview-fundo, #ffffff) 94%,
-      var(--preview-principal, #1e6f5c)
-    );
+  background: color-mix(
+    in srgb,
+    var(--preview-fundo, #ffffff) 94%,
+    var(--preview-principal, var(--green))
+  );
 
   border-bottom: 1px solid
-    color-mix(
-      in srgb,
-      var(--preview-principal, #1e6f5c) 12%,
-      transparent
-    );
+    color-mix(in srgb, var(--preview-principal, var(--green)) 12%, transparent);
 }
 
 /* Logo */
@@ -2111,8 +2095,8 @@ a {
   object-fit: contain;
 
   transition:
-    width .15s ease,
-    height .15s ease;
+    width 0.15s ease,
+    height 0.15s ease;
 }
 
 /* Nome */
@@ -2125,12 +2109,7 @@ a {
 }
 
 #aparencia-preview #preview-subtitulo {
-  color:
-    color-mix(
-      in srgb,
-      var(--preview-texto, #17211f) 60%,
-      transparent
-    );
+  color: color-mix(in srgb, var(--preview-texto, #17211f) 60%, transparent);
 
   font-size: 11px;
 }
@@ -2154,7 +2133,7 @@ a {
       circle at 50% 0%,
       color-mix(
         in srgb,
-        var(--preview-principal, #1e6f5c) 13%,
+        var(--preview-principal, var(--green)) 13%,
         transparent
       ),
       transparent 58%
@@ -2174,7 +2153,7 @@ a {
   font-size: clamp(26px, 4vw, 42px);
   line-height: 1.08;
   font-weight: 850;
-  letter-spacing: -.8px;
+  letter-spacing: -0.8px;
 }
 
 /* Descrição */
@@ -2184,12 +2163,7 @@ a {
 
   margin: 16px auto 0;
 
-  color:
-    color-mix(
-      in srgb,
-      var(--preview-texto, #17211f) 68%,
-      transparent
-    );
+  color: color-mix(in srgb, var(--preview-texto, #17211f) 68%, transparent);
 
   font-size: 14px;
   line-height: 1.7;
@@ -2221,37 +2195,28 @@ a {
   cursor: default;
 
   transition:
-    transform .15s ease,
-    box-shadow .15s ease;
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 #aparencia-preview .preview-primary {
-  border: 1px solid var(--preview-principal, #1e6f5c);
+  border: 1px solid var(--preview-principal, var(--green));
 
-  background: var(--preview-principal, #1e6f5c);
+  background: var(--preview-principal, var(--green));
 
   color: #fff;
 
-  box-shadow:
-    0 7px 18px
-    color-mix(
-      in srgb,
-      var(--preview-principal, #1e6f5c) 25%,
-      transparent
-    );
+  box-shadow: 0 7px 18px
+    color-mix(in srgb, var(--preview-principal, var(--green)) 25%, transparent);
 }
 
 #aparencia-preview .preview-secondary {
   border: 1px solid
-    color-mix(
-      in srgb,
-      var(--preview-principal, #1e6f5c) 30%,
-      transparent
-    );
+    color-mix(in srgb, var(--preview-principal, var(--green)) 30%, transparent);
 
   background: transparent;
 
-  color: var(--preview-principal, #1e6f5c);
+  color: var(--preview-principal, var(--green));
 }
 
 /* Rodapé */
@@ -2260,18 +2225,9 @@ a {
   padding: 14px 22px;
 
   border-top: 1px solid
-    color-mix(
-      in srgb,
-      var(--preview-texto, #17211f) 8%,
-      transparent
-    );
+    color-mix(in srgb, var(--preview-texto, #17211f) 8%, transparent);
 
-  color:
-    color-mix(
-      in srgb,
-      var(--preview-texto, #17211f) 55%,
-      transparent
-    );
+  color: color-mix(in srgb, var(--preview-texto, #17211f) 55%, transparent);
 
   font-size: 10px;
 
@@ -2293,18 +2249,17 @@ a {
 
   border-radius: 999px;
 
-  background:
-    color-mix(
-      in srgb,
-      var(--preview-principal, #1e6f5c) 12%,
-      #ffffff
-    );
+  background: color-mix(
+    in srgb,
+    var(--preview-principal, var(--green)) 12%,
+    #ffffff
+  );
 
-  color: var(--preview-principal, #1e6f5c);
+  color: var(--preview-principal, var(--green));
 
   font-size: 8px;
   font-weight: 900;
-  letter-spacing: .5px;
+  letter-spacing: 0.5px;
 
   pointer-events: none;
 }
@@ -2312,7 +2267,6 @@ a {
 /* Responsivo */
 
 @media (max-width: 650px) {
-
   #aparencia-preview .preview-header {
     padding: 0 14px;
   }
@@ -2329,7 +2283,573 @@ a {
   #aparencia-preview .preview-button {
     width: 100%;
   }
-
 }
 
+/* ============================================================
+   CATÁLOGO — GRID E COMPONENTES (classes usadas por catalogo.js)
+   ============================================================ */
 
+.catalog-section {
+  padding: 60px 0 80px;
+}
+
+.catalog-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.search-box {
+  flex: 1;
+  min-width: 220px;
+  max-width: 420px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+
+.search-box input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  font: inherit;
+  background: transparent;
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.lamina-content {
+  padding: 20px 22px 24px;
+}
+
+.lamina-content h2 {
+  margin: 6px 0 8px;
+  font-size: 19px;
+}
+
+.lamina-content p {
+  color: #6b7672;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.image-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 30, 25, 0.45);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.lamina-card:hover .image-overlay,
+.lamina-card:focus-within .image-overlay {
+  opacity: 1;
+}
+
+.explore-button {
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--green);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.no-image {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42px;
+  color: #9aa5a1;
+}
+
+.empty-catalog {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 70px 20px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+
+.empty-icon {
+  font-size: 44px;
+  margin-bottom: 10px;
+}
+
+/* Filtros do catálogo */
+
+.catalog-tools select {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: white;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.catalog-tools select:focus {
+  outline: none;
+  border-color: var(--green-light);
+}
+
+.catalog-tools .button.secondary {
+  white-space: nowrap;
+}
+
+.catalog-status {
+  margin-bottom: 18px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.lamina-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.lamina-tags span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #eef4f1;
+  color: var(--green-light);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+@media (max-width: 700px) {
+  .catalog-tools {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-box {
+    max-width: none;
+  }
+
+  .catalog-tools select,
+  .catalog-tools .button.secondary {
+    width: 100%;
+  }
+}
+
+/* ============================================================
+   VISUALIZADOR DE LÂMINAS — MARCAÇÕES E SELEÇÃO
+   Classes consumidas por src/main.js (renderLamina,
+   desenharEstruturas, configurarModoEstudo).
+   Regras aditivas: nenhuma propriedade existente foi alterada.
+   ============================================================ */
+
+.estrutura-overlay {
+  /* O OpenSeadragon reposiciona via transform; garantimos
+     que o conteúdo interno nunca bloqueie a interação com
+     a imagem nas áreas não clicáveis. */
+  pointer-events: none;
+  transition: filter 0.18s ease;
+}
+
+.estrutura-overlay > * {
+  pointer-events: auto;
+}
+
+.estrutura-overlay:hover {
+  filter: drop-shadow(0 0 5px rgba(224, 82, 82, 0.45));
+}
+
+.estrutura-overlay.estrutura-selecionada {
+  z-index: 1;
+  filter: drop-shadow(0 0 8px rgba(224, 82, 82, 0.85));
+}
+
+/* Número sequencial exibido sobre a marcação.
+   A fonte é o índice do array (mesma numeração da lista lateral). */
+.estrutura-numero-badge {
+  position: absolute;
+  top: -8px;
+  right: -6px;
+  z-index: 2;
+  min-width: 24px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--green);
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.estrutura-overlay.estrutura-selecionada .estrutura-numero-badge {
+  background: #e05252;
+}
+
+.structure.estrutura-selecionada {
+  background: #e8f1ec;
+  box-shadow: inset 3px 0 0 var(--green-light);
+}
+
+.structure.estrutura-selecionada strong {
+  color: var(--green);
+}
+
+#zoom-value {
+  display: inline-block;
+  min-width: 44px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e3efea;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Preenchimento da tela cheia do OpenSeadragon
+   (viewer.setFullScreen / setFullPage). */
+.viewer:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  background: #101513;
+}
+
+.viewer:fullscreen .openseadragon-container {
+  background: #101513;
+}
+
+@media (max-width: 600px) {
+  #zoom-value {
+    min-width: 38px;
+  }
+}
+
+/* ============================================================
+   MODO ESTUDO 2.0 — ÍNDICE, CONTADOR, NAVEGAÇÃO E PAINEL
+   Classes/IDs consumidos por src/main.js (renderLamina,
+   configurarModoEstudo). Regras aditivas.
+   ============================================================ */
+
+/* Contador do painel */
+
+.estrutura-estudo-contador {
+  margin-bottom: 10px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #edf6f2;
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* Tipo da estrutura no painel */
+
+.estrutura-estudo-tipo {
+  display: inline-block;
+  margin-bottom: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f1e8e2;
+  color: #8a4b28;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+/* Texto da marcação (tipo texto) */
+
+.estrutura-estudo-texto {
+  margin: 10px 0 0 !important;
+  padding: 10px 12px;
+  border-left: 3px solid var(--green-light);
+  border-radius: 0 8px 8px 0;
+  background: #f2f7f4;
+  color: #34413d !important;
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* Navegação anterior/próxima */
+
+.estrutura-estudo-navegacao {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.estrutura-nav-item {
+  min-height: 38px;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: #f4f7f5;
+  color: #34413d;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.estrutura-nav-item:hover {
+  background: #e8f1ec;
+  border-color: var(--green-light);
+}
+
+.estrutura-nav-item:focus-visible {
+  outline: 2px solid var(--green-light);
+  outline-offset: 2px;
+}
+
+.estrutura-nav-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Lista lateral de estruturas — número + tipo */
+
+.structure {
+  align-items: flex-start;
+}
+
+.structure-numero {
+  min-width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 26px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.structure-info {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.structure-info strong {
+  overflow-wrap: anywhere;
+}
+
+.structure-info .structure-tipo {
+  color: var(--green-light);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.structure-empty {
+  margin-top: 8px;
+  padding: 14px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  background: #fafcfb;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Painel de estudo — scroll interno quando muito alto */
+
+#estrutura-estudo-panel {
+  max-height: calc(100vh - 130px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+@media (max-width: 600px) {
+  .estrutura-estudo-navegacao {
+    grid-template-columns: 1fr;
+  }
+
+  .estrutura-nav-item {
+    width: 100%;
+  }
+
+  #estrutura-estudo-panel {
+    top: 84px;
+    right: 16px;
+    left: 16px;
+    width: auto;
+  }
+}
+
+/* ============================================================
+   FASE 18 — Navegação entre imagens da lâmina (viewer)
+   Barra escura coerente com .viewer-controls; uma imagem
+   visível por vez; contador + anterior/próxima.
+   ============================================================ */
+
+.imagem-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 14px;
+  background: #18201d;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  color: #aab7b1;
+  font-size: 11px;
+}
+
+.imagem-nav[hidden] {
+  display: none;
+}
+
+.img-contador {
+  color: white;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+}
+
+.imagem-nav-controles {
+  display: flex;
+  gap: 5px;
+}
+
+.imagem-nav-controles button {
+  width: 38px;
+  height: 34px;
+  border-radius: 7px;
+  background: #29332f;
+  color: white;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.imagem-nav-controles button:hover:not(:disabled) {
+  background: var(--green-light);
+}
+
+.imagem-nav-controles button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   FASE 18 — Preview de múltiplas imagens (formulário)
+   Miniaturas com remoção e reordenação (↑/↓); índice 0 é a
+   principal.
+   ============================================================ */
+
+.imagens-preview {
+  margin-bottom: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.imagem-item {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #f4f7f5;
+}
+
+.imagem-item-thumb {
+  display: block;
+  width: 100%;
+  height: 90px;
+  object-fit: cover;
+}
+
+.imagem-item-principal {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--green-light);
+  color: white;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.imagem-item-acoes {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px;
+  background: white;
+  border-top: 1px solid var(--border);
+}
+
+.imagem-item-acoes button {
+  width: 28px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: #f4f7f5;
+  color: #34413d;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.imagem-item-acoes button:hover:not(:disabled) {
+  border-color: var(--green-light);
+  color: var(--green-light);
+}
+
+.imagem-item-acoes button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.imagem-item-acoes .imagem-remover:hover:not(:disabled) {
+  border-color: #c0392b;
+  color: #c0392b;
+}
+
+.imagens-vazia {
+  grid-column: 1 / -1;
+  padding: 14px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+}
