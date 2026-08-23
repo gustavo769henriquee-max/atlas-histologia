@@ -18,3 +18,12 @@ supabase/.temp/
 *.bak
 *backup*
 backup-*/
+
+# Variáveis de ambiente
+.env
+.env.*
+!.env.example
+
+# Configurações locais do VS Code.vscode/
+
+/.vscode/
