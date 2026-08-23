@@ -1,11 +1,10 @@
-﻿import { supabase } from '../lib/supabase.js'
+﻿import { supabase } from "../lib/supabase.js";
 
-const app = document.querySelector('#app')
+const app = document.querySelector("#app");
 
-let todasLaminas = []
+let todasLaminas = [];
 
 export async function renderCatalogo() {
-
   app.innerHTML = `
     <header class="header">
       <div class="container header-content">
@@ -82,6 +81,33 @@ export async function renderCatalogo() {
 
             </select>
 
+
+            <select id="filter-tecnica">
+
+              <option value="">
+                Todas as técnicas
+              </option>
+
+            </select>
+
+
+            <select id="filter-coloracao">
+
+              <option value="">
+                Todas as colorações
+              </option>
+
+            </select>
+
+
+            <button
+              id="limpar-filtros"
+              type="button"
+              class="button secondary"
+            >
+              Limpar filtros
+            </button>
+
           </div>
 
 
@@ -120,113 +146,150 @@ export async function renderCatalogo() {
       </div>
 
     </footer>
-  `
+  `;
 
+  await carregarLaminas();
 
-  await carregarLaminas()
-
-  configurarFiltros()
+  configurarFiltros();
 }
-
 
 async function carregarLaminas() {
+  const status = document.querySelector("#catalog-status");
 
-  const status =
-    document.querySelector('#catalog-status')
+  const grid = document.querySelector("#catalog-grid");
 
+  if (!status || !grid) return;
 
-  const grid =
-    document.querySelector('#catalog-grid')
-
-
-  const {
-    data,
-    error
-  } =
-    await supabase
-      .from('laminas')
-      .select('*')
-      .eq('publicado', true)
-      .order('created_at', {
-        ascending: false
-      })
-
+  const { data, error } = await supabase
+    .from("laminas")
+    .select("*")
+    .eq("publicado", true)
+    .order("created_at", {
+      ascending: false,
+    });
 
   if (error) {
+    console.error("Erro ao carregar lâminas:", error);
 
-    console.error(
-      'Erro ao carregar lâminas:',
-      error
-    )
+    status.textContent = "Não foi possível carregar as lâminas.";
 
-
-    status.textContent =
-      'Não foi possível carregar as lâminas.'
-
-
-    return
+    return;
   }
 
+  todasLaminas = data || [];
 
-  todasLaminas =
-    data || []
+  preencherFiltros();
 
-
-  preencherCategorias()
-
-  renderCards(todasLaminas)
+  renderCards(todasLaminas);
 }
 
+/*
+ * Preenche os três filtros com valores derivados
+ * dos dados reais já carregados (sem novas consultas).
+ *
+ * Categoria: lâminas antigas têm apenas o texto;
+ * novas têm categoria_id — a chave usada é
+ * categoria_id || categoria, cobrindo ambos.
+ */
 
-function preencherCategorias() {
+function preencherFiltros() {
+  const selectCategoria = document.querySelector("#filter-categoria");
 
-  const select =
-    document.querySelector('#filter-categoria')
+  const selectTecnica = document.querySelector("#filter-tecnica");
 
+  const selectColoracao = document.querySelector("#filter-coloracao");
 
-  const categorias =
-    [...new Set(
-      todasLaminas
-        .map(lamina => lamina.categoria)
-        .filter(Boolean)
-    )]
-      .sort()
+  if (!selectCategoria || !selectTecnica || !selectColoracao) {
+    return;
+  }
 
+  const categorias = new Map();
 
-  select.innerHTML = `
+  const tecnicas = new Set();
+
+  const coloracoes = new Set();
+
+  todasLaminas.forEach((lamina) => {
+    const chaveCategoria = lamina.categoria_id || lamina.categoria;
+
+    if (chaveCategoria && !categorias.has(chaveCategoria)) {
+      categorias.set(chaveCategoria, lamina.categoria || chaveCategoria);
+    }
+
+    const tecnica = String(lamina.tecnica || "").trim();
+
+    if (tecnica) {
+      tecnicas.add(tecnica);
+    }
+
+    const coloracao = String(lamina.coloracao || "").trim();
+
+    if (coloracao) {
+      coloracoes.add(coloracao);
+    }
+  });
+
+  selectCategoria.innerHTML = `
     <option value="">
       Todas as categorias
     </option>
 
-    ${categorias.map(categoria => `
-      <option value="${escapeHtml(categoria)}">
-        ${escapeHtml(categoria)}
+    ${[...categorias.entries()]
+      .map(
+        ([valor, nome]) => `
+      <option value="${escapeHtml(valor)}">
+        ${escapeHtml(nome)}
       </option>
-    `).join('')}
-  `
+    `,
+      )
+      .join("")}
+  `;
+
+  selectTecnica.innerHTML = `
+    <option value="">
+      Todas as técnicas
+    </option>
+
+    ${[...tecnicas]
+      .sort()
+      .map(
+        (valor) => `
+      <option value="${escapeHtml(valor)}">
+        ${escapeHtml(valor)}
+      </option>
+    `,
+      )
+      .join("")}
+  `;
+
+  selectColoracao.innerHTML = `
+    <option value="">
+      Todas as colorações
+    </option>
+
+    ${[...coloracoes]
+      .sort()
+      .map(
+        (valor) => `
+      <option value="${escapeHtml(valor)}">
+        ${escapeHtml(valor)}
+      </option>
+    `,
+      )
+      .join("")}
+  `;
 }
 
-
 function renderCards(laminas) {
+  const grid = document.querySelector("#catalog-grid");
 
-  const grid =
-    document.querySelector('#catalog-grid')
+  const status = document.querySelector("#catalog-status");
 
-
-  const status =
-    document.querySelector('#catalog-status')
-
-
-  status.textContent =
-    `${laminas.length} ${
-      laminas.length === 1
-        ? 'lâmina encontrada'
-        : 'lâminas encontradas'
-    }`
-
+  status.textContent = `${laminas.length} ${
+    laminas.length === 1 ? "lâmina encontrada" : "lâminas encontradas"
+  }`;
 
   if (!laminas.length) {
-
     grid.innerHTML = `
 
       <div class="empty-catalog">
@@ -245,14 +308,14 @@ function renderCards(laminas) {
 
       </div>
 
-    `
+    `;
 
-    return
+    return;
   }
 
-
-  grid.innerHTML =
-    laminas.map(lamina => `
+  grid.innerHTML = laminas
+    .map(
+      (lamina) => `
 
       <article class="lamina-card">
 
@@ -260,15 +323,13 @@ function renderCards(laminas) {
 
           ${
             lamina.imagem_url
-
               ? `
                 <img
                   src="${escapeHtml(lamina.imagem_url)}"
-                  alt="${escapeHtml(lamina.nome || 'Lâmina histológica')}"
+                  alt="${escapeHtml(lamina.nome || "Lâmina histológica")}"
                   loading="lazy"
                 >
               `
-
               : `
                 <div class="no-image">
                   🔬
@@ -295,27 +356,21 @@ function renderCards(laminas) {
 
           <div class="lamina-category">
 
-            ${escapeHtml(
-              lamina.categoria || 'Histologia'
-            )}
+            ${escapeHtml(lamina.categoria || "Histologia")}
 
           </div>
 
 
           <h2>
 
-            ${escapeHtml(
-              lamina.nome || 'Lâmina sem nome'
-            )}
+            ${escapeHtml(lamina.nome || "Lâmina sem nome")}
 
           </h2>
 
 
           <p>
 
-            ${escapeHtml(
-              lamina.descricao || 'Sem descrição.'
-            )}
+            ${escapeHtml(lamina.descricao || "Sem descrição.")}
 
           </p>
 
@@ -329,7 +384,7 @@ function renderCards(laminas) {
                     🔬 ${escapeHtml(lamina.tecnica)}
                   </span>
                 `
-                : ''
+                : ""
             }
 
 
@@ -340,7 +395,17 @@ function renderCards(laminas) {
                     🧫 ${escapeHtml(lamina.coloracao)}
                   </span>
                 `
-                : ''
+                : ""
+            }
+
+            ${
+              lamina.aumento
+                ? `
+                  <span>
+                    🔍 Aumento: ${escapeHtml(lamina.aumento)}
+                  </span>
+                `
+                : ""
             }
 
           </div>
@@ -358,92 +423,96 @@ function renderCards(laminas) {
 
       </article>
 
-    `).join('')
+    `,
+    )
+    .join("");
 }
-
 
 function configurarFiltros() {
+  const busca = document.querySelector("#search-laminas");
 
-  const busca =
-    document.querySelector('#search-laminas')
+  const categoria = document.querySelector("#filter-categoria");
 
+  const tecnica = document.querySelector("#filter-tecnica");
 
-  const categoria =
-    document.querySelector('#filter-categoria')
+  const coloracao = document.querySelector("#filter-coloracao");
 
+  const limpar = document.querySelector("#limpar-filtros");
 
   function aplicarFiltros() {
+    const texto = busca.value.trim().toLowerCase();
 
-    const texto =
-      busca.value
-        .trim()
-        .toLowerCase()
+    const categoriaSelecionada = categoria.value;
 
+    const tecnicaSelecionada = tecnica.value;
 
-    const categoriaSelecionada =
-      categoria.value
+    const coloracaoSelecionada = coloracao.value;
 
+    const resultado = todasLaminas.filter((lamina) => {
+      const textoCompleto = `
+            ${lamina.nome || ""}
+            ${lamina.descricao || ""}
+            ${lamina.tecnica || ""}
+            ${lamina.coloracao || ""}
+            ${lamina.categoria || ""}
+          `.toLowerCase();
 
-    const resultado =
-      todasLaminas.filter(lamina => {
+      const correspondeTexto = !texto || textoCompleto.includes(texto);
 
-        const textoCompleto =
-          `
-            ${lamina.nome || ''}
-            ${lamina.descricao || ''}
-            ${lamina.tecnica || ''}
-            ${lamina.coloracao || ''}
-            ${lamina.categoria || ''}
-          `
-            .toLowerCase()
+      const categoriaDaLamina = lamina.categoria_id || lamina.categoria || "";
 
+      const correspondeCategoria =
+        !categoriaSelecionada || categoriaDaLamina === categoriaSelecionada;
 
-        const correspondeTexto =
-          !texto ||
-          textoCompleto.includes(texto)
+      const correspondeTecnica =
+        !tecnicaSelecionada ||
+        String(lamina.tecnica || "").trim() === tecnicaSelecionada;
 
+      const correspondeColoracao =
+        !coloracaoSelecionada ||
+        String(lamina.coloracao || "").trim() === coloracaoSelecionada;
 
-        const correspondeCategoria =
-          !categoriaSelecionada ||
-          lamina.categoria_id === categoriaSelecionada
+      return (
+        correspondeTexto &&
+        correspondeCategoria &&
+        correspondeTecnica &&
+        correspondeColoracao
+      );
+    });
 
-
-        return (
-          correspondeTexto &&
-          correspondeCategoria
-        )
-      })
-
-
-    renderCards(resultado)
+    renderCards(resultado);
   }
 
+  busca.addEventListener("input", aplicarFiltros);
 
-  busca.addEventListener(
-    'input',
-    aplicarFiltros
-  )
+  categoria.addEventListener("change", aplicarFiltros);
 
+  tecnica.addEventListener("change", aplicarFiltros);
 
-  categoria.addEventListener(
-    'change',
-    aplicarFiltros
-  )
+  coloracao.addEventListener("change", aplicarFiltros);
+
+  limpar?.addEventListener("click", () => {
+    busca.value = "";
+
+    categoria.value = "";
+
+    tecnica.value = "";
+
+    coloracao.value = "";
+
+    aplicarFiltros();
+  });
 }
 
-
-function escapeHtml(value = '') {
-
+function escapeHtml(value = "") {
   return String(value)
+    .replaceAll("&", "&amp;")
 
-    .replaceAll('&', '&amp;')
+    .replaceAll("<", "&lt;")
 
-    .replaceAll('<', '&lt;')
+    .replaceAll(">", "&gt;")
 
-    .replaceAll('>', '&gt;')
+    .replaceAll('"', "&quot;")
 
-    .replaceAll('"', '&quot;')
-
-    .replaceAll("'", '&#039;')
+    .replaceAll("'", "&#039;");
 }
-

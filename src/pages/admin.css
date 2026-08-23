@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+﻿@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 
 .admin-page {
   min-height: 100vh;
@@ -30,7 +30,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #1e6f5c;
+  background: var(--green);
   color: white;
   text-decoration: none;
   font-size: 21px;
@@ -97,12 +97,12 @@
 }
 
 .admin-menu:hover {
-  background: rgba(255,255,255,.08);
+  background: rgba(255, 255, 255, 0.08);
   color: white;
 }
 
 .admin-menu.active {
-  background: #1e6f5c;
+  background: var(--green);
   color: white;
 }
 
@@ -151,7 +151,7 @@
 }
 
 .eyebrow {
-  color: #1e6f5c;
+  color: var(--green-light);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 1.5px;
@@ -239,14 +239,14 @@
   border-radius: 14px;
   padding: 14px;
   display: grid;
-  grid-template-columns: 150px minmax(0,1fr) auto;
+  grid-template-columns: 150px minmax(0, 1fr) auto;
   align-items: center;
   gap: 20px;
 }
 
 .admin-lamina-card:hover {
   border-color: #b8cec7;
-  box-shadow: 0 8px 25px rgba(20,45,39,.06);
+  box-shadow: 0 8px 25px rgba(20, 45, 39, 0.06);
 }
 
 .admin-lamina-thumb {
@@ -280,7 +280,7 @@
 }
 
 .admin-category {
-  color: #1e6f5c;
+  color: var(--green);
   font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
@@ -395,7 +395,6 @@
 }
 
 @media (max-width: 850px) {
-
   .admin-sidebar {
     width: 70px;
   }
@@ -420,11 +419,9 @@
     grid-column: 1 / -1;
     justify-content: flex-end;
   }
-
 }
 
 @media (max-width: 600px) {
-
   .admin-header {
     padding: 0 15px;
   }
@@ -456,5 +453,461 @@
   .admin-lamina-thumb {
     height: 160px;
   }
+}
 
+/* ============================================================
+   ATLAS - EDITOR DE ESTRUTURAS / LAYOUT FINAL
+   ============================================================ */
+
+.estruturas-editor-card {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.estrutura-editor {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #e3e7e5;
+  border-radius: 14px;
+  background: #fafcfb;
+}
+
+.estrutura-editor-toolbar {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  width: 100%;
+  margin: 0 0 18px;
+}
+
+.estrutura-editor-toolbar .form-field {
+  min-width: 0;
+  width: 100%;
+}
+
+.estrutura-editor-toolbar input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.estrutura-ferramentas {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  margin: 0 0 18px;
+}
+
+.estrutura-tool {
+  flex: 0 0 auto;
+  min-height: 42px;
+  white-space: nowrap;
+}
+
+.estrutura-imagem-editor {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.estrutura-texto-editor {
+  width: 100%;
+  margin: 14px 0 0;
+}
+
+.estrutura-texto-editor .form-field {
+  width: 100%;
+}
+
+.estrutura-texto-editor input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.estrutura-editor-ajuda {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 14px 0;
+  line-height: 1.5;
+}
+
+.estrutura-editor > #adicionar-estrutura {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.estruturas-lista {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 18px;
+}
+
+.estrutura-item {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.estrutura-item-info {
+  min-width: 0;
+  flex: 1;
+}
+
+@media (max-width: 700px) {
+  .estrutura-editor {
+    padding: 14px;
+  }
+
+  .estrutura-editor-toolbar {
+    grid-template-columns: 1fr !important;
+  }
+
+  .estrutura-ferramentas {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .estrutura-tool {
+    width: 100%;
+  }
+
+  .estrutura-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+/*
+ * ============================================================
+ * EDITOR DE ESTRUTURAS - INTERACAO COM A IMAGEM
+ * Geometria unica: container -> stage -> img + svg overlay.
+ * O stage tem exatamente o tamanho da imagem renderizada.
+ * ============================================================
+ */
+
+.estrutura-imagem-editor {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.estrutura-imagem-editor:not(.com-imagem) {
+  border: 1px dashed #cfd8d4;
+}
+
+.estrutura-imagem-editor.com-imagem {
+  cursor: crosshair;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  line-height: 0;
+  font-size: 0;
+}
+
+.estrutura-imagem-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  padding: 24px;
+  color: #78827f;
+  font-size: 14px;
+  text-align: center;
+}
+
+.estrutura-imagem-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+.estrutura-imagem-area {
+  position: relative;
+  font-size: 0;
+  line-height: 0;
+}
+
+.estrutura-imagem-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.estrutura-tool.active {
+  background: var(--green);
+  border-color: var(--green);
+  color: #ffffff;
+}
+
+/* ============================================================
+   CATEGORIAS — CRUD
+   ============================================================ */
+
+.form-status {
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.form-status.loading {
+  background: #eef4f2;
+  color: var(--green-light);
+}
+
+.form-status.success {
+  background: #e5f3ea;
+  color: #267244;
+}
+
+.form-status.error {
+  background: #fff0f0;
+  color: #9b3131;
+}
+
+.categoria-form-container {
+  margin-bottom: 25px;
+  padding: 26px;
+  border: 1px solid #e4e9e7;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 4px 18px rgba(16, 47, 41, 0.04);
+}
+
+.categoria-form-container .form-card-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.categoria-form-container .form-card-title > span {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #edf6f2;
+  border-radius: 12px;
+  font-size: 20px;
+}
+
+.categoria-form-container .form-card-title h2 {
+  margin: 2px 0 5px;
+  font-size: 18px;
+  color: #17211f;
+}
+
+.categoria-form-container .form-card-title p {
+  margin: 0;
+  color: #7a8581;
+  font-size: 13px;
+}
+
+.categoria-form-container .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.categoria-form-container .form-field.full {
+  grid-column: 1 / -1;
+}
+
+.categoria-form-container .form-field label {
+  display: block;
+  margin-bottom: 8px;
+  color: #34413d;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.categoria-form-container input[type="text"],
+.categoria-form-container input[type="number"],
+.categoria-form-container textarea,
+.categoria-form-container select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #dce4e0;
+  background: #fbfcfc;
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: #17211f;
+  font: inherit;
+  outline: none;
+  transition: 0.18s ease;
+}
+
+.categoria-form-container input:focus,
+.categoria-form-container textarea:focus,
+.categoria-form-container select:focus {
+  background: #fff;
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 10%, transparent);
+}
+
+.categoria-form-container .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.categorias-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.categoria-card {
+  background: white;
+  border: 1px solid #e2e7e5;
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.categoria-card:hover {
+  border-color: #b8cec7;
+  box-shadow: 0 8px 25px rgba(20, 45, 39, 0.06);
+}
+
+.categoria-card-icon {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  background: #edf5f2;
+  font-size: 20px;
+}
+
+.categoria-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.categoria-card-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+
+.categoria-card-info h2 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+
+.categoria-card-info p {
+  margin: 0;
+  color: #747e7b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.categoria-card-info small {
+  display: block;
+  margin-top: 4px;
+  color: #7a8581;
+  font-size: 11px;
+}
+
+@media (max-width: 700px) {
+  .categoria-form-container .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .categoria-form-container .form-field.full {
+    grid-column: auto;
+  }
+}
+
+/* ============================================================
+   CONFIGURAÇÕES — DASHBOARD INFORMATIVO
+   ============================================================ */
+
+#configuracoes-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.config-card {
+  background: white;
+  border: 1px solid #e2e7e5;
+  border-radius: 16px;
+  padding: 26px;
+}
+
+.config-card h2 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: #17211f;
+}
+
+.config-card > p {
+  margin: 0 0 18px;
+  color: #707b77;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.config-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.config-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 14px;
+  border: 1px solid #e2e7e5;
+  border-radius: 12px;
+  background: #fafcfb;
+}
+
+.config-label {
+  color: #34413d;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.config-value {
+  color: #17211f;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: right;
+  word-break: break-word;
+}
+
+@media (max-width: 700px) {
+  .config-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .config-value {
+    text-align: left;
+  }
 }
