@@ -22,7 +22,7 @@ export async function renderCatalogo() {
           <a href="#inicio">Início</a>
           <a href="#laminas" class="active">Lâminas</a>
           <a href="#sobre">Sobre</a>
-          <a href="#admin">Administração</a>
+          <a href="#login">Administração</a>
         </nav>
 
       </div>
@@ -516,4 +516,3 @@ function escapeHtml(value = "") {
 
     .replaceAll("'", "&#039;");
 }
-

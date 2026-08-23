@@ -2458,7 +2458,7 @@ a {
 }
 
 /* ============================================================
-   VISUALIZADOR DE LÂMINAS — MARCAÇÕES E SELEÇÃO
+   VISUALIZADOR DE L?MINAS — MARCAÇÕES E SELEÇÃO
    Classes consumidas por src/main.js (renderLamina,
    desenharEstruturas, configurarModoEstudo).
    Regras aditivas: nenhuma propriedade existente foi alterada.
@@ -2768,7 +2768,7 @@ a {
 
 /* ============================================================
    FASE 18 — Preview de múltiplas imagens (formulário)
-   Miniaturas com remoção e reordenação (?/?); índice 0 é a
+   Miniaturas com remoção e reordenação (/); índice 0 é a
    principal.
    ============================================================ */
 
@@ -2856,3 +2856,324 @@ a {
 
 
 
+
+/* ============================================================
+   HOME V2  REFINAMENTO VISUAL
+   ============================================================ */
+
+.hero {
+  position: relative;
+  padding: 110px 0 105px;
+  background:
+    radial-gradient(
+      circle at 78% 42%,
+      color-mix(in srgb, var(--green-light) 12%, transparent),
+      transparent 34%
+    ),
+    linear-gradient(
+      180deg,
+      var(--cream) 0%,
+      color-mix(in srgb, var(--green) 3%, var(--cream)) 100%
+    );
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  right: -220px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--green) 5%, transparent);
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.hero-grid {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-text {
+  position: relative;
+  z-index: 2;
+}
+
+.hero .eyebrow {
+  padding: 7px 11px;
+  border: 1px solid color-mix(in srgb, var(--green-light) 22%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--green-light) 7%, transparent);
+}
+
+.hero h1 {
+  margin-top: 8px;
+  max-width: 680px;
+  font-weight: 800;
+  letter-spacing: -4.5px;
+  text-wrap: balance;
+}
+
+.hero-text > p {
+  max-width: 590px;
+  font-size: 18px;
+  line-height: 1.75;
+}
+
+.hero-actions {
+  align-items: center;
+}
+
+.hero-actions .button {
+  min-height: 50px;
+  padding: 0 20px;
+}
+
+.hero-actions .button.primary {
+  box-shadow:
+    0 12px 30px color-mix(in srgb, var(--green) 20%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.hero-actions .button.primary:hover {
+  box-shadow:
+    0 16px 36px color-mix(in srgb, var(--green) 28%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.hero-actions .button.secondary {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+.hero-visual {
+  min-height: 500px;
+}
+
+.microscope-card {
+  width: min(460px, 100%);
+  height: 460px;
+  border-radius: 34px;
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      color-mix(in srgb, var(--green-light) 18%, white),
+      transparent 48%
+    ),
+    color-mix(in srgb, var(--green) 7%, white);
+  border: 1px solid color-mix(in srgb, var(--green) 18%, white);
+  box-shadow:
+    0 35px 80px color-mix(in srgb, var(--green) 12%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transform: rotate(1deg);
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.microscope-card:hover {
+  transform: rotate(0deg) translateY(-5px);
+  box-shadow:
+    0 42px 90px color-mix(in srgb, var(--green) 17%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.microscope-glow {
+  width: 310px;
+  height: 310px;
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.55) 42%,
+      transparent 72%
+    );
+  filter: blur(4px);
+}
+
+.microscope {
+  transform: translate(-50%, -45%) scale(1.04);
+}
+
+.floating-tag {
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow:
+    0 15px 35px rgba(40, 70, 60, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+}
+
+.tag-one {
+  left: 20px;
+  top: 70px;
+}
+
+.tag-two {
+  right: 18px;
+  top: 145px;
+}
+
+.tag-three {
+  left: 28px;
+  bottom: 62px;
+}
+
+.scan-line {
+  opacity: 0.7;
+}
+
+.section {
+  padding: 110px 0;
+}
+
+.section-heading {
+  margin-bottom: 48px;
+}
+
+.section-heading h2,
+.about h2 {
+  font-weight: 800;
+}
+
+.tissue-card {
+  border-radius: 20px;
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff 0%,
+      color-mix(in srgb, var(--green) 3%, var(--cream)) 100%
+    );
+}
+
+.about {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 85% 30%,
+      color-mix(in srgb, var(--green-light) 13%, transparent),
+      transparent 32%
+    ),
+    #eaf2ee;
+}
+
+.about::after {
+  content: "";
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  right: -170px;
+  bottom: -180px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--green) 6%, transparent);
+  pointer-events: none;
+}
+
+.about-grid {
+  position: relative;
+  z-index: 1;
+}
+
+.about-text > p {
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.about-text .button {
+  margin-top: 30px;
+}
+
+.footer {
+  border-top: 1px solid color-mix(in srgb, white 12%, transparent);
+}
+
+@media (max-width: 850px) {
+  .hero {
+    padding: 75px 0 65px;
+  }
+
+  .hero::before {
+    width: 350px;
+    height: 350px;
+    right: -190px;
+  }
+
+  .hero h1 {
+    letter-spacing: -3px;
+  }
+
+  .hero-text > p {
+    font-size: 16px;
+  }
+
+  .hero-visual {
+    min-height: 400px;
+  }
+
+  .microscope-card {
+    width: min(400px, 100%);
+    height: 400px;
+  }
+
+  .section {
+    padding: 80px 0;
+  }
+}
+
+@media (max-width: 520px) {
+  .hero {
+    padding: 55px 0 50px;
+  }
+
+  .hero h1 {
+    font-size: clamp(40px, 13vw, 56px);
+    letter-spacing: -2.5px;
+  }
+
+  .hero-actions {
+    align-items: stretch;
+  }
+
+  .hero-actions .button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero-visual {
+    min-height: 340px;
+  }
+
+  .microscope-card {
+    height: 340px;
+    border-radius: 26px;
+  }
+
+  .microscope {
+    transform: translate(-50%, -45%) scale(0.78);
+  }
+
+  .floating-tag {
+    font-size: 10px;
+    padding: 8px 10px;
+  }
+
+  .tag-one {
+    left: 10px;
+    top: 45px;
+  }
+
+  .tag-two {
+    right: 8px;
+    top: 115px;
+  }
+
+  .tag-three {
+    left: 14px;
+    bottom: 42px;
+  }
+}

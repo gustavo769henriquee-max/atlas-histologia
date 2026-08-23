@@ -535,7 +535,7 @@ export async function renderAparencia() {
 function atualizarPreviewAparencia() {
 
   const pegar = id =>
-    document.querySelector(id)?.value || ''
+    document.querySelector(id).value || ''
 
   const nome =
     pegar('#config-nome') || 'Atlas'
@@ -676,7 +676,7 @@ function configurarTamanhoLogo() {
       document.querySelector('.preview-logo')
 
     const imagemPreview =
-      previewLogo?.querySelector('img')
+      previewLogo.querySelector('img')
 
 
     if (imagemPreview) {
@@ -704,7 +704,7 @@ function configurarTamanhoLogo() {
       document.querySelector('#logo-preview')
 
     const imagemEditor =
-      caixaLogo?.querySelector('img')
+      caixaLogo.querySelector('img')
 
 
     if (imagemEditor) {
@@ -763,7 +763,7 @@ function configurarLogoPreview() {
   input.addEventListener('change', async () => {
 
     const arquivo =
-      input.files?.[0]
+      input.files[0]
 
     if (!arquivo) {
       return
@@ -816,7 +816,7 @@ function configurarLogoPreview() {
 
 
     const logoUrl =
-      urlData?.publicUrl
+      urlData.publicUrl
 
 
     if (!logoUrl) {
@@ -1098,7 +1098,7 @@ export function setupAparencia() {
         let resultado
 
 
-        if (existente?.id) {
+        if (existente.id) {
 
           resultado =
             await supabase
@@ -1152,7 +1152,7 @@ export function setupAparencia() {
 
   document
     .querySelector('#cancelar-aparencia')
-    ?.addEventListener(
+    .addEventListener(
       'click',
       () => {
 
