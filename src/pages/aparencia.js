@@ -1,49 +1,46 @@
-import { supabase } from '../lib/supabase.js'
+﻿import { supabase } from "../lib/supabase.js";
 
-let logoUrlAtual = ''
+let logoUrlAtual = "";
 
 export async function renderAparencia() {
-
-  const { data, error } =
-    await supabase
-      .from('configuracoes_site')
-      .select('*')
-      .limit(1)
-      .maybeSingle()
+  const { data, error } = await supabase
+    .from("configuracoes_site")
+    .select("*")
+    .limit(1)
+    .maybeSingle();
 
   if (error) {
-    console.error(error)
+    console.error(error);
 
     return `
       <div class="admin-error">
-        Erro ao carregar as configurações.
+        Erro ao carregar as configuraÃ§Ãµes.
       </div>
-    `
+    `;
   }
 
-  const config = data || {}
+  const config = data || {};
 
-  const logoUrlInicial = config.logo_url || ''
+  const logoUrlInicial = config.logo_url || "";
 
-  logoUrlAtual = logoUrlInicial
-
+  logoUrlAtual = logoUrlInicial;
 
   return `
-    <section id="admin-section-aparencia" class="admin-section active">
+    <section id="admin-section-aparencia" class="admin-section">
 
       <div class="admin-title-row">
 
         <div>
           <span class="eyebrow">
-            PERSONALIZAÇÃO
+            PERSONALIZAÃ‡ÃƒO
           </span>
 
           <h1>
-            Aparência
+            AparÃªncia
           </h1>
 
           <p>
-            Personalize o conteúdo e as cores do Atlas.
+            Personalize o conteÃºdo e as cores do Atlas.
           </p>
         </div>
 
@@ -58,7 +55,7 @@ export async function renderAparencia() {
 
           <div class="form-card-title">
 
-            <span>🖼️</span>
+            <span>ðŸ–¼ï¸</span>
 
             <div>
               <h2>Identidade visual</h2>
@@ -79,7 +76,7 @@ export async function renderAparencia() {
                 id="logo-preview"
                 class="logo-preview"
               >
-                🔬
+                ðŸ”¬
               </div>
 
             </div>
@@ -89,7 +86,7 @@ export async function renderAparencia() {
 
               <label class="logo-upload-button">
 
-                <span>📁</span>
+                <span>ðŸ“</span>
                 Escolher logo
 
                 <input
@@ -124,7 +121,7 @@ export async function renderAparencia() {
                   </label>
 
                   <strong id="logo-tamanho-valor">
-                    100%
+                    ${config.logo_tamanho || 100}%
                   </strong>
 
                 </div>
@@ -135,7 +132,7 @@ export async function renderAparencia() {
                   min="50"
                   max="150"
                   step="1"
-                  value="100"
+                  value="${config.logo_tamanho || 100}"
                 >
 
                 <div class="logo-size-labels">
@@ -165,7 +162,7 @@ export async function renderAparencia() {
 
           <div class="form-card-title">
 
-            <span>✍️</span>
+            <span>âœï¸</span>
 
             <div>
               <h2>Textos do site</h2>
@@ -189,7 +186,7 @@ export async function renderAparencia() {
               <input
                 id="config-nome"
                 type="text"
-                value="${escapeHtml(config.nome_site || '')}"
+                value="${escapeHtml(config.nome_site || "")}"
               >
 
             </div>
@@ -198,13 +195,13 @@ export async function renderAparencia() {
             <div class="form-field">
 
               <label>
-                Subtítulo
+                SubtÃ­tulo
               </label>
 
               <input
                 id="config-subtitulo"
                 type="text"
-                value="${escapeHtml(config.subtitulo || '')}"
+                value="${escapeHtml(config.subtitulo || "")}"
               >
 
             </div>
@@ -213,13 +210,13 @@ export async function renderAparencia() {
             <div class="form-field full">
 
               <label>
-                Título da página inicial
+                TÃ­tulo da pÃ¡gina inicial
               </label>
 
               <input
                 id="config-titulo"
                 type="text"
-                value="${escapeHtml(config.titulo_inicio || '')}"
+                value="${escapeHtml(config.titulo_inicio || "")}"
               >
 
             </div>
@@ -228,13 +225,13 @@ export async function renderAparencia() {
             <div class="form-field full">
 
               <label>
-                Descrição da página inicial
+                DescriÃ§Ã£o da pÃ¡gina inicial
               </label>
 
               <textarea
                 id="config-descricao"
                 rows="4"
-              >${escapeHtml(config.descricao_inicio || '')}</textarea>
+              >${escapeHtml(config.descricao_inicio || "")}</textarea>
 
             </div>
 
@@ -242,13 +239,13 @@ export async function renderAparencia() {
             <div class="form-field">
 
               <label>
-                Botão principal
+                BotÃ£o principal
               </label>
 
               <input
                 id="config-botao"
                 type="text"
-                value="${escapeHtml(config.texto_botao_principal || '')}"
+                value="${escapeHtml(config.texto_botao_principal || "")}"
               >
 
             </div>
@@ -257,13 +254,13 @@ export async function renderAparencia() {
             <div class="form-field">
 
               <label>
-                Botão secundário
+                BotÃ£o secundÃ¡rio
               </label>
 
               <input
                 id="config-botao-secundario"
                 type="text"
-                value="${escapeHtml(config.texto_botao_secundario || '')}"
+                value="${escapeHtml(config.texto_botao_secundario || "")}"
               >
 
             </div>
@@ -272,13 +269,13 @@ export async function renderAparencia() {
             <div class="form-field full">
 
               <label>
-                Texto da seção Sobre
+                Texto da seÃ§Ã£o Sobre
               </label>
 
               <textarea
                 id="config-sobre"
                 rows="3"
-              >${escapeHtml(config.texto_sobre || '')}</textarea>
+              >${escapeHtml(config.texto_sobre || "")}</textarea>
 
             </div>
 
@@ -286,13 +283,13 @@ export async function renderAparencia() {
             <div class="form-field full">
 
               <label>
-                Texto do rodapé
+                Texto do rodapÃ©
               </label>
 
               <input
                 id="config-rodape"
                 type="text"
-                value="${escapeHtml(config.texto_rodape || '')}"
+                value="${escapeHtml(config.texto_rodape || "")}"
               >
 
             </div>
@@ -306,7 +303,7 @@ export async function renderAparencia() {
 
           <div class="form-card-title">
 
-            <span>🎨</span>
+            <span>ðŸŽ¨</span>
 
             <div>
               <h2>Cores</h2>
@@ -333,10 +330,10 @@ export async function renderAparencia() {
                 <input
                   id="config-cor-principal"
                   type="color"
-                  value="${config.cor_principal || 'var(--cor-principal)'}"
+                  value="${config.cor_principal || "#2f6f5e"}"
                 >
 
-                <input id="cor-principal-valor" type="text" class="color-code-input" value="${config.cor_principal || 'var(--cor-principal)'}" maxlength="7" placeholder="#000000" autocomplete="off">
+                <input id="cor-principal-valor" type="text" class="color-code-input" value="${config.cor_principal || "#2f6f5e"}" maxlength="7" placeholder="#000000" autocomplete="off">
 
               </div>
 
@@ -354,10 +351,10 @@ export async function renderAparencia() {
                 <input
                   id="config-cor-fundo"
                   type="color"
-                  value="${config.cor_fundo || '#f5f7f6'}"
+                  value="${config.cor_fundo || "#f5f7f6"}"
                 >
 
-                <input id="cor-fundo-valor" type="text" class="color-code-input" value="${config.cor_fundo || '#f5f7f6'}" maxlength="7" placeholder="#000000" autocomplete="off">
+                <input id="cor-fundo-valor" type="text" class="color-code-input" value="${config.cor_fundo || "#f5f7f6"}" maxlength="7" placeholder="#000000" autocomplete="off">
 
               </div>
 
@@ -375,10 +372,10 @@ export async function renderAparencia() {
                 <input
                   id="config-cor-texto"
                   type="color"
-                  value="${config.cor_texto || '#17211f'}"
+                  value="${config.cor_texto || "#17211f"}"
                 >
 
-                <input id="cor-texto-valor" type="text" class="color-code-input" value="${config.cor_texto || '#17211f'}" maxlength="7" placeholder="#000000" autocomplete="off">
+                <input id="cor-texto-valor" type="text" class="color-code-input" value="${config.cor_texto || "#17211f"}" maxlength="7" placeholder="#000000" autocomplete="off">
 
               </div>
 
@@ -396,10 +393,10 @@ export async function renderAparencia() {
                 <input
                   id="config-cor-destaque"
                   type="color"
-                  value="${config.cor_destaque || 'var(--cor-destaque)'}"
+                  value="${config.cor_destaque || "#d7e8df"}"
                 >
 
-                <input id="cor-destaque-valor" type="text" class="color-code-input" value="${config.cor_destaque || 'var(--cor-destaque)'}" maxlength="7" placeholder="#000000" autocomplete="off">
+                <input id="cor-destaque-valor" type="text" class="color-code-input" value="${config.cor_destaque || "#d7e8df"}" maxlength="7" placeholder="#000000" autocomplete="off">
 
               </div>
 
@@ -430,23 +427,23 @@ export async function renderAparencia() {
             type="submit"
             class="button primary"
           >
-            💾 Salvar alterações
+            ðŸ’¾ Salvar alteraÃ§Ãµes
           </button>
 
         </div>
 
 
-      
+
       <div class="aparencia-preview-card">
 
         <div class="aparencia-preview-header">
           <div>
-             <span class="eyebrow">PRÉVIA</span>
-             <h2>Como o Atlas ficará</h2>
+             <span class="eyebrow">PRÃ‰VIA</span>
+             <h2>Como o Atlas ficarÃ¡</h2>
           </div>
 
              <span class="preview-live">
-             ● AO VIVO
+             â— AO VIVO
            </span>
         </div>
 
@@ -460,7 +457,7 @@ export async function renderAparencia() {
             <div class="preview-brand">
 
               <span class="preview-logo">
-                🔬
+                ðŸ”¬
               </span>
 
               <span>
@@ -469,15 +466,15 @@ export async function renderAparencia() {
                 </strong>
 
                 <small id="preview-subtitulo">
-                  Histológico
+                  HistolÃ³gico
                 </small>
               </span>
 
             </div>
 
             <nav class="preview-nav">
-               <span>Início</span>
-               <span>Lâminas</span>
+               <span>InÃ­cio</span>
+               <span>LÃ¢minas</span>
               <span>Sobre</span>
             </nav>
 
@@ -487,16 +484,16 @@ export async function renderAparencia() {
           <section class="preview-hero">
 
             <span class="preview-eyebrow">
-              🔬 MICROSCOPIA • ESTUDO • EXPLORAÇÃO
+              ðŸ”¬ MICROSCOPIA â€¢ ESTUDO â€¢ EXPLORAÃ‡ÃƒO
             </span>
 
             <h1 id="preview-titulo">
-              Explore o mundo microscópico.
+              Explore o mundo microscÃ³pico.
             </h1>
 
             <p id="preview-descricao">
               Um atlas de histologia interativo para explorar
-              tecidos, estruturas e lâminas histológicas.
+              tecidos, estruturas e lÃ¢minas histolÃ³gicas.
             </p>
 
             <div class="preview-actions">
@@ -514,7 +511,7 @@ export async function renderAparencia() {
                 id="preview-botao-secundario"
                 class="preview-button preview-secondary"
               >
-                Conheça o projeto
+                ConheÃ§a o projeto
               </button>
 
             </div>
@@ -527,682 +524,434 @@ export async function renderAparencia() {
       </form>
 
     </section>
-  `
+  `;
 }
 
-
-
 function atualizarPreviewAparencia() {
+  const pegar = (id) => document.querySelector(id).value || "";
 
-  const pegar = id =>
-    document.querySelector(id).value || ''
+  const nome = pegar("#config-nome") || "Atlas";
 
-  const nome =
-    pegar('#config-nome') || 'Atlas'
+  const subtitulo = pegar("#config-subtitulo") || "HistolÃ³gico";
 
-  const subtitulo =
-    pegar('#config-subtitulo') || 'Histológico'
-
-  const titulo =
-    pegar('#config-titulo') || 'Explore o mundo microscópico.'
+  const titulo = pegar("#config-titulo") || "Explore o mundo microscÃ³pico.";
 
   const descricao =
-    pegar('#config-descricao') ||
-    'Um atlas de histologia interativo para explorar tecidos, estruturas e lâminas histológicas.'
+    pegar("#config-descricao") ||
+    "Um atlas de histologia interativo para explorar tecidos, estruturas e lÃ¢minas histolÃ³gicas.";
 
-  const botao =
-    pegar('#config-botao') ||
-    'Explorar ' + nome
+  const botao = pegar("#config-botao") || "Explorar " + nome;
 
   const botaoSecundario =
-    pegar('#config-botao-secundario') ||
-    'Conheça o projeto'
+    pegar("#config-botao-secundario") || "ConheÃ§a o projeto";
 
-  const preview = document.querySelector('#aparencia-preview')
+  const preview = document.querySelector("#aparencia-preview");
 
-  if (!preview) return
+  if (!preview) return;
 
   const atualizarTexto = (seletor, valor) => {
-
-    const elemento =
-      preview.querySelector(seletor)
+    const elemento = preview.querySelector(seletor);
 
     if (elemento) {
-      elemento.textContent = valor
+      elemento.textContent = valor;
     }
+  };
 
-  }
+  atualizarTexto("#preview-nome", nome);
+  atualizarTexto("#preview-subtitulo", subtitulo);
+  atualizarTexto("#preview-titulo", titulo);
+  atualizarTexto("#preview-descricao", descricao);
+  atualizarTexto("#preview-botao", botao);
+  atualizarTexto("#preview-botao-secundario", botaoSecundario);
 
-  atualizarTexto('#preview-nome', nome)
-  atualizarTexto('#preview-subtitulo', subtitulo)
-  atualizarTexto('#preview-titulo', titulo)
-  atualizarTexto('#preview-descricao', descricao)
-  atualizarTexto('#preview-botao', botao)
-  atualizarTexto('#preview-botao-secundario', botaoSecundario)
+  const principal = pegar("#config-cor-principal");
 
+  const fundo = pegar("#config-cor-fundo");
 
-  const principal =
-    pegar('#config-cor-principal')
+  const texto = pegar("#config-cor-texto");
 
-  const fundo =
-    pegar('#config-cor-fundo')
-
-  const texto =
-    pegar('#config-cor-texto')
-
-  const destaque =
-    pegar('#config-cor-destaque')
-
+  const destaque = pegar("#config-cor-destaque");
 
   if (principal) {
-    preview.style.setProperty(
-      '--preview-principal',
-      principal
-    )
+    preview.style.setProperty("--preview-principal", principal);
   }
 
   if (fundo) {
-    preview.style.setProperty(
-      '--preview-fundo',
-      fundo
-    )
+    preview.style.setProperty("--preview-fundo", fundo);
   }
 
   if (texto) {
-    preview.style.setProperty(
-      '--preview-texto',
-      texto
-    )
+    preview.style.setProperty("--preview-texto", texto);
   }
 
   if (destaque) {
-    preview.style.setProperty(
-      '--preview-destaque',
-      destaque
-    )
+    preview.style.setProperty("--preview-destaque", destaque);
   }
-
 }
-
 
 function configurarPreviewAparencia() {
-
   const campos = document.querySelectorAll(
-    '#aparencia-form input, #aparencia-form textarea'
-  )
+    "#aparencia-form input, #aparencia-form textarea",
+  );
 
-  campos.forEach(campo => {
+  campos.forEach((campo) => {
+    campo.addEventListener("input", atualizarPreviewAparencia);
+    campo.addEventListener("change", atualizarPreviewAparencia);
+  });
 
-    campo.addEventListener(
-      'input',
-      atualizarPreviewAparencia
-    )
-
-    campo.addEventListener(
-      'change',
-      atualizarPreviewAparencia
-    )
-
-  })
-
-  atualizarPreviewAparencia()
-
+  atualizarPreviewAparencia();
 }
 
-
 function configurarTamanhoLogo() {
+  const controle = document.querySelector("#config-logo-tamanho");
 
-  const controle =
-    document.querySelector('#config-logo-tamanho')
-
-  const valor =
-    document.querySelector('#logo-tamanho-valor')
+  const valor = document.querySelector("#logo-tamanho-valor");
 
   if (!controle || !valor) {
-    return
+    return;
   }
-
 
   const atualizar = () => {
+    const tamanho = Number(controle.value);
 
-    const tamanho =
-      Number(controle.value)
+    valor.textContent = tamanho + "%";
 
-    valor.textContent =
-      tamanho + '%'
+    const previewLogo = document.querySelector(".preview-logo");
 
-
-    const previewLogo =
-      document.querySelector('.preview-logo')
-
-    const imagemPreview =
-      previewLogo.querySelector('img')
-
+    const imagemPreview = previewLogo.querySelector("img");
 
     if (imagemPreview) {
+      const tamanhoBase = 42;
+      const tamanhoFinal = tamanhoBase * (tamanho / 100);
 
-      const tamanhoBase = 42
-      const tamanhoFinal =
-        tamanhoBase * (tamanho / 100)
+      imagemPreview.style.width = tamanhoFinal + "px";
 
-      imagemPreview.style.width =
-        tamanhoFinal + 'px'
+      imagemPreview.style.height = tamanhoFinal + "px";
 
-      imagemPreview.style.height =
-        tamanhoFinal + 'px'
+      imagemPreview.style.maxWidth = "none";
 
-      imagemPreview.style.maxWidth =
-        'none'
-
-      imagemPreview.style.maxHeight =
-        'none'
-
+      imagemPreview.style.maxHeight = "none";
     }
 
+    const caixaLogo = document.querySelector("#logo-preview");
 
-    const caixaLogo =
-      document.querySelector('#logo-preview')
-
-    const imagemEditor =
-      caixaLogo.querySelector('img')
-
+    const imagemEditor = caixaLogo.querySelector("img");
 
     if (imagemEditor) {
+      const tamanhoBaseEditor = 90;
+      const tamanhoFinalEditor = tamanhoBaseEditor * (tamanho / 100);
 
-      const tamanhoBaseEditor = 90
-      const tamanhoFinalEditor =
-        tamanhoBaseEditor * (tamanho / 100)
+      imagemEditor.style.width = tamanhoFinalEditor + "px";
 
-      imagemEditor.style.width =
-        tamanhoFinalEditor + 'px'
+      imagemEditor.style.height = tamanhoFinalEditor + "px";
 
-      imagemEditor.style.height =
-        tamanhoFinalEditor + 'px'
+      imagemEditor.style.maxWidth = "none";
 
-      imagemEditor.style.maxWidth =
-        'none'
-
-      imagemEditor.style.maxHeight =
-        'none'
-
+      imagemEditor.style.maxHeight = "none";
     }
+  };
 
-  }
+  controle.addEventListener("input", atualizar);
 
-
-  controle.addEventListener(
-    'input',
-    atualizar
-  )
-
-
-  atualizar()
-
+  atualizar();
 }
 
 function configurarLogoPreview() {
+  const input = document.querySelector("#config-logo");
 
-  const input =
-    document.querySelector('#config-logo')
+  const preview = document.querySelector("#logo-preview");
 
-  const preview =
-    document.querySelector('#logo-preview')
+  const nome = document.querySelector("#logo-nome");
 
-  const nome =
-    document.querySelector('#logo-nome')
-
-  const remover =
-    document.querySelector('#remover-logo')
+  const remover = document.querySelector("#remover-logo");
 
   if (!input || !preview || !nome || !remover) {
-    return
+    return;
   }
 
-
-
-  input.addEventListener('change', async () => {
-
-    const arquivo =
-      input.files[0]
+  input.addEventListener("change", async () => {
+    const arquivo = input.files[0];
 
     if (!arquivo) {
-      return
+      return;
     }
 
-
-    if (!arquivo.type.startsWith('image/')) {
-      input.value = ''
-      return
+    if (!arquivo.type.startsWith("image/")) {
+      input.value = "";
+      return;
     }
 
+    nome.textContent = "Enviando logo...";
 
-    nome.textContent =
-      'Enviando logo...'
+    const extensao = arquivo.name.split(".").pop().toLowerCase();
 
+    const nomeArquivo = `logo-${Date.now()}.${extensao}`;
 
-    const extensao =
-      arquivo.name.split('.').pop().toLowerCase()
-
-    const nomeArquivo =
-      `logo-${Date.now()}.${extensao}`
-
-
-    const { error: uploadError } =
-      await supabase
-        .storage
-        .from('logos')
-        .upload(nomeArquivo, arquivo, {
-          cacheControl: '3600',
-          upsert: true
-        })
-
+    const { error: uploadError } = await supabase.storage
+      .from("logos")
+      .upload(nomeArquivo, arquivo, {
+        cacheControl: "3600",
+        upsert: true,
+      });
 
     if (uploadError) {
+      console.error(uploadError);
 
-      console.error(uploadError)
+      nome.textContent = "Erro ao enviar a logo";
 
-      nome.textContent =
-        'Erro ao enviar a logo'
-
-      return
+      return;
     }
 
+    const { data: urlData } = supabase.storage
+      .from("logos")
+      .getPublicUrl(nomeArquivo);
 
-    const { data: urlData } =
-      supabase
-        .storage
-        .from('logos')
-        .getPublicUrl(nomeArquivo)
-
-
-    const logoUrl =
-      urlData.publicUrl
-
+    const logoUrl = urlData.publicUrl;
 
     if (!logoUrl) {
+      nome.textContent = "NÃ£o foi possÃ­vel obter a URL da logo";
 
-      nome.textContent =
-        'Não foi possível obter a URL da logo'
-
-      return
+      return;
     }
-
 
     /* Guarda a URL para o salvamento */
 
-    logoUrlAtual = logoUrl
+    logoUrlAtual = logoUrl;
 
-    input.dataset.logoUrl =
-      logoUrl
-
+    input.dataset.logoUrl = logoUrl;
 
     /* Mostra no editor */
 
-    preview.innerHTML = ''
+    preview.innerHTML = "";
 
-    const imagem =
-      document.createElement('img')
+    const imagem = document.createElement("img");
 
-    imagem.src =
-      logoUrl
+    imagem.src = logoUrl;
 
-    imagem.alt =
-      'Logo do Atlas'
+    imagem.alt = "Logo do Atlas";
 
-    preview.appendChild(imagem)
+    preview.appendChild(imagem);
 
+    nome.textContent = arquivo.name;
 
-    nome.textContent =
-      arquivo.name
+    /* Mostra tambÃ©m na prÃ©via do site */
 
-
-    /* Mostra também na prévia do site */
-
-    const previewLogo =
-      document.querySelector('.preview-logo')
+    const previewLogo = document.querySelector(".preview-logo");
 
     if (previewLogo) {
+      previewLogo.innerHTML = "";
 
-      previewLogo.innerHTML = ''
+      const imagemPreview = document.createElement("img");
 
-      const imagemPreview =
-        document.createElement('img')
+      imagemPreview.src = logoUrl;
 
-      imagemPreview.src =
-        logoUrl
+      imagemPreview.alt = "Logo";
 
-      imagemPreview.alt =
-        'Logo'
-
-      previewLogo.appendChild(
-        imagemPreview
-      )
-
+      previewLogo.appendChild(imagemPreview);
     }
-
 
     /* Reaplica o tamanho escolhido */
 
-    const controle =
-      document.querySelector('#config-logo-tamanho')
+    const controle = document.querySelector("#config-logo-tamanho");
 
     if (controle) {
-      controle.dispatchEvent(
-        new Event('input')
-      )
+      controle.dispatchEvent(new Event("input"));
     }
+  });
 
-  })
+  remover.addEventListener("click", () => {
+    input.value = "";
 
+    input.dataset.logoUrl = "";
 
-  remover.addEventListener('click', () => {
+    logoUrlAtual = "";
 
-    input.value = ''
+    preview.innerHTML = "ðŸ”¬";
 
-    input.dataset.logoUrl = ''
+    nome.textContent = "Nenhuma logo selecionada";
 
-    logoUrlAtual = ''
-
-    preview.innerHTML =
-      '🔬'
-
-    nome.textContent =
-      'Nenhuma logo selecionada'
-
-
-    const previewLogo =
-      document.querySelector('.preview-logo')
+    const previewLogo = document.querySelector(".preview-logo");
 
     if (previewLogo) {
-      previewLogo.innerHTML = '🔬'
+      previewLogo.innerHTML = "ðŸ”¬";
     }
-
-  })
-
+  });
 }
 
 export function setupAparencia() {
-
-  configurarPreviewAparencia()
-  configurarLogoPreview()
-  configurarTamanhoLogo()
+  configurarPreviewAparencia();
+  configurarLogoPreview();
+  configurarTamanhoLogo();
 
   const editoresCor = [
-    ['#config-cor-principal', '#cor-principal-valor'],
-    ['#config-cor-fundo', '#cor-fundo-valor'],
-    ['#config-cor-texto', '#cor-texto-valor'],
-    ['#config-cor-destaque', '#cor-destaque-valor']
-  ]
+    ["#config-cor-principal", "#cor-principal-valor"],
+    ["#config-cor-fundo", "#cor-fundo-valor"],
+    ["#config-cor-texto", "#cor-texto-valor"],
+    ["#config-cor-destaque", "#cor-destaque-valor"],
+  ];
 
   editoresCor.forEach(([idCor, idCodigo]) => {
+    const seletor = document.querySelector(idCor);
+    const codigo = document.querySelector(idCodigo);
 
-    const seletor = document.querySelector(idCor)
-    const codigo = document.querySelector(idCodigo)
+    if (!seletor || !codigo) return;
 
-    if (!seletor || !codigo) return
+    codigo.value = seletor.value.toUpperCase();
 
-    codigo.value = seletor.value.toUpperCase()
+    seletor.addEventListener("input", () => {
+      codigo.value = seletor.value.toUpperCase();
+    });
 
-    seletor.addEventListener('input', () => {
-      codigo.value = seletor.value.toUpperCase()
-    })
+    codigo.addEventListener("input", () => {
+      let valor = codigo.value.trim();
 
-    codigo.addEventListener('input', () => {
-
-      let valor = codigo.value.trim()
-
-      if (!valor.startsWith('#')) {
-        valor = '#' + valor
+      if (!valor.startsWith("#")) {
+        valor = "#" + valor;
       }
 
       if (/^#[0-9A-Fa-f]{6}$/.test(valor)) {
-        seletor.value = valor
+        seletor.value = valor;
       }
+    });
 
-    })
+    codigo.addEventListener("blur", () => {
+      let valor = codigo.value.trim();
 
-    codigo.addEventListener('blur', () => {
-
-      let valor = codigo.value.trim()
-
-      if (!valor.startsWith('#')) {
-        valor = '#' + valor
+      if (!valor.startsWith("#")) {
+        valor = "#" + valor;
       }
 
       if (/^#[0-9A-Fa-f]{6}$/.test(valor)) {
-        codigo.value = valor.toUpperCase()
-        seletor.value = valor
+        codigo.value = valor.toUpperCase();
+        seletor.value = valor;
       } else {
-        codigo.value = seletor.value.toUpperCase()
+        codigo.value = seletor.value.toUpperCase();
       }
+    });
+  });
 
-    })
+  const form = document.querySelector("#aparencia-form");
 
-  })
-
-
-  const form =
-    
-  document.querySelector('#aparencia-form')
-
-  if (!form) return
-
+  if (!form) return;
 
   const cores = [
-    ['#config-cor-principal', '#cor-principal-valor'],
-    ['#config-cor-fundo', '#cor-fundo-valor'],
-    ['#config-cor-texto', '#cor-texto-valor'],
-    ['#config-cor-destaque', '#cor-destaque-valor']
-  ]
-
+    ["#config-cor-principal", "#cor-principal-valor"],
+    ["#config-cor-fundo", "#cor-fundo-valor"],
+    ["#config-cor-texto", "#cor-texto-valor"],
+    ["#config-cor-destaque", "#cor-destaque-valor"],
+  ];
 
   cores.forEach(([inputId, valorId]) => {
+    const input = document.querySelector(inputId);
 
-    const input =
-      document.querySelector(inputId)
+    const valor = document.querySelector(valorId);
 
-    const valor =
-      document.querySelector(valorId)
+    if (!input || !valor) return;
 
-    if (!input || !valor) return
+    input.addEventListener("input", () => {
+      valor.value = input.value.toUpperCase();
+    });
+  });
 
-    input.addEventListener('input', () => {
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-      valor.textContent =
-        input.value
+    if (form.dataset.salvando === "true") return;
+    form.dataset.salvando = "true";
 
-    })
+    try {
+      const status = document.querySelector("#aparencia-status");
 
-  })
+      status.textContent = "Salvando...";
 
+      status.className = "form-status loading";
 
-  form.addEventListener(
-    'submit',
-    async event => {
+      const dados = {
+        nome_site: document.querySelector("#config-nome").value,
 
-      event.preventDefault()
+        subtitulo: document.querySelector("#config-subtitulo").value,
 
-      if (form.dataset.salvando === 'true') return
-      form.dataset.salvando = 'true'
+        titulo_inicio: document.querySelector("#config-titulo").value,
 
-      try {
+        descricao_inicio: document.querySelector("#config-descricao").value,
 
-        const status =
-          document.querySelector('#aparencia-status')
+        texto_botao_principal: document.querySelector("#config-botao").value,
 
-        status.textContent =
-          'Salvando...'
+        texto_botao_secundario: document.querySelector(
+          "#config-botao-secundario",
+        ).value,
 
-        status.className =
-          'form-status loading'
+        texto_sobre: document.querySelector("#config-sobre").value,
 
+        texto_rodape: document.querySelector("#config-rodape").value,
 
-        const dados = {
+        cor_principal: document.querySelector("#config-cor-principal").value,
 
-          nome_site:
-            document.querySelector('#config-nome').value,
+        cor_fundo: document.querySelector("#config-cor-fundo").value,
 
-          subtitulo:
-            document.querySelector('#config-subtitulo').value,
+        cor_texto: document.querySelector("#config-cor-texto").value,
 
-          titulo_inicio:
-            document.querySelector('#config-titulo').value,
+        cor_destaque: document.querySelector("#config-cor-destaque").value,
 
-          descricao_inicio:
-            document.querySelector('#config-descricao').value,
+        logo_tamanho: Number(
+          document.querySelector("#config-logo-tamanho").value,
+        ),
 
-          texto_botao_principal:
-            document.querySelector('#config-botao').value,
+        logo_url:
+          logoUrlAtual ||
+          document.querySelector("#config-logo").dataset.logoUrl ||
+          null,
 
-          texto_botao_secundario:
-            document.querySelector('#config-botao-secundario').value,
+        atualizado_em: new Date().toISOString(),
+      };
 
-          texto_sobre:
-            document.querySelector('#config-sobre').value,
+      const { data: existente } = await supabase
+        .from("configuracoes_site")
+        .select("id")
+        .limit(1)
+        .maybeSingle();
 
-          texto_rodape:
-            document.querySelector('#config-rodape').value,
+      let resultado;
 
-          cor_principal:
-            document.querySelector('#config-cor-principal').value,
-
-          cor_fundo:
-            document.querySelector('#config-cor-fundo').value,
-
-          cor_texto:
-            document.querySelector('#config-cor-texto').value,
-
-          cor_destaque:
-            document.querySelector('#config-cor-destaque').value,
-
-          logo_tamanho:
-            Number(document.querySelector('#config-logo-tamanho').value),
-
-          logo_url:
-            logoUrlAtual || document.querySelector('#config-logo').dataset.logoUrl || null,
-
-          atualizado_em:
-            new Date().toISOString()
-
-        }
-
-
-        const { data: existente } =
-          await supabase
-            .from('configuracoes_site')
-            .select('id')
-            .limit(1)
-            .maybeSingle()
-
-
-        let resultado
-
-
-        if (existente.id) {
-
-          resultado =
-            await supabase
-              .from('configuracoes_site')
-              .update(dados)
-              .eq('id', existente.id)
-
-        } else {
-
-          resultado =
-            await supabase
-              .from('configuracoes_site')
-              .insert(dados)
-
-        }
-
-
-        if (resultado.error) {
-
-          console.error(
-            resultado.error
-          )
-
-          status.textContent =
-            'Erro ao salvar: ' +
-            resultado.error.message
-
-          status.className =
-            'form-status error'
-
-          return
-
-        }
-
-
-        status.textContent =
-          'Configurações salvas com sucesso!'
-
-        status.className =
-          'form-status success'
-
-      } finally {
-
-        form.dataset.salvando = 'false'
-
+      if (existente.id) {
+        resultado = await supabase
+          .from("configuracoes_site")
+          .update(dados)
+          .eq("id", existente.id);
+      } else {
+        resultado = await supabase.from("configuracoes_site").insert(dados);
       }
 
-    }
-  )
+      if (resultado.error) {
+        console.error(resultado.error);
 
+        status.textContent = "Erro ao salvar: " + resultado.error.message;
+
+        status.className = "form-status error";
+
+        return;
+      }
+
+      status.textContent = "ConfiguraÃ§Ãµes salvas com sucesso!";
+
+      status.className = "form-status success";
+    } finally {
+      form.dataset.salvando = "false";
+    }
+  });
 
   document
-    .querySelector('#cancelar-aparencia')
-    .addEventListener(
-      'click',
-      () => {
-
-        window.dispatchEvent(new Event('hashchange'))
-
-      }
-    )
-
+    .querySelector("#cancelar-aparencia")
+    .addEventListener("click", () => {
+      window.dispatchEvent(new Event("hashchange"));
+    });
 }
 
-
-function escapeHtml(value = '') {
-
+function escapeHtml(value = "") {
   return String(value)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#039;')
-
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
