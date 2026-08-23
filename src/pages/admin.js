@@ -1,16 +1,19 @@
 import { renderAparencia, setupAparencia } from "./aparencia.js";
 import "./admin.css";
 
-import { supabase, isAdmin } from "../lib/supabase.js";
+import { supabase, getCurrentUser, isAdmin } from "../lib/supabase.js";
 import { extrairCaminhoArmazenamento } from "../lib/storage-path.js";
 
 export async function renderAdmin() {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
 
-  if (!user || !(await isAdmin())) {
+  if (!user) {
     window.location.hash = "#login";
+    return "";
+  }
+
+  if (!(await isAdmin(user))) {
+    window.location.hash = "#inicio";
     return "";
   }
 

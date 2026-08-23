@@ -1,6 +1,6 @@
 import "./style.css";
 import OpenSeadragon from "openseadragon";
-import { supabase } from "./lib/supabase.js";
+import { supabase, getCurrentSession, isAdmin } from "./lib/supabase.js";
 
 import { renderLogin, setupLogin } from "./pages/login.js";
 import { renderAdmin, setupAdmin } from "./pages/admin.js";
@@ -90,7 +90,7 @@ function renderHeader(config = {}) {
           <a href="#inicio">Início</a>
           <a href="#laminas">Lâminas</a>
           <a href="#sobre">Sobre</a>
-          <a href="#login">Administração</a>
+          <a href="#admin">Administração</a>
         </nav>
 
       </div>
@@ -1560,13 +1560,17 @@ async function render() {
   }
 
   if (route === "admin") {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const session = await getCurrentSession();
 
-    if (!user) {
+    if (token !== renderToken) return;
+
+    if (!session?.user) {
       window.location.hash = "#login";
+      return;
+    }
 
+    if (!(await isAdmin(session.user))) {
+      window.location.hash = "#inicio";
       return;
     }
 
@@ -1574,19 +1578,25 @@ async function render() {
 
     app.innerHTML = await renderAdmin();
 
+    if (token !== renderToken) return;
+
     setupAdmin();
 
     return;
   }
 
   if (route === "nova-lamina") {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const session = await getCurrentSession();
 
-    if (!user) {
+    if (token !== renderToken) return;
+
+    if (!session?.user) {
       window.location.hash = "#login";
+      return;
+    }
 
+    if (!(await isAdmin(session.user))) {
+      window.location.hash = "#inicio";
       return;
     }
 
@@ -1689,5 +1699,24 @@ async function render() {
 }
 
 window.addEventListener("hashchange", render);
+
+/*
+ * Mantém a interface sincronizada com o estado de autenticação.
+ * A sessão continua persistida entre navegações e recarregamentos.
+ */
+supabase.auth.onAuthStateChange((event) => {
+  if (
+    event === "SIGNED_OUT" ||
+    event === "SIGNED_IN" ||
+    event === "TOKEN_REFRESHED" ||
+    event === "USER_UPDATED"
+  ) {
+    const route = getRoute();
+
+    if (route === "admin" || route === "nova-lamina" || route === "login") {
+      window.setTimeout(() => render(), 0);
+    }
+  }
+});
 
 render();
