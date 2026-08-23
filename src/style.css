@@ -2156,7 +2156,7 @@ a {
   letter-spacing: -0.8px;
 }
 
-/* Descrição */
+/* Descri��o */
 
 #aparencia-preview #preview-descricao {
   max-width: 590px;
@@ -2237,7 +2237,7 @@ a {
 /* Indicador */
 
 #aparencia-preview::before {
-  content: "PRÉ-VISUALIZAÇÃO AO VIVO";
+  content: "PR�-VISUALIZA��O AO VIVO";
 
   position: absolute;
   top: 12px;
@@ -2458,7 +2458,7 @@ a {
 }
 
 /* ============================================================
-   VISUALIZADOR DE L?MINAS — MARCAÇÕES E SELEÇÃO
+   VISUALIZADOR DE L?MINAS � MARCA��ES E SELE��O
    Classes consumidas por src/main.js (renderLamina,
    desenharEstruturas, configurarModoEstudo).
    Regras aditivas: nenhuma propriedade existente foi alterada.
@@ -2466,8 +2466,8 @@ a {
 
 .estrutura-overlay {
   /* O OpenSeadragon reposiciona via transform; garantimos
-     que o conteúdo interno nunca bloqueie a interação com
-     a imagem nas áreas não clicáveis. */
+     que o conte�do interno nunca bloqueie a intera��o com
+     a imagem nas �reas n�o clic�veis. */
   pointer-events: none;
   transition: filter 0.18s ease;
 }
@@ -2485,8 +2485,8 @@ a {
   filter: drop-shadow(0 0 8px rgba(224, 82, 82, 0.85));
 }
 
-/* Número sequencial exibido sobre a marcação.
-   A fonte é o índice do array (mesma numeração da lista lateral). */
+/* N�mero sequencial exibido sobre a marca��o.
+   A fonte � o �ndice do array (mesma numera��o da lista lateral). */
 .estrutura-numero-badge {
   position: absolute;
   top: -8px;
@@ -2552,7 +2552,7 @@ a {
 }
 
 /* ============================================================
-   MODO ESTUDO 2.0 — ÍNDICE, CONTADOR, NAVEGAÇÃO E PAINEL
+   MODO ESTUDO 2.0 � �NDICE, CONTADOR, NAVEGA��O E PAINEL
    Classes/IDs consumidos por src/main.js (renderLamina,
    configurarModoEstudo). Regras aditivas.
    ============================================================ */
@@ -2585,7 +2585,7 @@ a {
   text-transform: uppercase;
 }
 
-/* Texto da marcação (tipo texto) */
+/* Texto da marca��o (tipo texto) */
 
 .estrutura-estudo-texto {
   margin: 10px 0 0 !important;
@@ -2600,7 +2600,7 @@ a {
   overflow-wrap: anywhere;
 }
 
-/* Navegação anterior/próxima */
+/* Navega��o anterior/pr�xima */
 
 .estrutura-estudo-navegacao {
   display: grid;
@@ -2714,7 +2714,7 @@ a {
 }
 
 /* ============================================================
-   FASE 18 — Navegação entre imagens da lâmina (viewer)
+   FASE 18 � Navega��o entre imagens da l�mina (viewer)
    Barra escura coerente com .viewer-controls; uma imagem
    visível por vez; contador + anterior/próxima.
    ============================================================ */
@@ -2768,7 +2768,7 @@ a {
 
 /* ============================================================
    FASE 18 — Preview de múltiplas imagens (formulário)
-   Miniaturas com remoção e reordenação (/); índice 0 é a
+   Miniaturas com remo��o e reordena��o (/); �ndice 0 � a
    principal.
    ============================================================ */
 
@@ -3439,7 +3439,7 @@ body {
   filter: blur(55px);
 }
 
-/* ---------- Seção Sobre ---------- */
+/* ---------- Se��o Sobre ---------- */
 
 .section {
   position: relative;
@@ -3544,7 +3544,7 @@ body {
   transform: scale(1.035);
 }
 
-/* ---------- Página da lâmina ---------- */
+/* ---------- P�gina da l�mina ---------- */
 
 .slide-header {
   padding: 42px 0 30px;
@@ -3636,7 +3636,7 @@ body {
   background: color-mix(in srgb, var(--green) 9%, var(--cream));
 }
 
-/* ---------- Painel da lâmina ---------- */
+/* ---------- Painel da l�mina ---------- */
 
 .info-panel {
   border: 1px solid var(--border);
@@ -4066,7 +4066,7 @@ button:active {
 }
 
 /* ============================================================
-   CATÁLOGO — SEÇÃO
+   CAT�LOGO � SE��O
    ============================================================ */
 
 .catalog-section {
@@ -4226,7 +4226,7 @@ button:active {
 }
 
 /* ============================================================
-   GRID DE LÂMINAS
+   GRID DE L�MINAS
    ============================================================ */
 
 .catalog-grid {
@@ -4686,5 +4686,695 @@ button:active {
 
   .lamina-content {
     padding: 19px;
+  }
+}
+
+/* ============================================================
+   HOME REDESIGN — ATLAS HISTOLÓGICO
+   Evolu��o visual da Home.
+   Cores e identidade continuam vindo das configurações do admin.
+   ============================================================ */
+
+.home-page {
+  overflow: hidden;
+}
+
+.home-hero {
+  position: relative;
+  min-height: calc(100vh - 76px);
+  display: flex;
+  align-items: center;
+  padding: 72px 0 0;
+  background:
+    radial-gradient(
+      circle at 78% 40%,
+      color-mix(in srgb, var(--green-light) 16%, transparent),
+      transparent 32%
+    ),
+    var(--cream);
+}
+
+.home-hero-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(420px, 0.95fr);
+  align-items: center;
+  gap: 70px;
+  min-height: 650px;
+}
+
+.home-hero-content {
+  max-width: 700px;
+}
+
+.home-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding: 8px 12px;
+  border: 1px solid color-mix(in srgb, var(--green) 18%, var(--border));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--cream) 78%, white);
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+}
+
+.home-eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: var(--green-light);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--green-light) 13%, transparent);
+}
+
+.home-hero h1 {
+  max-width: 760px;
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(48px, 6vw, 82px);
+  line-height: 0.98;
+  letter-spacing: -3.5px;
+  font-weight: 800;
+}
+
+.home-hero-description {
+  max-width: 620px;
+  margin: 28px 0 0;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+.home-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 34px;
+}
+
+.home-primary-button {
+  min-height: 52px;
+  padding-inline: 22px;
+}
+
+.home-secondary-button {
+  min-height: 52px;
+  padding-inline: 22px;
+}
+
+.home-hero-note {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 22px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.home-hero-note span {
+  color: var(--green-light);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.home-hero-visual {
+  position: relative;
+  min-width: 0;
+}
+
+.home-visual-card {
+  position: relative;
+  min-height: 570px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--green) 16%, var(--border));
+  border-radius: 34px;
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--green) 9%, var(--cream)),
+      color-mix(in srgb, var(--green) 2%, var(--cream))
+    );
+  box-shadow:
+    0 35px 90px rgba(0, 0, 0, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.home-visual-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.45;
+  background-image:
+    linear-gradient(
+      color-mix(in srgb, var(--green) 8%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--green) 8%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 38px 38px;
+  mask-image: radial-gradient(circle at center, black, transparent 78%);
+}
+
+.home-visual-orbit {
+  position: absolute;
+  border: 1px solid color-mix(in srgb, var(--green-light) 20%, transparent);
+  border-radius: 50%;
+}
+
+.home-orbit-one {
+  width: 410px;
+  height: 410px;
+}
+
+.home-orbit-two {
+  width: 560px;
+  height: 560px;
+}
+
+.home-microscope {
+  position: relative;
+  z-index: 2;
+  width: 250px;
+  height: 390px;
+  transform: rotate(-5deg);
+  filter: drop-shadow(20px 28px 24px rgba(0, 0, 0, 0.16));
+}
+
+.home-microscope-head {
+  position: absolute;
+  top: 10px;
+  left: 92px;
+  width: 72px;
+  height: 62px;
+  border-radius: 18px 18px 12px 12px;
+  background: var(--green);
+  transform: rotate(12deg);
+}
+
+.home-microscope-neck {
+  position: absolute;
+  top: 57px;
+  left: 86px;
+  width: 70px;
+  height: 190px;
+  border-radius: 35px 35px 22px 22px;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--green) 82%, black),
+      var(--green),
+      color-mix(in srgb, var(--green) 65%, white)
+    );
+  transform: skewX(-8deg);
+}
+
+.home-microscope-body {
+  position: absolute;
+  top: 105px;
+  left: 58px;
+  width: 120px;
+  height: 155px;
+  border-radius: 45px 45px 26px 26px;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--green) 72%, black),
+      var(--green)
+    );
+  transform: rotate(8deg);
+}
+
+.home-microscope-detail {
+  position: absolute;
+  top: 24px;
+  right: 14px;
+  width: 28px;
+  height: 76px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--green-light) 70%, white);
+  opacity: 0.75;
+}
+
+.home-microscope-stage {
+  position: absolute;
+  top: 238px;
+  left: 35px;
+  width: 172px;
+  height: 28px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--green) 82%, black);
+  box-shadow: 0 9px 0 color-mix(in srgb, var(--green) 55%, black);
+}
+
+.home-microscope-slide {
+  position: absolute;
+  left: 38px;
+  top: -5px;
+  width: 92px;
+  height: 14px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--cream) 85%, white);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.home-microscope-slide span {
+  position: absolute;
+  top: 2px;
+  left: 40px;
+  width: 12px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--green-light);
+}
+
+.home-microscope-base {
+  position: absolute;
+  bottom: 45px;
+  left: 20px;
+  width: 205px;
+  height: 42px;
+  border-radius: 18px 18px 12px 12px;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--green) 82%, white),
+      color-mix(in srgb, var(--green) 75%, black)
+    );
+}
+
+.home-microscope-foot {
+  position: absolute;
+  bottom: 30px;
+  left: 8px;
+  width: 230px;
+  height: 30px;
+  border-radius: 15px;
+  background: color-mix(in srgb, var(--green) 72%, black);
+}
+
+.home-floating-card {
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 13px 15px;
+  border: 1px solid color-mix(in srgb, var(--green) 14%, var(--border));
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--cream) 91%, white);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.10);
+  backdrop-filter: blur(14px);
+}
+
+.home-floating-card-top {
+  top: 54px;
+  right: 30px;
+}
+
+.home-floating-card-bottom {
+  bottom: 45px;
+  left: 30px;
+}
+
+.home-floating-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--green) 9%, var(--cream));
+  font-size: 18px;
+}
+
+.home-floating-card strong,
+.home-floating-card small {
+  display: block;
+}
+
+.home-floating-card strong {
+  color: var(--text);
+  font-size: 12px;
+}
+
+.home-floating-card small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.home-floating-number {
+  color: var(--green);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.home-hero-bottom {
+  position: relative;
+  z-index: 3;
+  margin-top: -2px;
+  border-top: 1px solid color-mix(in srgb, var(--green) 10%, var(--border));
+}
+
+.home-hero-bottom-inner {
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.home-hero-line {
+  width: 42px;
+  height: 1px;
+  background: var(--green-light);
+}
+
+.home-about {
+  padding-top: 110px;
+  padding-bottom: 110px;
+  background: var(--cream);
+}
+
+.home-section-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.75fr);
+  gap: 80px;
+  align-items: end;
+}
+
+.home-section-heading h2 {
+  max-width: 650px;
+  margin: 18px 0 0;
+  color: var(--text);
+  font-size: clamp(36px, 4.5vw, 58px);
+  line-height: 1.02;
+  letter-spacing: -2.5px;
+}
+
+.home-section-heading h2 span {
+  display: block;
+  color: var(--green);
+}
+
+.home-section-heading > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.home-about-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 55px;
+}
+
+.home-feature-card {
+  position: relative;
+  min-height: 300px;
+  padding: 28px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--cream) 76%, white);
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.home-feature-card:hover {
+  transform: translateY(-5px);
+  border-color: color-mix(in srgb, var(--green) 28%, var(--border));
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.08);
+}
+
+.home-feature-number {
+  position: absolute;
+  top: 22px;
+  right: 24px;
+  color: color-mix(in srgb, var(--green) 25%, transparent);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.home-feature-icon {
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  margin-bottom: 55px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--green) 9%, var(--cream));
+  font-size: 22px;
+}
+
+.home-feature-card h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 21px;
+}
+
+.home-feature-card p {
+  margin: 10px 0 22px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.home-feature-card a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.home-feature-card a span {
+  transition: transform 0.18s ease;
+}
+
+.home-feature-card:hover a span {
+  transform: translateX(4px);
+}
+
+.home-cta {
+  padding: 70px 0;
+  background: color-mix(in srgb, var(--green) 7%, var(--cream));
+  border-top: 1px solid color-mix(in srgb, var(--green) 10%, var(--border));
+}
+
+.home-cta-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 35px;
+}
+
+.home-cta h2 {
+  margin: 12px 0 0;
+  color: var(--text);
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+
+/* ---------- Header refinado ---------- */
+
+.header {
+  position: relative;
+  z-index: 20;
+  border-bottom: 1px solid color-mix(in srgb, var(--green) 8%, var(--border));
+  background: color-mix(in srgb, var(--cream) 88%, white);
+  backdrop-filter: blur(14px);
+}
+
+.header-content {
+  min-height: 76px;
+}
+
+.brand {
+  transition: transform 0.18s ease;
+}
+
+.brand:hover {
+  transform: translateY(-1px);
+}
+
+.nav a {
+  position: relative;
+}
+
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -7px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--green-light);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.18s ease;
+}
+
+.nav a:hover::after,
+.nav a.active::after {
+  transform: scaleX(1);
+}
+
+
+/* ---------- Responsivo ---------- */
+
+@media (max-width: 1050px) {
+  .home-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 45px;
+    padding-top: 25px;
+    padding-bottom: 55px;
+  }
+
+  .home-hero-content {
+    max-width: 760px;
+  }
+
+  .home-hero-visual {
+    max-width: 680px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .home-visual-card {
+    min-height: 500px;
+  }
+
+  .home-section-heading {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+@media (max-width: 800px) {
+  .home-about-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .home-feature-card {
+    min-height: 240px;
+  }
+
+  .home-feature-icon {
+    margin-bottom: 35px;
+  }
+
+  .home-cta-inner {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-hero {
+    min-height: auto;
+    padding-top: 42px;
+  }
+
+  .home-hero-grid {
+    min-height: auto;
+    gap: 35px;
+  }
+
+  .home-hero h1 {
+    font-size: clamp(42px, 13vw, 58px);
+    letter-spacing: -2.5px;
+  }
+
+  .home-hero-description {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .home-hero-actions {
+    flex-direction: column;
+  }
+
+  .home-hero-actions .button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .home-visual-card {
+    min-height: 400px;
+    border-radius: 24px;
+  }
+
+  .home-microscope {
+    transform: scale(0.78) rotate(-5deg);
+  }
+
+  .home-floating-card-top {
+    top: 22px;
+    right: 14px;
+  }
+
+  .home-floating-card-bottom {
+    bottom: 20px;
+    left: 14px;
+  }
+
+  .home-floating-card {
+    padding: 10px 12px;
+  }
+
+  .home-hero-bottom-inner {
+    min-height: 58px;
+    justify-content: center;
+  }
+
+  .home-hero-bottom-inner > span:first-child,
+  .home-hero-bottom-inner > span:last-child {
+    display: none;
+  }
+
+  .home-about {
+    padding-top: 75px;
+    padding-bottom: 75px;
+  }
+
+  .home-section-heading h2 {
+    font-size: 38px;
+    letter-spacing: -1.7px;
+  }
+
+  .home-about-cards {
+    margin-top: 35px;
+  }
+
+  .home-feature-card {
+    padding: 23px;
+  }
+
+  .home-cta {
+    padding: 55px 0;
   }
 }

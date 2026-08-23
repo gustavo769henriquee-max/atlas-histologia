@@ -27,6 +27,13 @@ function aplicarConfiguracoesVisuais(config = {}) {
     root.style.setProperty("--cor-texto", config.cor_texto);
   }
 
+  if (config.cor_secundaria) {
+    root.style.setProperty("--cor-secundaria", config.cor_secundaria);
+  }
+
+  if (config.cor_acento) {
+    root.style.setProperty("--cor-acento", config.cor_acento);
+  }
   if (config.cor_destaque) {
     root.style.setProperty("--green-light", config.cor_destaque);
     root.style.setProperty("--cor-destaque", config.cor_destaque);
@@ -102,59 +109,129 @@ function renderHome(config = {}) {
   return `
     ${renderHeader(config)}
 
-    <main>
+    <main class="home-page">
 
-      <section class="hero" id="inicio">
+      <section class="home-hero" id="inicio">
 
-        <div class="container hero-grid">
+        <div class="container home-hero-grid">
 
-          <div class="hero-text">
+          <div class="home-hero-content">
 
-            <span class="eyebrow">
-              🔬 MICROSCOPIA • ESTUDO • EXPLORAÇÃO
-            </span>
+            <div class="home-eyebrow">
+              <span class="home-eyebrow-dot"></span>
+              <span>MICROSCOPIA • ESTUDO • EXPLORAÇÃO</span>
+            </div>
 
-            <h1>
-              ${escapeHtml(config.titulo_inicio || "Explore o mundo microscópico.")}
-            </h1>
+            <h1>${escapeHtml(config.titulo_inicio || "Explore a Microestrutura do Mundo Animal")}</h1>
 
-            <p>
-              ${escapeHtml(config.descricao_inicio || "Um atlas de histologia interativo para explorar tecidos, estruturas e lâminas histológicas de uma forma visual e dinâmica.")}
+            <p class="home-hero-description">
+              ${escapeHtml(
+                config.descricao_inicio ||
+                  "Um atlas de histologia interativo para explorar tecidos, estruturas e lâminas histológicas de uma forma visual e dinâmica."
+              )}
             </p>
 
-            <div class="hero-actions">
+            <div class="home-hero-actions">
 
-              <a href="#laminas" class="button primary">
-                ${escapeHtml(config.texto_botao_principal || "Explorar " + (config.nome_site || "Atlas"))}
+              <a href="#laminas" class="button primary home-primary-button">
+                ${escapeHtml(
+                  config.texto_botao_principal ||
+                    "Explorar " + (config.nome_site || "Atlas")
+                )}
                 <span>→</span>
               </a>
 
-              <a href="#sobre" class="button secondary">
-                ${escapeHtml(config.texto_botao_secundario || "Conheça o projeto")}
+              <a href="#sobre" class="button secondary home-secondary-button">
+                ${escapeHtml(
+                  config.texto_botao_secundario || "Conheça o projeto"
+                )}
               </a>
+
+            </div>
+
+            <div class="home-hero-note">
+              <span>↗</span>
+              Explore lâminas, estruturas e detalhes em alta resolução.
+            </div>
+
+          </div>
+
+
+          <div class="home-hero-visual">
+
+            <div class="home-visual-card">
+
+              <div class="home-visual-grid"></div>
+
+              <div class="home-visual-orbit home-orbit-one"></div>
+              <div class="home-visual-orbit home-orbit-two"></div>
+
+              <div class="home-microscope">
+
+                <div class="home-microscope-head"></div>
+
+                <div class="home-microscope-neck"></div>
+
+                <div class="home-microscope-body">
+
+                  <div class="home-microscope-detail"></div>
+
+                </div>
+
+                <div class="home-microscope-stage">
+
+                  <div class="home-microscope-slide">
+                    <span></span>
+                  </div>
+
+                </div>
+
+                <div class="home-microscope-base"></div>
+
+                <div class="home-microscope-foot"></div>
+
+              </div>
+
+
+              <div class="home-floating-card home-floating-card-top">
+
+                <span class="home-floating-icon">🔬</span>
+
+                <div>
+                  <strong>Atlas interativo</strong>
+                  <small>Explore em alta resolução</small>
+                </div>
+
+              </div>
+
+
+              <div class="home-floating-card home-floating-card-bottom">
+
+                <span class="home-floating-number">01</span>
+
+                <div>
+                  <small>Experiência</small>
+                  <strong>Visual + Interativa</strong>
+                </div>
+
+              </div>
 
             </div>
 
           </div>
 
-          <div class="hero-visual">
+        </div>
 
-            <div class="microscope-card">
 
-              <div class="microscope-glow"></div>
+        <div class="home-hero-bottom">
 
-              <div class="microscope">
+          <div class="container home-hero-bottom-inner">
 
-                <div class="microscope-top"></div>
-                <div class="microscope-body"></div>
-                <div class="microscope-base"></div>
-                <div class="microscope-lens"></div>
+            <span>Atlas de Histologia</span>
 
-              </div>
+            <span class="home-hero-line"></span>
 
-              <div class="scan-line"></div>
-
-            </div>
+            <span>Aprender observando</span>
 
           </div>
 
@@ -163,34 +240,139 @@ function renderHome(config = {}) {
       </section>
 
 
-      <section class="section" id="sobre">
+      <section class="home-about section" id="sobre">
 
-        <div class="container about-grid">
+        <div class="container">
+
+          <div class="home-section-heading">
+
+            <div>
+
+              <span class="eyebrow">
+                SOBRE O ATLAS
+              </span>
+
+              <h2>
+                Aprender histologia
+                <span>de uma forma diferente.</span>
+              </h2>
+
+            </div>
+
+            <p>
+              ${escapeHtml(
+                config.texto_sobre ||
+                  "O " +
+                    (config.nome_site || "Atlas") +
+                    " " +
+                    (config.subtitulo || "Histológico") +
+                    " foi pensado para transformar a observação das lâminas em uma experiência de aprendizagem visual e interativa."
+              )}
+            </p>
+
+          </div>
+
+
+          <div class="home-about-cards">
+
+            <article class="home-feature-card">
+
+              <span class="home-feature-number">01</span>
+
+              <div class="home-feature-icon">
+                🔎
+              </div>
+
+              <h3>
+                Explore
+              </h3>
+
+              <p>
+                Navegue pelas lâminas e observe diferentes tecidos e estruturas microscópicas.
+              </p>
+
+              <a href="#laminas">
+                Ver l�minas
+                <span>→</span>
+              </a>
+
+            </article>
+
+
+            <article class="home-feature-card">
+
+              <span class="home-feature-number">02</span>
+
+              <div class="home-feature-icon">
+                🔬
+              </div>
+
+              <h3>
+                Amplie
+              </h3>
+
+              <p>
+                Utilize o visualizador interativo para aproximar, movimentar e observar os detalhes.
+              </p>
+
+              <a href="#laminas">
+                Explorar atlas
+                <span>→</span>
+              </a>
+
+            </article>
+
+
+            <article class="home-feature-card">
+
+              <span class="home-feature-number">03</span>
+
+              <div class="home-feature-icon">
+                🧫
+              </div>
+
+              <h3>
+                Aprenda
+              </h3>
+
+              <p>
+                Relacione as estruturas observadas com as informações disponíveis em cada lâmina.
+              </p>
+
+              <a href="#laminas">
+                Começar agora
+                <span>→</span>
+              </a>
+
+            </article>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <section class="home-cta">
+
+        <div class="container home-cta-inner">
 
           <div>
 
             <span class="eyebrow">
-              SOBRE O ATLAS
+              PRONTO PARA EXPLORAR?
             </span>
 
             <h2>
-              Aprender histologia
-              de uma forma diferente.
+              Entre no mundo microscópico.
             </h2>
 
           </div>
 
-          <div class="about-text">
-
-            <p>
-              ${escapeHtml(config.texto_sobre || "O " + (config.nome_site || "Atlas") + " " + (config.subtitulo || "Histológico") + " foi pensado para transformar a observação das lâminas em uma experiência de aprendizagem visual e interativa.")}
-            </p>
-
-            <a href="#laminas" class="button primary">
-              Explorar lâminas →
-            </a>
-
-          </div>
+          <a href="#laminas" class="button primary">
+            Explorar l�minas
+            <span>→</span>
+          </a>
 
         </div>
 
@@ -203,15 +385,21 @@ function renderHome(config = {}) {
 
       <div class="container">
 
-        <span>🔬 ${escapeHtml(config.nome_site || "Atlas")} ${escapeHtml(config.subtitulo || "Histológico")}</span>
-        <span>${escapeHtml(config.texto_rodape || "Projeto acadêmico")}</span>
+        <span>
+          🔬 ${escapeHtml(config.nome_site || "Atlas")} ${escapeHtml(
+            config.subtitulo || "Histológico"
+          )}
+        </span>
+
+        <span>
+          ${escapeHtml(config.texto_rodape || "Projeto acadêmico")}
+        </span>
 
       </div>
 
     </footer>
   `;
 }
-
 function escapeHtml(value = "") {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -1720,3 +1908,4 @@ supabase.auth.onAuthStateChange((event) => {
 });
 
 render();
+
