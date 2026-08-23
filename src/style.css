@@ -17,8 +17,8 @@
   background: #f5f7f5;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  --green: #174c3c;
-  --green-light: #2d755d;
+  --green: var(--cor-principal, #1e6f5c);
+  --green-light: var(--cor-destaque, #102f29);
   --mint: #dcefe7;
   --cream: #f5f7f5;
   --white: #ffffff;
