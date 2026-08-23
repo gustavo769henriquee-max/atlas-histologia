@@ -1612,7 +1612,7 @@ async function render() {
   if (route === "catalogo") {
     if (token !== renderToken) return;
 
-    await renderCatalogo();
+    await renderCatalogo(config);
 
     return;
   }

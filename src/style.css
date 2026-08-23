@@ -2854,9 +2854,6 @@ a {
   text-align: center;
 }
 
-
-
-
 /* ============================================================
    HOME V2  REFINAMENTO VISUAL
    ============================================================ */
@@ -2983,13 +2980,12 @@ a {
 .microscope-glow {
   width: 310px;
   height: 310px;
-  background:
-    radial-gradient(
-      circle,
-      rgba(255, 255, 255, 0.95) 0%,
-      rgba(255, 255, 255, 0.55) 42%,
-      transparent 72%
-    );
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.55) 42%,
+    transparent 72%
+  );
   filter: blur(4px);
 }
 
@@ -3042,12 +3038,11 @@ a {
 
 .tissue-card {
   border-radius: 20px;
-  background:
-    linear-gradient(
-      145deg,
-      #ffffff 0%,
-      color-mix(in srgb, var(--green) 3%, var(--cream)) 100%
-    );
+  background: linear-gradient(
+    145deg,
+    #ffffff 0%,
+    color-mix(in srgb, var(--green) 3%, var(--cream)) 100%
+  );
 }
 
 .about {
@@ -3175,5 +3170,1521 @@ a {
   .tag-three {
     left: 14px;
     bottom: 42px;
+  }
+}
+
+/* ============================================================
+   REDESIGN VISUAL — ATLAS DE HISTOLOGIA
+   Camada visual adicional.
+   Mantém as variáveis configuráveis pelo painel de Aparência.
+   ============================================================ */
+
+/* ---------- Base ---------- */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.container {
+  width: min(1180px, calc(100% - 40px));
+}
+
+/* ---------- Header ---------- */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  background: color-mix(in srgb, var(--cream) 88%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
+  transition:
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.header-content {
+  min-height: 76px;
+}
+
+.brand {
+  gap: 12px;
+  transition: transform 0.2s ease;
+}
+
+.brand:hover {
+  transform: translateY(-1px);
+}
+
+.brand-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--green);
+  box-shadow:
+    0 8px 22px color-mix(in srgb, var(--green) 22%, transparent),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+}
+
+.brand-icon img {
+  display: block;
+}
+
+.nav {
+  gap: 6px;
+}
+
+.nav a {
+  position: relative;
+  padding: 9px 13px;
+  border-radius: 10px;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.nav a:hover {
+  background: color-mix(in srgb, var(--green) 9%, transparent);
+  transform: translateY(-1px);
+}
+
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 13px;
+  right: 13px;
+  bottom: 4px;
+  height: 2px;
+  border-radius: 99px;
+  background: var(--green);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+.nav a:hover::after {
+  transform: scaleX(1);
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(72px, 9vw, 120px) 0;
+  background:
+    radial-gradient(
+      circle at 78% 35%,
+      color-mix(in srgb, var(--green-light) 16%, transparent),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 12% 80%,
+      color-mix(in srgb, var(--green) 8%, transparent),
+      transparent 32%
+    ),
+    var(--cream);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  right: -180px;
+  top: -190px;
+  border: 1px solid color-mix(in srgb, var(--green) 14%, transparent);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  right: 70px;
+  bottom: -170px;
+  border: 1px solid color-mix(in srgb, var(--green-light) 13%, transparent);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero-grid {
+  position: relative;
+  z-index: 1;
+  align-items: center;
+  gap: clamp(50px, 8vw, 110px);
+}
+
+.hero-text {
+  max-width: 650px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 11px;
+  border: 1px solid color-mix(in srgb, var(--green) 18%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--green) 6%, transparent);
+  color: var(--green-light);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.7px;
+}
+
+.hero h1 {
+  max-width: 760px;
+  margin-top: 20px;
+  margin-bottom: 22px;
+  font-size: clamp(42px, 6vw, 72px);
+  line-height: 0.98;
+  letter-spacing: -2.8px;
+}
+
+.hero-text > p {
+  max-width: 620px;
+  font-size: clamp(16px, 1.5vw, 19px);
+  line-height: 1.75;
+  opacity: 0.78;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.button {
+  min-height: 48px;
+  padding: 0 19px;
+  border-radius: 12px;
+  font-weight: 750;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+}
+
+.button.primary {
+  box-shadow: 0 10px 25px color-mix(in srgb, var(--green) 20%, transparent);
+}
+
+.button.secondary {
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--cream) 80%, white);
+}
+
+/* ---------- Microscópio / visual da home ---------- */
+
+.hero-visual {
+  min-width: 0;
+}
+
+.microscope-card {
+  position: relative;
+  min-height: 430px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--green) 14%, transparent);
+  border-radius: 28px;
+  background:
+    radial-gradient(
+      circle at center,
+      color-mix(in srgb, var(--green-light) 12%, transparent),
+      transparent 50%
+    ),
+    color-mix(in srgb, var(--green) 3%, var(--cream));
+  box-shadow:
+    0 30px 80px color-mix(in srgb, var(--text) 10%, transparent),
+    inset 0 0 50px color-mix(in srgb, var(--green) 4%, transparent);
+}
+
+.microscope-card::before,
+.microscope-card::after {
+  content: "";
+  position: absolute;
+  border: 1px solid color-mix(in srgb, var(--green) 12%, transparent);
+  border-radius: 50%;
+}
+
+.microscope-card::before {
+  width: 330px;
+  height: 330px;
+}
+
+.microscope-card::after {
+  width: 220px;
+  height: 220px;
+}
+
+.microscope-glow {
+  background: color-mix(in srgb, var(--green-light) 18%, transparent);
+  filter: blur(55px);
+}
+
+/* ---------- Seção Sobre ---------- */
+
+.section {
+  position: relative;
+  padding: clamp(72px, 9vw, 110px) 0;
+}
+
+.about-grid {
+  align-items: start;
+  gap: clamp(50px, 9vw, 120px);
+}
+
+.about-grid h2 {
+  margin-top: 18px;
+  max-width: 550px;
+  font-size: clamp(34px, 4.5vw, 55px);
+  line-height: 1.05;
+  letter-spacing: -1.8px;
+}
+
+.about-text {
+  max-width: 580px;
+}
+
+.about-text p {
+  font-size: 17px;
+  line-height: 1.8;
+  opacity: 0.78;
+  margin-bottom: 28px;
+}
+
+/* ---------- Footer ---------- */
+
+.footer {
+  border-top: 1px solid var(--border);
+  background: color-mix(in srgb, var(--green) 3%, var(--cream));
+}
+
+.footer .container {
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* ---------- Catálogo ---------- */
+
+.catalogo-page,
+.catalog-page {
+  padding-bottom: 80px;
+}
+
+.catalogo-header,
+.catalog-header {
+  padding: 58px 0 34px;
+}
+
+.catalogo-header h1,
+.catalog-header h1 {
+  margin-top: 12px;
+  font-size: clamp(36px, 5vw, 56px);
+  letter-spacing: -2px;
+}
+
+.catalogo-grid,
+.catalog-grid {
+  gap: 20px;
+}
+
+.lamina-card,
+.catalogo-card,
+.catalog-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--cream) 88%, white);
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--text) 5%, transparent);
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.lamina-card:hover,
+.catalogo-card:hover,
+.catalog-card:hover {
+  transform: translateY(-5px);
+  border-color: color-mix(in srgb, var(--green) 30%, var(--border));
+  box-shadow: 0 18px 45px color-mix(in srgb, var(--text) 9%, transparent);
+}
+
+.lamina-card img,
+.catalogo-card img,
+.catalog-card img {
+  transition: transform 0.45s ease;
+}
+
+.lamina-card:hover img,
+.catalogo-card:hover img,
+.catalog-card:hover img {
+  transform: scale(1.035);
+}
+
+/* ---------- Página da lâmina ---------- */
+
+.slide-header {
+  padding: 42px 0 30px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--green) 5%, transparent),
+    transparent 60%
+  );
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 25px;
+  color: var(--green-light);
+  font-weight: 700;
+}
+
+.slide-title {
+  align-items: end;
+}
+
+.slide-title h1 {
+  margin-top: 9px;
+  font-size: clamp(32px, 5vw, 54px);
+  letter-spacing: -1.8px;
+}
+
+.slide-title p {
+  margin-top: 10px;
+  opacity: 0.7;
+}
+
+.slide-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.slide-meta span {
+  padding: 8px 11px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--cream) 75%, white);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ---------- Viewer ---------- */
+
+.viewer-section {
+  padding: 30px 0 80px;
+}
+
+.viewer-container {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: #101514;
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.12);
+}
+
+.viewer {
+  min-height: 620px;
+}
+
+.viewer-controls {
+  min-height: 54px;
+  padding: 8px 12px 8px 18px;
+  background: color-mix(in srgb, var(--cream) 94%, white);
+  border-top: 1px solid var(--border);
+}
+
+.zoom-buttons button {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--cream) 85%, white);
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease;
+}
+
+.zoom-buttons button:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--green) 9%, var(--cream));
+}
+
+/* ---------- Painel da lâmina ---------- */
+
+.info-panel {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--cream) 92%, white);
+  box-shadow: 0 12px 35px color-mix(in srgb, var(--text) 6%, transparent);
+}
+
+.panel-label {
+  color: var(--green-light);
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 1.6px;
+}
+
+.info-panel h2 {
+  letter-spacing: -0.7px;
+}
+
+.structure {
+  border: 1px solid transparent;
+  border-radius: 13px;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.structure:hover {
+  transform: translateX(3px);
+  border-color: color-mix(in srgb, var(--green) 18%, var(--border));
+  background: color-mix(in srgb, var(--green) 5%, transparent);
+}
+
+.structure.estrutura-selecionada {
+  border-color: color-mix(in srgb, var(--green) 35%, var(--border));
+  background: color-mix(in srgb, var(--green) 8%, transparent);
+}
+
+/* ---------- Painel de estudo ---------- */
+
+#estrutura-estudo-panel {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: color-mix(in srgb, var(--cream) 94%, white) !important;
+  border-color: var(--border) !important;
+  box-shadow: 0 24px 65px rgba(0, 0, 0, 0.2) !important;
+}
+
+.estrutura-estudo-navegacao {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.estrutura-nav-item {
+  min-height: 38px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--cream) 75%, white);
+  color: var(--text);
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.estrutura-nav-item:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--green) 8%, var(--cream));
+}
+
+/* ---------- Formulários / Login / Admin ---------- */
+
+input,
+textarea,
+select {
+  border-radius: 10px;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 12%, transparent);
+}
+
+button {
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* ---------- Responsividade ---------- */
+
+@media (max-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-visual {
+    max-width: 620px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .microscope-card {
+    min-height: 360px;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .viewer-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .viewer {
+    min-height: 520px;
+  }
+}
+
+@media (max-width: 680px) {
+  .container {
+    width: min(100% - 28px, 1180px);
+  }
+
+  .header-content {
+    min-height: 68px;
+  }
+
+  .nav {
+    gap: 2px;
+  }
+
+  .nav a {
+    padding: 8px 7px;
+    font-size: 12px;
+  }
+
+  .nav a::after {
+    left: 7px;
+    right: 7px;
+  }
+
+  .hero {
+    padding: 62px 0 70px;
+  }
+
+  .hero h1 {
+    font-size: clamp(38px, 12vw, 54px);
+    letter-spacing: -2px;
+  }
+
+  .hero-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .hero-actions .button {
+    justify-content: center;
+  }
+
+  .microscope-card {
+    min-height: 300px;
+    border-radius: 22px;
+  }
+
+  .section {
+    padding: 68px 0;
+  }
+
+  .footer .container {
+    align-items: flex-start;
+    flex-direction: column;
+    padding-top: 25px;
+    padding-bottom: 25px;
+  }
+
+  .viewer {
+    min-height: 430px;
+  }
+
+  #estrutura-estudo-panel {
+    top: 82px !important;
+    right: 14px !important;
+    width: min(320px, calc(100vw - 28px)) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   REDESIGN VISUAL — ATLAS HISTOLÓGICO
+   Usa exclusivamente as cores configuráveis do site.
+   ============================================================ */
+
+:root {
+  --atlas-green: var(--cor-principal, var(--green, #245f4a));
+  --atlas-bg: var(--cor-fundo, var(--cream, #f5f1e8));
+  --atlas-text: var(--cor-texto, var(--text, #17211f));
+  --atlas-accent: var(--cor-destaque, var(--green-light, #78a98f));
+
+  --atlas-border: color-mix(in srgb, var(--atlas-text) 12%, transparent);
+
+  --atlas-muted: color-mix(in srgb, var(--atlas-text) 62%, transparent);
+
+  --atlas-surface: color-mix(in srgb, var(--atlas-bg) 88%, white);
+
+  --atlas-shadow: 0 18px 45px
+    color-mix(in srgb, var(--atlas-text) 13%, transparent);
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.header {
+  position: relative;
+  z-index: 20;
+  background: color-mix(in srgb, var(--atlas-bg) 92%, transparent);
+  border-bottom: 1px solid var(--atlas-border);
+  backdrop-filter: blur(14px);
+}
+
+.header-content {
+  min-height: 78px;
+}
+
+.brand {
+  gap: 12px;
+  text-decoration: none;
+}
+
+.brand-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+
+  border-radius: 13px;
+
+  background: var(--atlas-green);
+
+  color: var(--atlas-bg);
+
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--atlas-green) 22%, transparent);
+
+  overflow: hidden;
+}
+
+.brand-icon img {
+  display: block;
+}
+
+.brand strong {
+  color: var(--atlas-text);
+  letter-spacing: -0.02em;
+}
+
+.brand small {
+  color: var(--atlas-muted);
+}
+
+.nav a {
+  position: relative;
+  transition:
+    color 180ms ease,
+    opacity 180ms ease;
+}
+
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+
+  width: 0;
+  height: 2px;
+
+  background: var(--atlas-green);
+
+  transform: translateX(-50%);
+
+  transition: width 180ms ease;
+}
+
+.nav a:hover::after,
+.nav a.active::after {
+  width: 22px;
+}
+
+.nav a:hover,
+.nav a.active {
+  color: var(--atlas-green);
+}
+
+/* ============================================================
+   CATÁLOGO — HERO
+   ============================================================ */
+
+.catalog-hero {
+  position: relative;
+  overflow: hidden;
+
+  padding: 78px 0 74px;
+
+  background:
+    radial-gradient(
+      circle at 85% 25%,
+      color-mix(in srgb, var(--atlas-accent) 18%, transparent),
+      transparent 34%
+    ),
+    var(--atlas-bg);
+
+  border-bottom: 1px solid var(--atlas-border);
+}
+
+.catalog-hero::before {
+  content: "";
+
+  position: absolute;
+
+  width: 360px;
+  height: 360px;
+
+  right: -170px;
+  top: -170px;
+
+  border: 1px solid color-mix(in srgb, var(--atlas-green) 18%, transparent);
+
+  border-radius: 50%;
+}
+
+.catalog-hero::after {
+  content: "";
+
+  position: absolute;
+
+  width: 210px;
+  height: 210px;
+
+  right: -55px;
+  top: -55px;
+
+  border: 1px solid color-mix(in srgb, var(--atlas-green) 14%, transparent);
+
+  border-radius: 50%;
+}
+
+.catalog-hero-content {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 50px;
+}
+
+.catalog-hero h1 {
+  max-width: 760px;
+
+  margin: 16px 0 18px;
+
+  color: var(--atlas-text);
+
+  font-size: clamp(42px, 6vw, 76px);
+
+  line-height: 0.98;
+
+  letter-spacing: -0.045em;
+}
+
+.catalog-hero p {
+  max-width: 620px;
+
+  margin: 0;
+
+  color: var(--atlas-muted);
+
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+.catalog-hero-mark {
+  min-width: 120px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-end;
+
+  gap: 5px;
+
+  color: var(--atlas-green);
+}
+
+.catalog-hero-mark span {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.catalog-hero-mark strong {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+}
+
+/* ============================================================
+   CATÁLOGO — SEÇÃO
+   ============================================================ */
+
+.catalog-section {
+  padding: 70px 0 100px;
+
+  background: var(--atlas-bg);
+}
+
+.catalog-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  margin-bottom: 30px;
+}
+
+.section-kicker {
+  display: block;
+
+  margin-bottom: 9px;
+
+  color: var(--atlas-green);
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 0.19em;
+}
+
+.catalog-heading h2 {
+  margin: 0;
+
+  color: var(--atlas-text);
+
+  font-size: clamp(28px, 4vw, 42px);
+
+  letter-spacing: -0.035em;
+}
+
+.catalog-status {
+  flex-shrink: 0;
+
+  color: var(--atlas-muted);
+
+  font-size: 13px;
+}
+
+/* ============================================================
+   FILTROS
+   ============================================================ */
+
+.catalog-tools {
+  display: grid;
+
+  grid-template-columns:
+    minmax(240px, 1.7fr)
+    repeat(3, minmax(150px, 1fr))
+    auto;
+
+  gap: 10px;
+
+  margin-bottom: 42px;
+
+  padding: 12px;
+
+  background: color-mix(in srgb, var(--atlas-text) 4%, transparent);
+
+  border: 1px solid var(--atlas-border);
+
+  border-radius: 18px;
+}
+
+.search-box,
+.catalog-tools select,
+.catalog-tools .button {
+  min-height: 48px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 0 15px;
+
+  background: var(--atlas-surface);
+
+  border: 1px solid var(--atlas-border);
+
+  border-radius: 11px;
+
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.search-box:focus-within {
+  border-color: var(--atlas-green);
+
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--atlas-green) 12%, transparent);
+}
+
+.search-icon {
+  color: var(--atlas-green);
+
+  font-size: 22px;
+
+  line-height: 1;
+}
+
+.search-box input {
+  width: 100%;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: var(--atlas-text);
+
+  font: inherit;
+}
+
+.search-box input::placeholder {
+  color: var(--atlas-muted);
+}
+
+.catalog-tools select {
+  min-width: 0;
+
+  padding: 0 13px;
+
+  border: 1px solid var(--atlas-border);
+
+  border-radius: 11px;
+
+  background: var(--atlas-surface);
+
+  color: var(--atlas-text);
+
+  outline: none;
+
+  cursor: pointer;
+}
+
+.catalog-tools select:focus {
+  border-color: var(--atlas-green);
+
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--atlas-green) 12%, transparent);
+}
+
+.catalog-tools .button {
+  white-space: nowrap;
+}
+
+/* ============================================================
+   GRID DE LÂMINAS
+   ============================================================ */
+
+.catalog-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 22px;
+}
+
+/* ============================================================
+   CARD
+   ============================================================ */
+
+.lamina-card {
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  background: var(--atlas-surface);
+
+  border: 1px solid var(--atlas-border);
+
+  border-radius: 18px;
+
+  box-shadow: 0 8px 25px color-mix(in srgb, var(--atlas-text) 5%, transparent);
+
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+
+.lamina-card:hover {
+  transform: translateY(-5px);
+
+  border-color: color-mix(in srgb, var(--atlas-green) 35%, var(--atlas-border));
+
+  box-shadow: var(--atlas-shadow);
+}
+
+/* ============================================================
+   IMAGEM
+   ============================================================ */
+
+.lamina-image {
+  position: relative;
+
+  height: 245px;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      color-mix(in srgb, var(--atlas-accent) 20%, transparent),
+      transparent 60%
+    ),
+    color-mix(in srgb, var(--atlas-text) 8%, var(--atlas-bg));
+}
+
+.lamina-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  transition: transform 450ms ease;
+}
+
+.lamina-card:hover .lamina-image img {
+  transform: scale(1.045);
+}
+
+.lamina-number {
+  position: absolute;
+
+  top: 14px;
+  left: 14px;
+
+  z-index: 2;
+
+  min-width: 38px;
+  height: 28px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0 9px;
+
+  background: color-mix(in srgb, var(--atlas-text) 82%, transparent);
+
+  color: var(--atlas-bg);
+
+  border-radius: 999px;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 0.1em;
+
+  backdrop-filter: blur(8px);
+}
+
+.no-image {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  color: var(--atlas-muted);
+}
+
+.no-image span {
+  font-size: 42px;
+}
+
+.no-image small {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   OVERLAY DA IMAGEM
+   ============================================================ */
+
+.image-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: flex-end;
+
+  padding: 18px;
+
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--atlas-text) 72%, transparent),
+    transparent 55%
+  );
+
+  opacity: 0;
+
+  transition: opacity 220ms ease;
+}
+
+.lamina-card:hover .image-overlay {
+  opacity: 1;
+}
+
+.explore-button {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 10px 15px;
+
+  background: var(--atlas-green);
+
+  color: var(--atlas-bg);
+
+  border-radius: 9px;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  text-decoration: none;
+
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--atlas-text) 22%, transparent);
+}
+
+.explore-button span {
+  font-size: 17px;
+
+  transition: transform 180ms ease;
+}
+
+.explore-button:hover span {
+  transform: translateX(3px);
+}
+
+/* ============================================================
+   CONTEÚDO DO CARD
+   ============================================================ */
+
+.lamina-content {
+  display: flex;
+  flex-direction: column;
+
+  flex: 1;
+
+  padding: 22px 22px 20px;
+}
+
+.lamina-category {
+  margin-bottom: 8px;
+
+  color: var(--atlas-green);
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 0.15em;
+
+  text-transform: uppercase;
+}
+
+.lamina-content h2 {
+  margin: 0 0 9px;
+
+  color: var(--atlas-text);
+
+  font-size: 21px;
+
+  line-height: 1.2;
+
+  letter-spacing: -0.025em;
+}
+
+.lamina-content p {
+  display: -webkit-box;
+
+  overflow: hidden;
+
+  margin: 0 0 18px;
+
+  color: var(--atlas-muted);
+
+  font-size: 13px;
+
+  line-height: 1.65;
+
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.lamina-tags {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 6px;
+
+  margin-bottom: 20px;
+}
+
+.lamina-tags span {
+  padding: 6px 8px;
+
+  background: color-mix(in srgb, var(--atlas-green) 7%, transparent);
+
+  color: var(--atlas-muted);
+
+  border: 1px solid color-mix(in srgb, var(--atlas-green) 12%, transparent);
+
+  border-radius: 7px;
+
+  font-size: 10px;
+}
+
+.card-link {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: auto;
+
+  padding-top: 15px;
+
+  border-top: 1px solid var(--atlas-border);
+
+  color: var(--atlas-text);
+
+  font-size: 12px;
+  font-weight: 800;
+
+  text-decoration: none;
+
+  transition: color 180ms ease;
+}
+
+.card-link span {
+  color: var(--atlas-green);
+
+  font-size: 19px;
+
+  transition: transform 180ms ease;
+}
+
+.card-link:hover {
+  color: var(--atlas-green);
+}
+
+.card-link:hover span {
+  transform: translateX(4px);
+}
+
+/* ============================================================
+   ESTADO VAZIO
+   ============================================================ */
+
+.empty-catalog {
+  grid-column: 1 / -1;
+
+  padding: 90px 25px;
+
+  text-align: center;
+
+  border: 1px dashed var(--atlas-border);
+
+  border-radius: 18px;
+
+  background: color-mix(in srgb, var(--atlas-text) 2%, transparent);
+}
+
+.empty-icon {
+  width: 60px;
+  height: 60px;
+
+  display: grid;
+  place-items: center;
+
+  margin: 0 auto 18px;
+
+  background: color-mix(in srgb, var(--atlas-green) 10%, transparent);
+
+  border-radius: 16px;
+
+  font-size: 27px;
+}
+
+.empty-catalog h2 {
+  margin: 0 0 8px;
+
+  color: var(--atlas-text);
+
+  font-size: 24px;
+}
+
+.empty-catalog p {
+  margin: 0;
+
+  color: var(--atlas-muted);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.footer {
+  border-top: 1px solid var(--atlas-border);
+
+  background: color-mix(in srgb, var(--atlas-text) 3%, var(--atlas-bg));
+}
+
+.footer span {
+  color: var(--atlas-muted);
+}
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+
+@media (max-width: 1050px) {
+  .catalog-tools {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .search-box {
+    grid-column: 1 / -1;
+  }
+
+  .catalog-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .catalog-hero {
+    padding: 55px 0;
+  }
+
+  .catalog-hero-content {
+    align-items: flex-start;
+  }
+
+  .catalog-hero-mark {
+    display: none;
+  }
+
+  .catalog-hero h1 {
+    font-size: 43px;
+  }
+
+  .catalog-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .catalog-tools {
+    grid-template-columns: 1fr;
+
+    padding: 10px;
+  }
+
+  .search-box {
+    grid-column: auto;
+  }
+
+  .catalog-tools select,
+  .catalog-tools .button {
+    width: 100%;
+  }
+
+  .catalog-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lamina-image {
+    height: 230px;
+  }
+
+  .image-overlay {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 520px) {
+  .catalog-section {
+    padding: 50px 0 70px;
+  }
+
+  .catalog-hero h1 {
+    font-size: 37px;
+  }
+
+  .catalog-hero p {
+    font-size: 15px;
+  }
+
+  .lamina-content {
+    padding: 19px;
   }
 }

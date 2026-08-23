@@ -3,26 +3,43 @@
 const app = document.querySelector("#app");
 
 let todasLaminas = [];
+let configuracaoAtual = {};
 
-export async function renderCatalogo() {
+export async function renderCatalogo(config = {}) {
+  configuracaoAtual = config || {};
+
   app.innerHTML = `
     <header class="header">
       <div class="container header-content">
 
         <a href="#inicio" class="brand">
-          <span class="brand-icon">🔬</span>
+
+          <span
+            class="brand-icon"
+            style="
+              width: ${Number(config.logo_tamanho || 100) * 0.42}px;
+              height: ${Number(config.logo_tamanho || 100) * 0.42}px;
+            "
+          >
+            ${
+              config.logo_url
+                ? `<img src="${escapeHtml(config.logo_url)}" alt="Logo" style="width:100%;height:100%;object-fit:contain;">`
+                : "🔬"
+            }
+          </span>
 
           <span>
-            <strong>Atlas</strong>
-            <small>Histológico</small>
+            <strong>${escapeHtml(config.nome_site || "Atlas")}</strong>
+            <small>${escapeHtml(config.subtitulo || "Histológico")}</small>
           </span>
+
         </a>
 
         <nav class="nav">
           <a href="#inicio">Início</a>
           <a href="#laminas" class="active">Lâminas</a>
           <a href="#sobre">Sobre</a>
-          <a href="#login">Administração</a>
+          <a href="#admin">Administração</a>
         </nav>
 
       </div>
@@ -36,7 +53,7 @@ export async function renderCatalogo() {
         <div class="container">
 
           <span class="eyebrow">
-            🔬 ATLAS HISTOLÓGICO
+            🔬 ${escapeHtml(config.nome_site || "ATLAS HISTOLÓGICO")}
           </span>
 
           <h1>
@@ -136,18 +153,17 @@ export async function renderCatalogo() {
       <div class="container">
 
         <span>
-          🔬 Atlas Histológico
+          🔬 ${escapeHtml(config.nome_site || "Atlas")} ${escapeHtml(config.subtitulo || "Histológico")}
         </span>
 
         <span>
-          Projeto acadêmico
+          ${escapeHtml(config.texto_rodape || "Projeto acadêmico")}
         </span>
 
       </div>
 
     </footer>
   `;
-
   await carregarLaminas();
 
   configurarFiltros();
@@ -155,7 +171,6 @@ export async function renderCatalogo() {
 
 async function carregarLaminas() {
   const status = document.querySelector("#catalog-status");
-
   const grid = document.querySelector("#catalog-grid");
 
   if (!status || !grid) return;
@@ -179,24 +194,12 @@ async function carregarLaminas() {
   todasLaminas = data || [];
 
   preencherFiltros();
-
   renderCards(todasLaminas);
 }
 
-/*
- * Preenche os três filtros com valores derivados
- * dos dados reais já carregados (sem novas consultas).
- *
- * Categoria: lâminas antigas têm apenas o texto;
- * novas têm categoria_id — a chave usada é
- * categoria_id || categoria, cobrindo ambos.
- */
-
 function preencherFiltros() {
   const selectCategoria = document.querySelector("#filter-categoria");
-
   const selectTecnica = document.querySelector("#filter-tecnica");
-
   const selectColoracao = document.querySelector("#filter-coloracao");
 
   if (!selectCategoria || !selectTecnica || !selectColoracao) {
@@ -204,9 +207,7 @@ function preencherFiltros() {
   }
 
   const categorias = new Map();
-
   const tecnicas = new Set();
-
   const coloracoes = new Set();
 
   todasLaminas.forEach((lamina) => {
@@ -237,10 +238,10 @@ function preencherFiltros() {
     ${[...categorias.entries()]
       .map(
         ([valor, nome]) => `
-      <option value="${escapeHtml(valor)}">
-        ${escapeHtml(nome)}
-      </option>
-    `,
+          <option value="${escapeHtml(valor)}">
+            ${escapeHtml(nome)}
+          </option>
+        `,
       )
       .join("")}
   `;
@@ -254,10 +255,10 @@ function preencherFiltros() {
       .sort()
       .map(
         (valor) => `
-      <option value="${escapeHtml(valor)}">
-        ${escapeHtml(valor)}
-      </option>
-    `,
+          <option value="${escapeHtml(valor)}">
+            ${escapeHtml(valor)}
+          </option>
+        `,
       )
       .join("")}
   `;
@@ -271,10 +272,10 @@ function preencherFiltros() {
       .sort()
       .map(
         (valor) => `
-      <option value="${escapeHtml(valor)}">
-        ${escapeHtml(valor)}
-      </option>
-    `,
+          <option value="${escapeHtml(valor)}">
+            ${escapeHtml(valor)}
+          </option>
+        `,
       )
       .join("")}
   `;
@@ -282,8 +283,9 @@ function preencherFiltros() {
 
 function renderCards(laminas) {
   const grid = document.querySelector("#catalog-grid");
-
   const status = document.querySelector("#catalog-status");
+
+  if (!grid || !status) return;
 
   status.textContent = `${laminas.length} ${
     laminas.length === 1 ? "lâmina encontrada" : "lâminas encontradas"
@@ -291,7 +293,6 @@ function renderCards(laminas) {
 
   if (!laminas.length) {
     grid.innerHTML = `
-
       <div class="empty-catalog">
 
         <div class="empty-icon">
@@ -303,11 +304,10 @@ function renderCards(laminas) {
         </h2>
 
         <p>
-          Tente mudar a busca ou o filtro.
+          Tente mudar a busca ou os filtros.
         </p>
 
       </div>
-
     `;
 
     return;
@@ -315,147 +315,146 @@ function renderCards(laminas) {
 
   grid.innerHTML = laminas
     .map(
-      (lamina) => `
+      (lamina, index) => `
+        <article class="lamina-card">
 
-      <article class="lamina-card">
+          <div class="lamina-image">
 
-        <div class="lamina-image">
+            ${
+              lamina.imagem_url
+                ? `
+                  <img
+                    src="${escapeHtml(lamina.imagem_url)}"
+                    alt="${escapeHtml(lamina.nome || "Lâmina histológica")}"
+                    loading="lazy"
+                  >
+                `
+                : `
+                  <div class="no-image">
+                    <span>🔬</span>
+                    <small>Sem imagem</small>
+                  </div>
+                `
+            }
 
-          ${
-            lamina.imagem_url
-              ? `
-                <img
-                  src="${escapeHtml(lamina.imagem_url)}"
-                  alt="${escapeHtml(lamina.nome || "Lâmina histológica")}"
-                  loading="lazy"
-                >
-              `
-              : `
-                <div class="no-image">
-                  🔬
-                </div>
-              `
-          }
+            <div class="lamina-number">
+              ${String(index + 1).padStart(2, "0")}
+            </div>
+
+            <div class="image-overlay">
+
+              <a
+                href="#lamina/${lamina.id}"
+                class="explore-button"
+              >
+                ${escapeHtml(
+                  configuracaoAtual.texto_botao_lamina || "Explorar lâmina",
+                )}
+                <span>→</span>
+              </a>
+
+            </div>
+
+          </div>
 
 
-          <div class="image-overlay">
+          <div class="lamina-content">
+
+            <div class="lamina-category">
+              ${escapeHtml(lamina.categoria || "Histologia")}
+            </div>
+
+
+            <h2>
+              ${escapeHtml(lamina.nome || "Lâmina sem nome")}
+            </h2>
+
+
+            <p>
+              ${escapeHtml(lamina.descricao || "Sem descrição.")}
+            </p>
+
+
+            <div class="lamina-tags">
+
+              ${
+                lamina.tecnica
+                  ? `
+                    <span>
+                      🔬 ${escapeHtml(lamina.tecnica)}
+                    </span>
+                  `
+                  : ""
+              }
+
+              ${
+                lamina.coloracao
+                  ? `
+                    <span>
+                      🧫 ${escapeHtml(lamina.coloracao)}
+                    </span>
+                  `
+                  : ""
+              }
+
+              ${
+                lamina.aumento
+                  ? `
+                    <span>
+                      🔍 ${escapeHtml(lamina.aumento)}
+                    </span>
+                  `
+                  : ""
+              }
+
+            </div>
+
 
             <a
               href="#lamina/${lamina.id}"
-              class="explore-button"
+              class="card-link"
             >
-              Explorar →
+              ${escapeHtml(
+                configuracaoAtual.texto_botao_lamina || "Explorar lâmina",
+              )}
+
+              <span>→</span>
             </a>
 
           </div>
 
-        </div>
-
-
-        <div class="lamina-content">
-
-          <div class="lamina-category">
-
-            ${escapeHtml(lamina.categoria || "Histologia")}
-
-          </div>
-
-
-          <h2>
-
-            ${escapeHtml(lamina.nome || "Lâmina sem nome")}
-
-          </h2>
-
-
-          <p>
-
-            ${escapeHtml(lamina.descricao || "Sem descrição.")}
-
-          </p>
-
-
-          <div class="lamina-tags">
-
-            ${
-              lamina.tecnica
-                ? `
-                  <span>
-                    🔬 ${escapeHtml(lamina.tecnica)}
-                  </span>
-                `
-                : ""
-            }
-
-
-            ${
-              lamina.coloracao
-                ? `
-                  <span>
-                    🧫 ${escapeHtml(lamina.coloracao)}
-                  </span>
-                `
-                : ""
-            }
-
-            ${
-              lamina.aumento
-                ? `
-                  <span>
-                    🔍 Aumento: ${escapeHtml(lamina.aumento)}
-                  </span>
-                `
-                : ""
-            }
-
-          </div>
-
-
-          <a
-            href="#lamina/${lamina.id}"
-            class="card-link"
-          >
-            Explorar lâmina
-            <span>→</span>
-          </a>
-
-        </div>
-
-      </article>
-
-    `,
+        </article>
+      `,
     )
     .join("");
 }
 
 function configurarFiltros() {
   const busca = document.querySelector("#search-laminas");
-
   const categoria = document.querySelector("#filter-categoria");
-
   const tecnica = document.querySelector("#filter-tecnica");
-
   const coloracao = document.querySelector("#filter-coloracao");
-
   const limpar = document.querySelector("#limpar-filtros");
+
+  if (!busca || !categoria || !tecnica || !coloracao) {
+    return;
+  }
 
   function aplicarFiltros() {
     const texto = busca.value.trim().toLowerCase();
 
     const categoriaSelecionada = categoria.value;
-
     const tecnicaSelecionada = tecnica.value;
-
     const coloracaoSelecionada = coloracao.value;
 
     const resultado = todasLaminas.filter((lamina) => {
       const textoCompleto = `
-            ${lamina.nome || ""}
-            ${lamina.descricao || ""}
-            ${lamina.tecnica || ""}
-            ${lamina.coloracao || ""}
-            ${lamina.categoria || ""}
-          `.toLowerCase();
+        ${lamina.nome || ""}
+        ${lamina.descricao || ""}
+        ${lamina.tecnica || ""}
+        ${lamina.coloracao || ""}
+        ${lamina.categoria || ""}
+      `.toLowerCase();
 
       const correspondeTexto = !texto || textoCompleto.includes(texto);
 
@@ -484,20 +483,14 @@ function configurarFiltros() {
   }
 
   busca.addEventListener("input", aplicarFiltros);
-
   categoria.addEventListener("change", aplicarFiltros);
-
   tecnica.addEventListener("change", aplicarFiltros);
-
   coloracao.addEventListener("change", aplicarFiltros);
 
   limpar?.addEventListener("click", () => {
     busca.value = "";
-
     categoria.value = "";
-
     tecnica.value = "";
-
     coloracao.value = "";
 
     aplicarFiltros();
@@ -507,12 +500,9 @@ function configurarFiltros() {
 function escapeHtml(value = "") {
   return String(value)
     .replaceAll("&", "&amp;")
-
     .replaceAll("<", "&lt;")
-
     .replaceAll(">", "&gt;")
-
     .replaceAll('"', "&quot;")
-
     .replaceAll("'", "&#039;");
 }
+
