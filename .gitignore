@@ -33,3 +33,6 @@ test-results/
 
 # Supabase CLI local cache
 supabase/.temp/
+
+# Arquivos de backup locais
+*.backup-*
