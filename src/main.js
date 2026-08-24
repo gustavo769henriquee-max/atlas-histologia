@@ -1957,7 +1957,7 @@ async function render() {
 
     if (token !== renderToken) return;
 
-    app.innerHTML = renderNovaLamina();
+    app.innerHTML = renderNovaLamina(config);
 
     setupNovaLamina();
 

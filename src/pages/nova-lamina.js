@@ -14,7 +14,7 @@ let resizeHandlerNovaLamina = null;
  */
 let imagens = [];
 
-export function renderNovaLamina() {
+export function renderNovaLamina(config = {}) {
   const params = new URLSearchParams(window.location.hash.split("?")[1] || "");
 
   const editarId = params.get("editar");
@@ -26,13 +26,20 @@ export function renderNovaLamina() {
 
         <a href="#inicio" class="brand">
 
-          <span class="brand-icon">
-            ${icone.microscopio}
+          <span
+            class="brand-icon"
+            style="width:${Math.round(Number(config.logo_tamanho || 100) * 0.52)}px;height:${Math.round(Number(config.logo_tamanho || 100) * 0.52)}px;"
+          >
+            ${
+              config.logo_url
+                ? `<img src="${escapeHtml(config.logo_url)}" alt="">`
+                : icone.microscopio
+            }
           </span>
 
-          <span>
-            <strong>Atlas</strong>
-            <small>Histológico</small>
+          <span class="brand-texto">
+            <strong>${escapeHtml(config.nome_site || "Atlas")}</strong>
+            <small>${escapeHtml(config.subtitulo || "Histológico")}</small>
           </span>
 
         </a>
