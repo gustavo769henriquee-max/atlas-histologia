@@ -18,6 +18,7 @@ export function renderNovaLamina(config = {}) {
   const params = new URLSearchParams(window.location.hash.split("?")[1] || "");
 
   const editarId = params.get("editar");
+  const editarIdAttr = escapeHtml(editarId || "");
 
   return `
     <header class="header">
@@ -114,7 +115,7 @@ export function renderNovaLamina(config = {}) {
           <form
             id="lamina-form"
             class="lamina-form"
-            data-editar-id="${editarId || ""}"
+            data-editar-id="${editarIdAttr}"
           >
 
             <div class="form-card">
