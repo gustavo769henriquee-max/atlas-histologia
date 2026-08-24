@@ -1,6 +1,7 @@
 import "./style.css";
 import OpenSeadragon from "openseadragon";
 import { supabase, getCurrentSession, isAdmin } from "./lib/supabase.js";
+import { icone } from "./lib/icons.js";
 
 import { renderLogin, setupLogin } from "./pages/login.js";
 import { renderAdmin, setupAdmin } from "./pages/admin.js";
@@ -9,36 +10,77 @@ import { renderNovaLamina, setupNovaLamina } from "./pages/nova-lamina.js";
 
 const app = document.querySelector("#app");
 
+/*
+ * Aplica as configurações vindas do painel Aparência sobre os
+ * tokens centralizados (:root em style.css). Cores derivadas
+ * (superfícies, bordas, hover) acompanham automaticamente porque
+ * são color-mix() dos tokens base.
+ */
 function aplicarConfiguracoesVisuais(config = {}) {
   const root = document.documentElement;
 
+  const definir = (token, valor) => {
+    if (valor) root.style.setProperty(token, valor);
+  };
+
+  /* Identidade */
+  definir("--cor-principal", config.cor_principal);
+  definir("--cor-secundaria", config.cor_secundaria);
+  definir("--cor-acento", config.cor_acento);
+
+  /* Superfícies e texto */
+  definir("--cor-fundo", config.cor_fundo);
+  definir("--cor-texto", config.cor_texto);
+
+  /* Aliases legados — mantêm regras antigas seguindo a paleta nova */
   if (config.cor_principal) {
     root.style.setProperty("--green", config.cor_principal);
-    root.style.setProperty("--cor-principal", config.cor_principal);
   }
-
   if (config.cor_fundo) {
     root.style.setProperty("--cream", config.cor_fundo);
-    root.style.setProperty("--cor-fundo", config.cor_fundo);
   }
-
   if (config.cor_texto) {
     root.style.setProperty("--text", config.cor_texto);
-    root.style.setProperty("--cor-texto", config.cor_texto);
-  }
-
-  if (config.cor_secundaria) {
-    root.style.setProperty("--cor-secundaria", config.cor_secundaria);
-  }
-
-  if (config.cor_acento) {
-    root.style.setProperty("--cor-acento", config.cor_acento);
   }
   if (config.cor_destaque) {
     root.style.setProperty("--green-light", config.cor_destaque);
-    root.style.setProperty("--cor-destaque", config.cor_destaque);
+  }
+
+  /*
+   * Contraste automático do texto sobre a cor principal:
+   * calcula a luminância relativa e escolhe branco ou escuro,
+   * garantindo legibilidade de botões/rodapé em qualquer paleta.
+   */
+  const principal = config.cor_principal || "#8a2b3d";
+
+  const rgb = principal.replace("#", "");
+
+  const hex =
+    rgb.length === 3
+      ? rgb
+          .split("")
+          .map((c) => c + c)
+          .join("")
+      : rgb;
+
+  if (hex.length === 6) {
+    const r = parseInt(hex.slice(0, 2), 16) / 255;
+    const g = parseInt(hex.slice(2, 4), 16) / 255;
+    const b = parseInt(hex.slice(4, 6), 16) / 255;
+
+    const canal = (c) =>
+      c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+
+    const luminancia =
+      0.2126 * canal(r) + 0.7152 * canal(g) + 0.0722 * canal(b);
+
+    root.style.setProperty(
+      "--cor-texto-claro",
+      luminancia > 0.55 ? "#1d1418" : "#ffffff",
+    );
   }
 }
+
 
 async function carregarConfiguracoesSite() {
   const { data, error } = await supabase
@@ -68,32 +110,31 @@ function getRoute() {
 }
 
 function renderHeader(config = {}) {
+  const tamanhoLogo = Math.round(Number(config.logo_tamanho || 100) * 0.52);
+
   return `
     <header class="header">
       <div class="container header-content">
 
-        <a href="#inicio" class="brand">
+        <a href="#inicio" class="brand" aria-label="Ir para o início">
           <span
-  class="brand-icon"
-  style="
-    width: ${Number(config.logo_tamanho || 100) * 0.42}px;
-    height: ${Number(config.logo_tamanho || 100) * 0.42}px;
-  "
->
-  ${
-    config.logo_url
-      ? `<img src="${escapeHtml(config.logo_url)}" alt="Logo" style="width:100%;height:100%;object-fit:contain;">`
-      : "🔬"
-  }
-</span>
+            class="brand-icon"
+            style="width:${tamanhoLogo}px;height:${tamanhoLogo}px;"
+          >
+            ${
+              config.logo_url
+                ? `<img src="${escapeHtml(config.logo_url)}" alt="Logo do ${escapeHtml(config.nome_site || "Atlas")}">`
+                : icone.microscopio
+            }
+          </span>
 
-          <span>
+          <span class="brand-texto">
             <strong>${escapeHtml(config.nome_site || "Atlas")}</strong>
             <small>${escapeHtml(config.subtitulo || "Histológico")}</small>
           </span>
         </a>
 
-        <nav class="nav">
+        <nav class="nav" aria-label="Navegação principal">
           <a href="#inicio">Início</a>
           <a href="#laminas">Lâminas</a>
           <a href="#sobre">Sobre</a>
@@ -105,7 +146,19 @@ function renderHeader(config = {}) {
   `;
 }
 
-function renderHome(config = {}) {
+function renderHome(config = {}, laminaDestaqueId = "") {
+  /*
+   * Destinos distintos para os três painéis:
+   * - EXPLORE → catálogo completo (navegação/descoberta);
+   * - AMPLIE  → abre direto uma lâmina publicada (experiência
+   *             real de microscopia e zoom); se não houver nenhuma,
+   *             cai no catálogo;
+   * - APRENDA → seção Sobre (conteúdo didático do projeto).
+   */
+  const destinoAmplie = laminaDestaqueId
+    ? `#lamina/${laminaDestaqueId}`
+    : "#laminas";
+
   return `
     ${renderHeader(config)}
 
@@ -113,7 +166,7 @@ function renderHome(config = {}) {
 
       <section class="home-hero" id="inicio">
 
-        <div class="container home-hero-grid">
+        <div class="container-wide home-hero-grid">
 
           <div class="home-hero-content">
 
@@ -195,7 +248,7 @@ function renderHome(config = {}) {
 
               <div class="home-floating-card home-floating-card-top">
 
-                <span class="home-floating-icon">🔬</span>
+                <span class="home-floating-icon">${icone.zoom}</span>
 
                 <div>
                   <strong>Atlas interativo</strong>
@@ -242,7 +295,7 @@ function renderHome(config = {}) {
 
       <section class="home-about section" id="sobre">
 
-        <div class="container">
+        <div class="container-wide">
 
           <div class="home-section-heading">
 
@@ -275,12 +328,15 @@ function renderHome(config = {}) {
 
           <div class="home-about-cards">
 
-            <article class="home-feature-card">
+            <article
+              class="home-feature-card"
+              data-revelar
+            >
 
               <span class="home-feature-number">01</span>
 
               <div class="home-feature-icon">
-                🔎
+                ${icone.camadas}
               </div>
 
               <h3>
@@ -288,23 +344,27 @@ function renderHome(config = {}) {
               </h3>
 
               <p>
-                Navegue pelas lâminas e observe diferentes tecidos e estruturas microscópicas.
+                Descubra o acervo navegando pelas lâminas e categorias —
+                tecidos, técnicas e colorações organizados para estudo.
               </p>
 
               <a href="#laminas">
-                Ver l�minas
+                Navegar pelo acervo
                 <span>→</span>
               </a>
 
             </article>
 
 
-            <article class="home-feature-card">
+            <article
+              class="home-feature-card home-feature-destaque"
+              data-revelar
+            >
 
               <span class="home-feature-number">02</span>
 
               <div class="home-feature-icon">
-                🔬
+                ${icone.microscopio}
               </div>
 
               <h3>
@@ -312,23 +372,27 @@ function renderHome(config = {}) {
               </h3>
 
               <p>
-                Utilize o visualizador interativo para aproximar, movimentar e observar os detalhes.
+                Entre no visualizador de microscopia: aproxime, movimente
+                e observe cada detalhe da lâmina em alta resolução.
               </p>
 
-              <a href="#laminas">
-                Explorar atlas
+              <a href="${destinoAmplie}">
+                Abrir o visualizador
                 <span>→</span>
               </a>
 
             </article>
 
 
-            <article class="home-feature-card">
+            <article
+              class="home-feature-card"
+              data-revelar
+            >
 
               <span class="home-feature-number">03</span>
 
               <div class="home-feature-icon">
-                🧫
+                ${icone.livro}
               </div>
 
               <h3>
@@ -336,11 +400,12 @@ function renderHome(config = {}) {
               </h3>
 
               <p>
-                Relacione as estruturas observadas com as informações disponíveis em cada lâmina.
+                Relacione estruturas observadas com explicações didáticas,
+                anotações e conteúdos de apoio em cada lâmina.
               </p>
 
-              <a href="#laminas">
-                Começar agora
+              <a href="#sobre">
+                Conhecer a proposta
                 <span>→</span>
               </a>
 
@@ -355,7 +420,7 @@ function renderHome(config = {}) {
 
       <section class="home-cta">
 
-        <div class="container home-cta-inner">
+        <div class="container-wide home-cta-inner">
 
           <div>
 
@@ -370,7 +435,7 @@ function renderHome(config = {}) {
           </div>
 
           <a href="#laminas" class="button primary">
-            Explorar l�minas
+            Explorar lâminas
             <span>→</span>
           </a>
 
@@ -383,17 +448,36 @@ function renderHome(config = {}) {
 
     <footer class="footer">
 
-      <div class="container">
+      <div class="container footer-conteudo">
 
-        <span>
-          🔬 ${escapeHtml(config.nome_site || "Atlas")} ${escapeHtml(
+        <span class="footer-marca">
+          ${icone.microscopio}
+          ${escapeHtml(config.nome_site || "Atlas")} ${escapeHtml(
             config.subtitulo || "Histológico"
           )}
         </span>
 
-        <span>
+        <span class="footer-texto">
           ${escapeHtml(config.texto_rodape || "Projeto acadêmico")}
         </span>
+
+        ${
+          config.link_institucional
+            ? `<a
+                 href="${escapeHtml(config.link_institucional)}"
+                 target="_blank"
+                 rel="noopener noreferrer"
+               >
+                 ${escapeHtml(config.nome_institucional || "Instituição")}
+               </a>`
+            : ""
+        }
+
+        ${
+          config.creditos
+            ? `<small>${escapeHtml(config.creditos)}</small>`
+            : ""
+        }
 
       </div>
 
@@ -408,6 +492,86 @@ function escapeHtml(value = "") {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
+
+/*
+ * Vídeo opcional da lâmina.
+ * REGRA: seção aparece SOMENTE quando existe video_url.
+ * Sem vídeo → nada é renderizado (sem caixa vazia).
+ * Suporta YouTube, Vimeo e arquivos de vídeo diretos (mp4/webm/ogg).
+ */
+function renderSecaoVideo(lamina) {
+  const url = String(lamina?.video_url || "").trim();
+
+  if (!url) return "";
+
+  /* YouTube */
+  const youtube =
+    url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([\w-]{6,})/) ||
+    null;
+
+  if (youtube) {
+    return `
+      <section class="video-secao">
+        <div class="container">
+          <div class="video-cabecalho">
+            ${icone.play}
+            <h2>Vídeo da lâmina</h2>
+          </div>
+          <div class="video-moldura">
+            <iframe
+              src="https://www.youtube.com/embed/${escapeHtml(youtube[1])}"
+              title="Vídeo da lâmina"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  /* Vimeo */
+  const vimeo = url.match(/vimeo\.com\/(\d+)/);
+
+  if (vimeo) {
+    return `
+      <section class="video-secao">
+        <div class="container">
+          <div class="video-cabecalho">
+            ${icone.play}
+            <h2>Vídeo da lâmina</h2>
+          </div>
+          <div class="video-moldura">
+            <iframe
+              src="https://player.vimeo.com/video/${escapeHtml(vimeo[1])}"
+              title="Vídeo da lâmina"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  /* Arquivo de vídeo direto */
+  return `
+    <section class="video-secao">
+      <div class="container">
+        <div class="video-cabecalho">
+          ${icone.play}
+          <h2>Vídeo da lâmina</h2>
+        </div>
+        <div class="video-moldura">
+          <video controls preload="metadata" src="${escapeHtml(url)}"></video>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
 
 function renderLamina(lamina, config) {
   const estruturas = Array.isArray(lamina.estruturas) ? lamina.estruturas : [];
@@ -447,19 +611,19 @@ function renderLamina(lamina, config) {
 
               ${
                 lamina.tecnica
-                  ? `<span>🔬 ${escapeHtml(lamina.tecnica)}</span>`
+                  ? `<span>${icone.microscopio} ${escapeHtml(lamina.tecnica)}</span>`
                   : ""
               }
 
                ${
                  lamina.coloracao
-                   ? `<span>🧫 ${escapeHtml(lamina.coloracao)}</span>`
+                   ? `<span>${icone.pasta} ${escapeHtml(lamina.coloracao)}</span>`
                    : ""
                }
 
                ${
                  lamina.aumento
-                   ? `<span>🔍 Aumento: ${escapeHtml(lamina.aumento)}</span>`
+                   ? `<span>${icone.zoom} Aumento: ${escapeHtml(lamina.aumento)}</span>`
                    : ""
                }
 
@@ -470,6 +634,9 @@ function renderLamina(lamina, config) {
         </div>
 
       </section>
+
+
+      ${renderSecaoVideo(lamina)}
 
 
       <section class="viewer-section">
@@ -694,7 +861,7 @@ function renderLamina(lamina, config) {
                 <div class="info-section">
 
                   <h3>
-                    🔎 O que observar
+                    ${icone.lupa} O que observar
                   </h3>
 
                   <div class="structure-list">
@@ -752,7 +919,7 @@ function renderLamina(lamina, config) {
                 <div class="info-section">
 
                   <h3>
-                    🔎 O que observar
+                    ${icone.lupa} O que observar
                   </h3>
 
                   <p class="structure-empty">
@@ -1883,7 +2050,73 @@ async function render() {
     return;
   }
 
-  app.innerHTML = renderHome(config);
+  /*
+   * Home — busca a lâmina publicada mais recente para dar ao
+   * painel AMPLIE um destino real de microscopia. Se falhar
+   * (sem conexão/sem lâminas), o painel cai no catálogo.
+   */
+  let laminaDestaqueId = "";
+
+  try {
+    const { data: destaque } = await supabase
+      .from("laminas")
+      .select("id")
+      .eq("publicado", true)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (destaque?.id && token === renderToken) {
+      laminaDestaqueId = destaque.id;
+    }
+  } catch (erroDestaque) {
+    console.warn("Sem lâmina em destaque:", erroDestaque);
+  }
+
+  app.innerHTML = renderHome(config, laminaDestaqueId);
+
+  configurarRevelacao();
+}
+
+/*
+ * Animações de entrada discretas: elementos com [data-revelar]
+ * ganham a classe .revelado quando entram no viewport.
+ * Respeita prefers-reduced-motion (ver CSS).
+ */
+function configurarRevelacao() {
+  const elementos = document.querySelectorAll("[data-revelar]");
+
+  if (!elementos.length) return;
+
+  const prefereMenosMovimento = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  if (
+    prefereMenosMovimento ||
+    typeof IntersectionObserver === "undefined"
+  ) {
+    elementos.forEach((el) => el.classList.add("revelado"));
+
+    return;
+  }
+
+  const observador = new IntersectionObserver(
+    (entradas) => {
+      entradas.forEach((entrada, indice) => {
+        if (!entrada.isIntersecting) return;
+
+        entrada.target.style.transitionDelay = `${Math.min(indice * 90, 270)}ms`;
+
+        entrada.target.classList.add("revelado");
+
+        observador.unobserve(entrada.target);
+      });
+    },
+    { threshold: 0.15 },
+  );
+
+  elementos.forEach((el) => observador.observe(el));
 }
 
 window.addEventListener("hashchange", render);

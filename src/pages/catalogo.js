@@ -1,4 +1,5 @@
-﻿import { supabase } from "../lib/supabase.js";
+import { supabase } from "../lib/supabase.js";
+import { icone } from "../lib/icons.js";
 
 const app = document.querySelector("#app");
 
@@ -17,14 +18,14 @@ export async function renderCatalogo(config = {}) {
           <span
             class="brand-icon"
             style="
-              width: ${Number(config.logo_tamanho || 100) * 0.42}px;
-              height: ${Number(config.logo_tamanho || 100) * 0.42}px;
+              width: ${Number(config.logo_tamanho || 100) * 0.52}px;
+              height: ${Number(config.logo_tamanho || 100) * 0.52}px;
             "
           >
             ${
               config.logo_url
-                ? `<img src="${escapeHtml(config.logo_url)}" alt="Logo" style="width:100%;height:100%;object-fit:contain;">`
-                : "🔬"
+                ? `<img src="${escapeHtml(config.logo_url)}">`
+                : icone.microscopio
             }
           </span>
 
@@ -53,7 +54,7 @@ export async function renderCatalogo(config = {}) {
         <div class="container">
 
           <span class="eyebrow">
-            🔬 ${escapeHtml(config.nome_site || "ATLAS HISTOLÓGICO")}
+            ${icone.microscopio} ${escapeHtml(config.nome_site || "ATLAS HISTOLÓGICO")}
           </span>
 
           <h1>
@@ -78,7 +79,7 @@ export async function renderCatalogo(config = {}) {
 
             <div class="search-box">
 
-              <span>🔎</span>
+              <span>${icone.lupa}</span>
 
               <input
                 id="search-laminas"
@@ -150,13 +151,14 @@ export async function renderCatalogo(config = {}) {
 
     <footer class="footer">
 
-      <div class="container">
+      <div class="container footer-conteudo">
 
-        <span>
-          🔬 ${escapeHtml(config.nome_site || "Atlas")} ${escapeHtml(config.subtitulo || "Histológico")}
+        <span class="footer-marca">
+          ${icone.microscopio}
+          ${escapeHtml(config.nome_site || "Atlas")} ${escapeHtml(config.subtitulo || "Histológico")}
         </span>
 
-        <span>
+        <span class="footer-texto">
           ${escapeHtml(config.texto_rodape || "Projeto acadêmico")}
         </span>
 
@@ -296,7 +298,7 @@ function renderCards(laminas) {
       <div class="empty-catalog">
 
         <div class="empty-icon">
-          🔬
+          ${icone.microscopio}
         </div>
 
         <h2>
@@ -331,7 +333,7 @@ function renderCards(laminas) {
                 `
                 : `
                   <div class="no-image">
-                    <span>🔬</span>
+                    <span>${icone.microscopio}</span>
                     <small>Sem imagem</small>
                   </div>
                 `
@@ -381,7 +383,7 @@ function renderCards(laminas) {
                 lamina.tecnica
                   ? `
                     <span>
-                      🔬 ${escapeHtml(lamina.tecnica)}
+                      ${icone.microscopio} ${escapeHtml(lamina.tecnica)}
                     </span>
                   `
                   : ""
@@ -391,7 +393,7 @@ function renderCards(laminas) {
                 lamina.coloracao
                   ? `
                     <span>
-                      🧫 ${escapeHtml(lamina.coloracao)}
+                      ${icone.gota} ${escapeHtml(lamina.coloracao)}
                     </span>
                   `
                   : ""

@@ -1,10 +1,84 @@
+/* ============================================================
+   ATLAS DE HISTOLOGIA — TOKENS DE DESIGN CENTRALIZADOS
+   ------------------------------------------------------------
+   Todo o site consome estas variáveis. O painel Aparência
+   sobrescreve --cor-principal / secundária / acento / fundo /
+   texto em tempo real (ver main.js), e os demais tokens são
+   DERIVADOS com color-mix(), então acompanham automaticamente.
+   Variáveis antigas (--green, --cream, ...) viraram ALIASES
+   para os novos tokens — nada do site fica preso ao verde antigo.
+   ============================================================ */
+
 :root {
-  --cor-principal: #1f6feb;
-  --cor-fundo: #f7f9fc;
-  --cor-texto: #172033;
-  --cor-destaque: var(--cor-destaque);
-}
-:root {
+  /* ---------- Identidade ---------- */
+  --cor-principal: #8a2b3d;
+  --cor-secundaria: #2e3a45;
+  --cor-acento: #c9404f;
+
+  /* ---------- Superfícies ---------- */
+  --cor-fundo: #f6f3f1;
+  --cor-fundo-suave: #eee8e5;
+  --cor-superficie: #ffffff;
+  --cor-superficie-escura: #191d21;
+
+  /* ---------- Texto ---------- */
+  --cor-texto: #211b1d;
+  --cor-texto-suave: #6f6267;
+  /* Texto sobre fundos coloridos — ajustado automaticamente por JS */
+  --cor-texto-claro: #ffffff;
+
+  /* ---------- Linhas e estados ---------- */
+  --cor-borda: #e4dcD8;
+  --cor-borda-forte: #d0c5c0;
+  --cor-hover: color-mix(in srgb, var(--cor-principal) 7%, var(--cor-fundo));
+  --cor-foco: color-mix(in srgb, var(--cor-principal) 32%, transparent);
+
+  /* ---------- Semânticas ---------- */
+  --cor-sucesso: #2e7d52;
+  --cor-sucesso-bg: color-mix(in srgb, var(--cor-sucesso) 12%, var(--cor-superficie));
+  --cor-alerta: #a06a1c;
+  --cor-alerta-bg: color-mix(in srgb, var(--cor-alerta) 12%, var(--cor-superficie));
+  --cor-erro: #b23f3e;
+  --cor-erro-bg: color-mix(in srgb, var(--cor-erro) 10%, var(--cor-superficie));
+
+  /* ---------- Controles do visualizador ----------
+     Superfície semitransparente escura derivada da cor principal:
+     legível sobre imagens claras E escuras. */
+  --viewer-fundo: color-mix(in srgb, var(--cor-principal) 16%, #15181c);
+  --viewer-fundo-botao: rgba(255, 255, 255, 0.09);
+  --viewer-borda: rgba(255, 255, 255, 0.14);
+  --viewer-texto: #f3f0ef;
+  --viewer-texto-suave: color-mix(in srgb, #ffffff 68%, transparent);
+  --viewer-hover: color-mix(in srgb, var(--cor-acento) 80%, #ffffff);
+
+  /* ---------- Forma e profundidade ---------- */
+  --raio-sm: 9px;
+  --raio-md: 13px;
+  --raio-lg: 18px;
+  --raio-xl: 26px;
+  --sombra-sm:
+    0 1px 2px rgba(25, 15, 18, 0.04),
+    0 4px 14px rgba(25, 15, 18, 0.05);
+  --sombra-md:
+    0 2px 6px rgba(25, 15, 18, 0.05),
+    0 14px 34px rgba(25, 15, 18, 0.09);
+  --sombra-lg:
+    0 6px 16px rgba(25, 15, 18, 0.07),
+    0 24px 60px rgba(25, 15, 18, 0.14);
+
+  /* ============================================================
+     ALIASES DE COMPATIBILIDADE (legado → sistema novo)
+     Mantêm funcionando regras antigas sem reescrevê-las uma a uma.
+     ============================================================ */
+  --green: var(--cor-principal);
+  --green-light: color-mix(in srgb, var(--cor-acento) 76%, #ffffff);
+  --mint: color-mix(in srgb, var(--cor-principal) 9%, var(--cor-fundo));
+  --cream: var(--cor-fundo);
+  --white: var(--cor-superficie);
+  --text: var(--cor-texto);
+  --muted: var(--cor-texto-suave);
+  --border: var(--cor-borda);
+
   font-family:
     Inter,
     ui-sans-serif,
@@ -13,19 +87,19 @@
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-  color: #17201d;
-  background: #f5f7f5;
+  color: var(--cor-texto);
+  background: var(--cor-fundo);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  --green: var(--cor-principal, var(--cor-principal));
-  --green-light: var(--cor-destaque, var(--cor-destaque));
-  --mint: #dcefe7;
-  --cream: #f5f7f5;
-  --white: #ffffff;
-  --text: #17201d;
-  --muted: #66736d;
-  --border: #dfe6e2;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* Foco visível e consistente em todo o site */
+:focus-visible {
+  outline: 2px solid var(--cor-acento);
+  outline-offset: 2px;
+}
+
 
 * {
   box-sizing: border-box;
@@ -63,17 +137,24 @@ a {
   margin: 0 auto;
 }
 
+/* Container amplo: hero/seções principais aproveitam telas grandes */
+.container-wide {
+  width: min(1480px, calc(100% - clamp(40px, 7vw, 120px)));
+  margin: 0 auto;
+}
+
 .header {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: rgba(245, 247, 245, 0.9);
+  background: color-mix(in srgb, var(--cor-fundo) 86%, transparent);
   backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(223, 230, 226, 0.8);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--cor-borda);
 }
 
 .header-content {
-  height: 76px;
+  height: 84px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -82,18 +163,40 @@ a {
 .brand {
   display: flex;
   align-items: center;
-  gap: 11px;
+  gap: 14px;
 }
 
 .brand-icon {
-  width: 42px;
-  height: 42px;
+  flex-shrink: 0;
   display: grid;
   place-items: center;
-  border-radius: 12px;
-  background: var(--green);
-  color: white;
-  font-size: 20px;
+  border-radius: 14px;
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--cor-principal) 92%, white),
+      var(--cor-principal)
+    );
+  color: var(--cor-texto-claro);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 6px 16px color-mix(in srgb, var(--cor-principal) 30%, transparent);
+  transition: transform 0.25s ease;
+}
+
+.brand:hover .brand-icon {
+  transform: rotate(-4deg) scale(1.04);
+}
+
+.brand-icon svg {
+  width: 58%;
+  height: 58%;
+}
+
+.brand-icon img {
+  width: calc(100% - 12px);
+  height: calc(100% - 12px);
+  object-fit: contain;
 }
 
 .brand strong,
@@ -102,30 +205,56 @@ a {
 }
 
 .brand strong {
-  font-size: 17px;
-  letter-spacing: -0.4px;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
 }
 
 .brand small {
-  color: var(--muted);
-  font-size: 11px;
-  letter-spacing: 1.5px;
+  margin-top: 2px;
+  color: var(--cor-texto-suave);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 2.2px;
   text-transform: uppercase;
 }
 
 .nav {
   display: flex;
   gap: 34px;
-  color: #53605a;
+  color: var(--cor-texto-suave);
   font-size: 14px;
+  font-weight: 600;
 }
 
 .nav a {
+  position: relative;
+  padding: 6px 0;
   transition: color 0.2s ease;
 }
 
-.nav a:hover {
-  color: var(--green);
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--cor-acento);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.22s ease;
+}
+
+.nav a:hover,
+.nav a.active {
+  color: var(--cor-principal);
+}
+
+.nav a:hover::after,
+.nav a.active::after {
+  transform: scaleX(1);
 }
 
 .menu-button {
@@ -199,14 +328,28 @@ a {
 }
 
 .button.primary {
-  background: var(--green);
-  color: white;
-  box-shadow: 0 12px 30px color-mix(in srgb, var(--green) 22%, transparent);
+  background:
+    linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--cor-principal) 88%, white),
+      var(--cor-principal)
+    );
+  color: var(--cor-texto-claro);
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--cor-principal) 26%, transparent);
+}
+
+.button.primary:hover {
+  box-shadow: 0 16px 38px color-mix(in srgb, var(--cor-principal) 36%, transparent);
 }
 
 .button.secondary {
-  border: 1px solid var(--border);
-  background: white;
+  border: 1px solid var(--cor-borda-forte);
+  background: var(--cor-superficie);
+}
+
+.button.secondary:hover {
+  border-color: var(--cor-principal);
+  color: var(--cor-principal);
 }
 
 .hero-visual {
@@ -421,7 +564,7 @@ a {
 
 .about {
   padding: 105px 0;
-  background: #eaf2ee;
+  background: color-mix(in srgb, var(--cor-principal) 5%, var(--cor-fundo));
 }
 
 .about-grid {
@@ -431,7 +574,7 @@ a {
 }
 
 .about-text > p {
-  color: #56645e;
+  color: var(--cor-texto-suave);
   font-size: 17px;
   line-height: 1.7;
 }
@@ -465,20 +608,25 @@ a {
 }
 
 .footer {
-  padding: 25px 0;
-  background: var(--green);
-  color: white;
+  padding: 34px 0;
+  background:
+    radial-gradient(
+      ellipse at top left,
+      color-mix(in srgb, var(--cor-principal) 14%, transparent),
+      transparent 55%
+    ),
+    var(--cor-superficie-escura);
+  color: var(--viewer-texto-suave);
 }
 
 .footer .container {
   display: flex;
   justify-content: space-between;
-  color: rgba(255, 255, 255, 0.7);
   font-size: 12px;
 }
 
 .footer span:first-child {
-  color: white;
+  color: var(--viewer-texto);
   font-weight: 700;
 }
 
@@ -2156,7 +2304,7 @@ a {
   letter-spacing: -0.8px;
 }
 
-/* Descri��o */
+/* Descrição */
 
 #aparencia-preview #preview-descricao {
   max-width: 590px;
@@ -2237,7 +2385,7 @@ a {
 /* Indicador */
 
 #aparencia-preview::before {
-  content: "PR�-VISUALIZA��O AO VIVO";
+  content: "PRÉ-VISUALIZAÇÃO AO VIVO";
 
   position: absolute;
   top: 12px;
@@ -2458,7 +2606,7 @@ a {
 }
 
 /* ============================================================
-   VISUALIZADOR DE L?MINAS � MARCA��ES E SELE��O
+   VISUALIZADOR DE LÂMINAS — MARCAÇÕES E SELEÇÃO
    Classes consumidas por src/main.js (renderLamina,
    desenharEstruturas, configurarModoEstudo).
    Regras aditivas: nenhuma propriedade existente foi alterada.
@@ -2466,8 +2614,8 @@ a {
 
 .estrutura-overlay {
   /* O OpenSeadragon reposiciona via transform; garantimos
-     que o conte�do interno nunca bloqueie a intera��o com
-     a imagem nas �reas n�o clic�veis. */
+     que o conteúdo interno nunca bloqueie a interação com
+     a imagem nas áreas não clicáveis. */
   pointer-events: none;
   transition: filter 0.18s ease;
 }
@@ -2485,8 +2633,8 @@ a {
   filter: drop-shadow(0 0 8px rgba(224, 82, 82, 0.85));
 }
 
-/* N�mero sequencial exibido sobre a marca��o.
-   A fonte � o �ndice do array (mesma numera��o da lista lateral). */
+/* Número sequencial exibido sobre a marcação.
+   A fonte é o índice do array (mesma numeração da lista lateral). */
 .estrutura-numero-badge {
   position: absolute;
   top: -8px;
@@ -2552,7 +2700,7 @@ a {
 }
 
 /* ============================================================
-   MODO ESTUDO 2.0 � �NDICE, CONTADOR, NAVEGA��O E PAINEL
+   MODO ESTUDO 2.0 — ÍNDICE, CONTADOR, NAVEGAÇÃO E PAINEL
    Classes/IDs consumidos por src/main.js (renderLamina,
    configurarModoEstudo). Regras aditivas.
    ============================================================ */
@@ -2585,7 +2733,7 @@ a {
   text-transform: uppercase;
 }
 
-/* Texto da marca��o (tipo texto) */
+/* Texto da marcação (tipo texto) */
 
 .estrutura-estudo-texto {
   margin: 10px 0 0 !important;
@@ -2600,7 +2748,7 @@ a {
   overflow-wrap: anywhere;
 }
 
-/* Navega��o anterior/pr�xima */
+/* Navegação anterior/próxima */
 
 .estrutura-estudo-navegacao {
   display: grid;
@@ -2714,7 +2862,7 @@ a {
 }
 
 /* ============================================================
-   FASE 18 � Navega��o entre imagens da l�mina (viewer)
+   FASE 18 — Navegação entre imagens da lâmina (viewer)
    Barra escura coerente com .viewer-controls; uma imagem
    visível por vez; contador + anterior/próxima.
    ============================================================ */
@@ -2725,9 +2873,9 @@ a {
   justify-content: space-between;
   gap: 12px;
   padding: 8px 14px;
-  background: #18201d;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  color: #aab7b1;
+  background: var(--viewer-fundo);
+  border-top: 1px solid var(--viewer-borda);
+  color: var(--viewer-texto-suave);
   font-size: 11px;
 }
 
@@ -2736,7 +2884,7 @@ a {
 }
 
 .img-contador {
-  color: white;
+  color: var(--viewer-texto);
   font-weight: 700;
   letter-spacing: 1.2px;
 }
@@ -2768,7 +2916,7 @@ a {
 
 /* ============================================================
    FASE 18 — Preview de múltiplas imagens (formulário)
-   Miniaturas com remo��o e reordena��o (/); �ndice 0 � a
+   Miniaturas com remoção e reordenação (/); índice 0 é a
    principal.
    ============================================================ */
 
@@ -3054,7 +3202,7 @@ a {
       color-mix(in srgb, var(--green-light) 13%, transparent),
       transparent 32%
     ),
-    #eaf2ee;
+    color-mix(in srgb, var(--cor-principal) 5%, var(--cor-fundo));
 }
 
 .about::after {
@@ -3439,7 +3587,7 @@ body {
   filter: blur(55px);
 }
 
-/* ---------- Se��o Sobre ---------- */
+/* ---------- Seção Sobre ---------- */
 
 .section {
   position: relative;
@@ -3544,7 +3692,7 @@ body {
   transform: scale(1.035);
 }
 
-/* ---------- P�gina da l�mina ---------- */
+/* ---------- Página da lâmina ---------- */
 
 .slide-header {
   padding: 42px 0 30px;
@@ -3603,40 +3751,69 @@ body {
 
 .viewer-container {
   overflow: hidden;
-  border: 1px solid var(--border);
+  border: 1px solid var(--cor-borda);
   border-radius: 20px;
-  background: #101514;
-  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.12);
+  background: var(--cor-superficie-escura);
+  box-shadow: var(--sombra-lg);
 }
 
 .viewer {
   min-height: 620px;
 }
 
+/* ============================================================
+   CONTROLES DO VISUALIZADOR — contraste garantido
+   Superfície escura derivada da identidade (--viewer-*), legível
+   sobre imagens claras e escuras; ícones sempre claros.
+   ============================================================ */
+
 .viewer-controls {
   min-height: 54px;
   padding: 8px 12px 8px 18px;
-  background: color-mix(in srgb, var(--cream) 94%, white);
-  border-top: 1px solid var(--border);
+  background: var(--viewer-fundo);
+  border-top: 1px solid var(--viewer-borda);
+  color: var(--viewer-texto);
+}
+
+.viewer-controls span,
+.viewer-controls .zoom-value {
+  color: var(--viewer-texto-suave);
+}
+
+.viewer-controls .zoom-value {
+  color: var(--viewer-texto);
+  font-weight: 700;
 }
 
 .zoom-buttons button {
   width: 38px;
   height: 38px;
   border-radius: 10px;
-  border: 1px solid var(--border);
-  background: color-mix(in srgb, var(--cream) 85%, white);
+  border: 1px solid var(--viewer-borda);
+  background: var(--viewer-fundo-botao);
+  color: var(--viewer-texto);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
   transition:
     transform 0.15s ease,
-    background 0.15s ease;
+    background 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .zoom-buttons button:hover {
   transform: translateY(-1px);
-  background: color-mix(in srgb, var(--green) 9%, var(--cream));
+  background: var(--viewer-hover);
+  border-color: transparent;
+  color: var(--cor-superficie-escura);
 }
 
-/* ---------- Painel da l�mina ---------- */
+.zoom-buttons button svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ---------- Painel da lâmina ---------- */
 
 .info-panel {
   border: 1px solid var(--border);
@@ -4066,7 +4243,7 @@ button:active {
 }
 
 /* ============================================================
-   CAT�LOGO � SE��O
+   CATÁLOGO — SEÇÃO
    ============================================================ */
 
 .catalog-section {
@@ -4226,7 +4403,7 @@ button:active {
 }
 
 /* ============================================================
-   GRID DE L�MINAS
+   GRID DE LÂMINAS
    ============================================================ */
 
 .catalog-grid {
@@ -4592,14 +4769,44 @@ button:active {
    FOOTER
    ============================================================ */
 
-.footer {
-  border-top: 1px solid var(--atlas-border);
-
-  background: color-mix(in srgb, var(--atlas-text) 3%, var(--atlas-bg));
+.footer-conteudo {
+  min-height: 90px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px 26px;
 }
 
-.footer span {
-  color: var(--atlas-muted);
+.footer-marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--viewer-texto);
+  font-weight: 800;
+}
+
+.footer-marca svg {
+  width: 18px;
+  height: 18px;
+  color: var(--cor-acento);
+}
+
+.footer-texto {
+  color: var(--viewer-texto-suave);
+}
+
+.footer a {
+  color: var(--viewer-texto);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--cor-acento) 60%, transparent);
+  text-underline-offset: 3px;
+}
+
+.footer small {
+  width: 100%;
+  color: var(--viewer-texto-suave);
 }
 
 /* ============================================================
@@ -4691,7 +4898,7 @@ button:active {
 
 /* ============================================================
    HOME REDESIGN — ATLAS HISTOLÓGICO
-   Evolu��o visual da Home.
+   Evolução visual da Home.
    Cores e identidade continuam vindo das configurações do admin.
    ============================================================ */
 
@@ -4701,31 +4908,36 @@ button:active {
 
 .home-hero {
   position: relative;
-  min-height: calc(100vh - 76px);
+  min-height: calc(100vh - 84px);
   display: flex;
   align-items: center;
   padding: 72px 0 0;
   background:
     radial-gradient(
-      circle at 78% 40%,
-      color-mix(in srgb, var(--green-light) 16%, transparent),
-      transparent 32%
+      circle at 82% 38%,
+      color-mix(in srgb, var(--cor-acento) 13%, transparent),
+      transparent 34%
     ),
-    var(--cream);
+    radial-gradient(
+      circle at 8% 90%,
+      color-mix(in srgb, var(--cor-principal) 7%, transparent),
+      transparent 30%
+    ),
+    var(--cor-fundo);
 }
 
 .home-hero-grid {
   position: relative;
   z-index: 2;
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(420px, 0.95fr);
+  grid-template-columns: minmax(0, 1.1fr) minmax(420px, 0.9fr);
   align-items: center;
-  gap: 70px;
+  gap: clamp(40px, 6vw, 96px);
   min-height: 650px;
 }
 
 .home-hero-content {
-  max-width: 700px;
+  max-width: 760px;
 }
 
 .home-eyebrow {
@@ -4868,6 +5080,34 @@ button:active {
   height: 390px;
   transform: rotate(-5deg);
   filter: drop-shadow(20px 28px 24px rgba(0, 0, 0, 0.16));
+  animation: microscopio-flutuar 8s ease-in-out infinite;
+}
+
+@keyframes microscopio-flutuar {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 0 -12px;
+  }
+}
+
+.home-visual-orbit {
+  animation: orbita-girar 60s linear infinite;
+}
+
+.home-orbit-two {
+  animation-direction: reverse;
+
+  animation-duration: 90s;
+}
+
+@keyframes orbita-girar {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .home-microscope-head {
@@ -5176,10 +5416,55 @@ button:active {
   transform: translateX(4px);
 }
 
+/* Card AMPLIE em destaque — identidade/acento vermelho */
+.home-feature-destaque {
+  background:
+    radial-gradient(
+      circle at top right,
+      color-mix(in srgb, var(--cor-acento) 10%, transparent),
+      transparent 42%
+    ),
+    var(--cor-superficie);
+  border-color: color-mix(in srgb, var(--cor-acento) 34%, var(--cor-borda));
+}
+
+.home-feature-destaque::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: linear-gradient(
+    to bottom,
+    var(--cor-acento),
+    color-mix(in srgb, var(--cor-acento) 30%, transparent)
+  );
+}
+
+.home-feature-destaque:hover {
+  border-color: var(--cor-acento);
+  box-shadow: 0 22px 50px color-mix(in srgb, var(--cor-acento) 14%, transparent);
+}
+
+.home-feature-icon svg {
+  width: 24px;
+  height: 24px;
+  color: var(--cor-principal);
+}
+
+.home-feature-destaque .home-feature-icon svg {
+  color: var(--cor-acento);
+}
+
 .home-cta {
   padding: 70px 0;
-  background: color-mix(in srgb, var(--green) 7%, var(--cream));
-  border-top: 1px solid color-mix(in srgb, var(--green) 10%, var(--border));
+  background:
+    radial-gradient(
+      ellipse at 15% 0%,
+      color-mix(in srgb, var(--cor-acento) 8%, transparent),
+      transparent 45%
+    ),
+    color-mix(in srgb, var(--cor-principal) 6%, var(--cor-fundo));
+  border-top: 1px solid color-mix(in srgb, var(--cor-principal) 10%, var(--cor-borda));
 }
 
 .home-cta-inner {
@@ -5201,15 +5486,15 @@ button:active {
 /* ---------- Header refinado ---------- */
 
 .header {
-  position: relative;
-  z-index: 20;
-  border-bottom: 1px solid color-mix(in srgb, var(--green) 8%, var(--border));
-  background: color-mix(in srgb, var(--cream) 88%, white);
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--cor-principal) 8%, var(--cor-borda));
+  background: color-mix(in srgb, var(--cor-fundo) 88%, white);
   backdrop-filter: blur(14px);
 }
 
 .header-content {
-  min-height: 76px;
+  min-height: 84px;
 }
 
 .brand {
@@ -5377,4 +5662,89 @@ button:active {
   .home-cta {
     padding: 55px 0;
   }
+}
+
+/* ============================================================
+   VÍDEO CONDICIONAL NAS LÂMINAS
+   Só existe no DOM quando a lâmina possui video_url.
+   ============================================================ */
+
+.video-secao {
+  padding: 10px 0 70px;
+}
+
+.video-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 18px;
+}
+
+.video-cabecalho svg {
+  width: 22px;
+  height: 22px;
+  color: var(--cor-acento);
+}
+
+.video-cabecalho h2 {
+  font-size: 21px;
+  letter-spacing: -0.5px;
+}
+
+.video-moldura {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  background: var(--cor-superficie-escura);
+  aspect-ratio: 16 / 9;
+  box-shadow: var(--sombra-md);
+}
+
+.video-moldura iframe,
+.video-moldura video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ============================================================
+   ANIMAÇÕES DE REVELAÇÃO (discretas e acessíveis)
+   ============================================================ */
+
+[data-revelar] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+[data-revelar].revelado {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  [data-revelar] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Ícone SVG padrão herdando a cor do texto */
+.icone {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
 }

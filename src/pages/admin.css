@@ -15,12 +15,12 @@
   --admin-border: #e1e8e4;
   --admin-border-strong: #d2ddd8;
 
-  --admin-green: var(--green, #176b52);
-  --admin-green-light: var(--green-light, #3c9b79);
-  --admin-green-dark: #0d4d3b;
+  --admin-green: var(--cor-principal, #8a2b3d);
+  --admin-green-light: var(--cor-acento, #c9404f);
+  --admin-green-dark: color-mix(in srgb, var(--admin-green) 68%, #000);
 
-  --admin-sidebar: #101b17;
-  --admin-sidebar-soft: #17251f;
+  --admin-sidebar: color-mix(in srgb, var(--admin-green) 14%, #141518);
+  --admin-sidebar-soft: color-mix(in srgb, var(--admin-green) 22%, #1b1d21);
 
   --admin-danger: #b63b3b;
   --admin-danger-bg: #fff1f1;
@@ -49,12 +49,12 @@
   background:
     radial-gradient(
       circle at 85% 0%,
-      rgba(60, 155, 121, 0.065),
+      color-mix(in srgb, var(--admin-green-light) 7%, transparent),
       transparent 30%
     ),
     radial-gradient(
       circle at 10% 100%,
-      rgba(60, 155, 121, 0.035),
+      color-mix(in srgb, var(--admin-green-light) 4%, transparent),
       transparent 25%
     ),
     var(--admin-bg);
@@ -129,7 +129,7 @@
   font-size: 19px;
 
   box-shadow:
-    0 6px 18px rgba(23, 107, 82, 0.2),
+    0 6px 18px color-mix(in srgb, var(--admin-green-dark) 20%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 
   transition:
@@ -141,7 +141,7 @@
   transform: translateY(-1px) scale(1.02);
 
   box-shadow:
-    0 9px 23px rgba(23, 107, 82, 0.24),
+    0 9px 23px color-mix(in srgb, var(--admin-green-dark) 24%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
@@ -327,8 +327,8 @@
 .admin-menu.active {
   background: linear-gradient(
     90deg,
-    rgba(60, 155, 121, 0.24),
-    rgba(60, 155, 121, 0.075)
+    color-mix(in srgb, var(--admin-green-light) 24%, transparent),
+    color-mix(in srgb, var(--admin-green-light) 8%, transparent)
   );
 
   color: #ffffff;
@@ -352,7 +352,7 @@
 
   background: var(--admin-green-light);
 
-  box-shadow: 0 0 8px rgba(60, 155, 121, 0.55);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--admin-green-light) 55%, transparent);
 }
 
 .admin-menu.active span {
@@ -526,7 +526,7 @@
   border: 1px solid rgba(13, 77, 59, 0.15);
 
   box-shadow:
-    0 6px 16px rgba(23, 107, 82, 0.15),
+    0 6px 16px color-mix(in srgb, var(--admin-green-dark) 15%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
@@ -534,7 +534,7 @@
   background: linear-gradient(135deg, #43a783, var(--admin-green-dark));
 
   box-shadow:
-    0 8px 21px rgba(23, 107, 82, 0.2),
+    0 8px 21px color-mix(in srgb, var(--admin-green-dark) 20%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
@@ -618,7 +618,7 @@
 
   border-radius: 0 3px 3px 0;
 
-  background: rgba(60, 155, 121, 0.55);
+  background: color-mix(in srgb, var(--admin-green-light) 55%, transparent);
 }
 
 .admin-stat::after {
@@ -634,7 +634,7 @@
 
   border-radius: 50%;
 
-  background: rgba(60, 155, 121, 0.045);
+  background: color-mix(in srgb, var(--admin-green-light) 5%, transparent);
 }
 
 .admin-stat > span {
@@ -656,7 +656,7 @@
 
   font-size: 17px;
 
-  box-shadow: inset 0 0 0 1px rgba(60, 155, 121, 0.05);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--admin-green-light) 5%, transparent);
 }
 
 .admin-stat strong {
@@ -728,7 +728,7 @@
   border-color: var(--admin-green-light);
 
   box-shadow:
-    0 0 0 3px rgba(60, 155, 121, 0.08),
+    0 0 0 3px color-mix(in srgb, var(--admin-green-light) 9%, transparent),
     0 4px 12px rgba(18, 38, 32, 0.03);
 }
 
@@ -785,7 +785,7 @@
 .admin-toolbar select:focus {
   border-color: var(--admin-green-light);
 
-  box-shadow: 0 0 0 3px rgba(60, 155, 121, 0.08);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--admin-green-light) 9%, transparent);
 }
 
 /* ============================================================
@@ -1289,7 +1289,7 @@
 
   border-color: var(--admin-green-light);
 
-  box-shadow: 0 0 0 3px rgba(60, 155, 121, 0.08);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--admin-green-light) 9%, transparent);
 }
 
 /* ============================================================
@@ -1651,7 +1651,7 @@
   font-size: 11px;
   font-weight: 750;
 
-  box-shadow: 0 5px 14px rgba(23, 107, 82, 0.12);
+  box-shadow: 0 5px 14px color-mix(in srgb, var(--admin-green-dark) 12%, transparent);
 
   transition:
     transform 0.18s ease,
@@ -1661,7 +1661,7 @@
 .logo-upload-button:hover {
   transform: translateY(-1px);
 
-  box-shadow: 0 7px 18px rgba(23, 107, 82, 0.18);
+  box-shadow: 0 7px 18px color-mix(in srgb, var(--admin-green-dark) 18%, transparent);
 }
 
 .logo-help {
@@ -1789,7 +1789,7 @@
 
   color: white;
 
-  box-shadow: 0 4px 12px rgba(23, 107, 82, 0.13);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--admin-green-dark) 13%, transparent);
 }
 
 .estrutura-imagem-editor {
@@ -2161,7 +2161,7 @@
    ============================================================ */
 
 .admin-page ::selection {
-  background: rgba(60, 155, 121, 0.2);
+  background: color-mix(in srgb, var(--admin-green-light) 20%, transparent);
 
   color: var(--admin-text);
 }
@@ -2523,3 +2523,454 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================================
+   APARÊNCIA — LAYOUT EM DUAS COLUNAS (formulário + prévia)
+   ============================================================ */
+
+.aparencia-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 430px);
+  gap: 22px;
+  align-items: start;
+}
+
+.aparencia-formulario {
+  display: grid;
+  gap: 18px;
+}
+
+/* ---------- Campos de cor ---------- */
+
+.aparencia-cores {
+  margin-top: 18px;
+  display: grid;
+  gap: 14px;
+}
+
+.campo-cor label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: var(--admin-text);
+
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.campo-cor-controles {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.campo-cor input[type="color"] {
+  width: 46px;
+  height: 36px;
+
+  padding: 3px;
+
+  border: 1px solid var(--admin-border-strong);
+  border-radius: 9px;
+
+  background: var(--admin-surface);
+
+  cursor: pointer;
+}
+
+.codigo-cor {
+  width: 96px;
+
+  padding: 8px 10px;
+
+  border: 1px solid var(--admin-border);
+  border-radius: 9px;
+
+  background: var(--admin-surface-soft);
+
+  color: var(--admin-text);
+
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.campo-cor small {
+  display: block;
+
+  margin-top: 5px;
+
+  color: var(--admin-text-muted);
+
+  font-size: 11px;
+}
+
+/* ============================================================
+   PRÉVIA AO VIVO — usa os MESMOS tokens do site (--cor-*),
+   aplicados no contêiner pela função configurarPreviewAoVivo().
+   ============================================================ */
+
+#aparencia-preview {
+  position: sticky;
+  top: 92px;
+
+  overflow: hidden;
+
+  border: 1px solid var(--admin-border);
+  border-radius: var(--raio-lg);
+
+  background: var(--cor-fundo, #f6f3f1);
+
+  box-shadow: var(--sombra-md);
+
+  /* Tokens do site real — sobrescritos ao vivo pelo JS */
+  --cor-principal: #8a2b3d;
+  --cor-secundaria: #2e3a45;
+  --cor-acento: #c9404f;
+  --cor-fundo: #f6f3f1;
+  --cor-texto: #211b1d;
+  --green: var(--cor-principal);
+  --cream: var(--cor-fundo);
+}
+
+.preview-rotulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 12px 16px;
+
+  background: var(--admin-sidebar);
+
+  color: rgba(255, 255, 255, 0.72);
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.preview-rotulo svg {
+  width: 15px;
+  height: 15px;
+
+  color: var(--cor-acento);
+}
+
+.preview-janela {
+  border-top: 1px solid var(--admin-border);
+}
+
+.preview-header {
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 0 16px;
+
+  background: color-mix(in srgb, var(--cor-fundo) 88%, white);
+
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--cor-principal) 10%, var(--cor-borda));
+}
+
+.preview-logo {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 11px;
+
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--cor-principal) 90%, white),
+    var(--cor-principal)
+  );
+
+  color: #fff;
+}
+
+.preview-logo svg {
+  width: 56%;
+  height: 56%;
+}
+
+.preview-logo img {
+  width: calc(100% - 8px);
+  height: calc(100% - 8px);
+  object-fit: contain;
+}
+
+.preview-marca strong {
+  display: block;
+
+  color: var(--cor-texto);
+
+  font-size: 13px;
+  letter-spacing: -0.3px;
+}
+
+.preview-marca small {
+  display: block;
+
+  color: color-mix(in srgb, var(--cor-texto) 62%, var(--cor-fundo));
+
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+}
+
+.preview-navi {
+  display: flex;
+  gap: 12px;
+
+  margin-left: auto;
+
+  color: color-mix(in srgb, var(--cor-texto) 60%, var(--cor-fundo));
+
+  font-size: 9.5px;
+  font-weight: 600;
+}
+
+@media (max-width: 1250px) {
+  .aparencia-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #aparencia-preview {
+    position: static;
+  }
+}
+
+/* Miniatura do hero real */
+
+.preview-hero {
+  padding: 30px 20px 26px;
+
+  background:
+    radial-gradient(
+      circle at 85% 25%,
+      color-mix(in srgb, var(--cor-acento) 13%, transparent),
+      transparent 40%
+    ),
+    var(--cor-fundo);
+}
+
+.preview-hero .eyebrow {
+  margin-bottom: 10px;
+
+  color: var(--cor-acento);
+}
+
+.preview-hero h1 {
+  max-width: 420px;
+  margin: 0;
+
+  color: var(--cor-texto);
+
+  font-size: 24px;
+  line-height: 1.05;
+  letter-spacing: -1px;
+}
+
+.preview-hero p {
+  max-width: 380px;
+  margin: 10px 0 0;
+
+  color: color-mix(in srgb, var(--cor-texto) 64%, var(--cor-fundo));
+
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.preview-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  margin-top: 16px;
+}
+
+.preview-button {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 8px 14px;
+
+  border-radius: 9px;
+
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+.preview-primary {
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--cor-principal) 88%, white),
+    var(--cor-principal)
+  );
+
+  color: #fff;
+
+  box-shadow: 0 8px 20px
+    color-mix(in srgb, var(--cor-principal) 28%, transparent);
+}
+
+.preview-secondary {
+  border: 1px solid
+    color-mix(in srgb, var(--cor-texto) 22%, var(--cor-borda));
+
+  background: var(--cor-superficie, #fff);
+
+  color: var(--cor-texto);
+}
+
+/* Miniatura dos cards Explore / Amplie / Aprenda */
+
+.preview-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+
+  padding: 0 16px 16px;
+
+  background: var(--cor-fundo);
+}
+
+.preview-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  min-height: 74px;
+
+  padding: 10px;
+
+  border: 1px solid color-mix(in srgb, var(--cor-texto) 10%, var(--cor-borda));
+  border-radius: 11px;
+
+  background: color-mix(in srgb, var(--cor-fundo) 76%, white);
+
+  color: var(--cor-texto);
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.preview-card b {
+  display: inline-flex;
+
+  color: var(--cor-principal);
+}
+
+.preview-card b svg {
+  width: 15px;
+  height: 15px;
+}
+
+.preview-card-destaque {
+  border-color: color-mix(in srgb, var(--cor-acento) 40%, var(--cor-borda));
+
+  background: color-mix(
+    in srgb,
+    var(--cor-acento) 7%,
+    var(--cor-superficie, #fff)
+  );
+
+  box-shadow: inset 3px 0 0 var(--cor-acento);
+}
+
+.preview-card-destaque b {
+  color: var(--cor-acento);
+}
+
+/* Miniatura do rodapé real */
+
+.preview-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 12px 16px;
+
+  background: var(--cor-superficie-escura, #191d21);
+
+  color: rgba(255, 255, 255, 0.68);
+
+  font-size: 9px;
+}
+
+.preview-footer svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+
+  color: var(--cor-acento);
+}
+
+/* ============================================================
+   ÍCONES SVG NO PAINEL
+   ============================================================ */
+
+.admin-logo svg,
+.admin-menu svg,
+.admin-stat > span svg,
+.admin-search svg,
+.admin-no-image svg,
+.categoria-card-icon svg,
+.admin-placeholder svg {
+  width: 18px;
+  height: 18px;
+}
+
+.admin-logo svg {
+  width: 22px;
+  height: 22px;
+}
+
+.admin-stat > span {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.admin-stat > span svg {
+  color: var(--admin-green);
+}
+
+.admin-menu svg {
+  flex-shrink: 0;
+}
+
+.admin-action svg {
+  width: 16px;
+  height: 16px;
+}
+
+.form-card-title > span {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.form-card-title > span svg {
+  width: 19px;
+  height: 19px;
+
+  color: var(--admin-green);
+}
+
+
+

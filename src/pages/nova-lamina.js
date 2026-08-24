@@ -1,5 +1,6 @@
 import { supabase } from "../lib/supabase.js";
 import { extrairCaminhoArmazenamento } from "../lib/storage-path.js";
+import { icone } from "../lib/icons.js";
 
 let resizeHandlerNovaLamina = null;
 
@@ -26,7 +27,7 @@ export function renderNovaLamina() {
         <a href="#inicio" class="brand">
 
           <span class="brand-icon">
-            🔬
+            ${icone.microscopio}
           </span>
 
           <span>
@@ -114,7 +115,7 @@ export function renderNovaLamina() {
               <div class="form-card-title">
 
                 <span>
-                  📋
+                  ${icone.documento}
                 </span>
 
                 <div>
@@ -231,11 +232,11 @@ export function renderNovaLamina() {
                   >
 
                     <option value="true">
-                      🟢 Publicada
+                      Publicada
                     </option>
 
                     <option value="false">
-                      ⚪ Oculta
+                      Oculta
                     </option>
 
                   </select>
@@ -265,6 +266,26 @@ export function renderNovaLamina() {
 
                  </div>
 
+                 <div class="form-field full">
+
+                   <label for="video_url">
+                     Vídeo (opcional)
+                   </label>
+
+                   <input
+                     id="video_url"
+                     name="video_url"
+                     type="url"
+                     placeholder="https://youtube.com/watch?v=... ou URL do arquivo"
+                   >
+
+                   <small>
+                     Link do YouTube, Vimeo ou arquivo de vídeo (MP4/WebM).
+                     A seção de vídeo só aparece na lâmina quando preenchida.
+                   </small>
+
+                 </div>
+
                </div>
 
              </div>
@@ -276,7 +297,7 @@ export function renderNovaLamina() {
                <div class="form-card-title">
 
                  <span>
-                   🖼️
+                   ${icone.imagem}
                  </span>
 
                  <div>
@@ -312,7 +333,7 @@ export function renderNovaLamina() {
                  <label for="imagem">
 
                    <span class="upload-icon">
-                     📤
+                     ${icone.upload}
                    </span>
 
                    <strong>
@@ -336,7 +357,7 @@ export function renderNovaLamina() {
               <div class="form-card-title">
 
                 <span>
-                  🔬
+                  ${icone.microscopio}
                 </span>
 
                 <div>
@@ -412,7 +433,7 @@ export function renderNovaLamina() {
                       class="estrutura-tool active"
                       data-estrutura-tool="ponto"
                     >
-                      📍 Ponto
+                      Ponto
                     </button>
 
                     <button
@@ -420,7 +441,7 @@ export function renderNovaLamina() {
                       class="estrutura-tool"
                       data-estrutura-tool="retangulo"
                     >
-                      ▬ Retângulo
+                      Retângulo
                     </button>
 
                     <button
@@ -428,7 +449,7 @@ export function renderNovaLamina() {
                       class="estrutura-tool"
                       data-estrutura-tool="seta"
                     >
-                      ➜ Seta
+                      Seta
                     </button>
 
                     <button
@@ -436,7 +457,7 @@ export function renderNovaLamina() {
                       class="estrutura-tool"
                       data-estrutura-tool="texto"
                     >
-                      T Texto
+                      Texto
                     </button>
 
                   </div>
@@ -1608,6 +1629,12 @@ async function carregarLamina(id) {
     campoAumento.value = data.aumento || "";
   }
 
+  const campoVideo = document.querySelector("#video_url");
+
+  if (campoVideo) {
+    campoVideo.value = data.video_url || "";
+  }
+
   /*
    * Carrega imagens existentes: lamina_imagens (ordenada) ou, em
    * lâminas antigas, apenas laminas.imagem_url como fallback (regra 14).
@@ -1757,6 +1784,8 @@ async function salvarLamina(form, editarId, estruturas = [], imagens = []) {
 
     const aumento = String(formData.get("aumento") || "").trim();
 
+    const videoUrl = String(formData.get("video_url") || "").trim();
+
     /*
      * Imagens múltiplas (Fase 18). O estado `imagens` (array em ordem
      * de exibição, índice 0 = principal) contém itens existentes
@@ -1830,6 +1859,8 @@ async function salvarLamina(form, editarId, estruturas = [], imagens = []) {
 
       aumento: aumento || null,
 
+      video_url: videoUrl || null,
+
       publicado,
 
       estruturas: estruturasNormalizadas,
@@ -1888,6 +1919,23 @@ async function salvarLamina(form, editarId, estruturas = [], imagens = []) {
        * para vincular as imagens em lamina_imagens (FK).
        */
       resultado = await supabase.from("laminas").insert(dados).select("id");
+    }
+
+    /*
+     * Fallback: se a coluna video_url ainda não existir no banco
+     * (migration pendente), salva a lâmina sem o vídeo em vez de
+     * interromper todo o cadastro.
+     */
+    if (
+      resultado.error &&
+      /video_url/i.test(resultado.error.message || "") &&
+      Object.prototype.hasOwnProperty.call(dados, "video_url")
+    ) {
+      delete dados.video_url;
+
+      resultado = editarId
+        ? await supabase.from("laminas").update(dados).eq("id", editarId)
+        : await supabase.from("laminas").insert(dados).select("id");
     }
 
     if (resultado.error) {
