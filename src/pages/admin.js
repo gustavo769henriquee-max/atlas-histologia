@@ -3,6 +3,7 @@ import "./admin.css";
 
 import { supabase, getCurrentUser, isAdmin } from "../lib/supabase.js";
 import { extrairCaminhoArmazenamento } from "../lib/storage-path.js";
+import { icone } from "../lib/icons.js";
 
 export async function renderAdmin() {
   const user = await getCurrentUser();
@@ -47,8 +48,8 @@ export async function renderAdmin() {
 
         <div class="admin-brand">
 
-           <a href="#inicio" class="admin-logo">
-             🔬
+           <a href="#inicio" class="admin-logo" aria-label="Voltar ao site">
+             ${icone.microscopio}
            </a>
 
           <div>
@@ -81,7 +82,7 @@ export async function renderAdmin() {
              class="admin-menu active"
              data-section="laminas"
            >
-             🔬
+             ${icone.microscopio}
              <span>Lâminas</span>
            </button>
 
@@ -89,7 +90,7 @@ export async function renderAdmin() {
              class="admin-menu"
              data-section="categorias"
            >
-             📁
+             ${icone.pasta}
              <span>Categorias</span>
            </button>
 
@@ -97,7 +98,7 @@ export async function renderAdmin() {
              class="admin-menu"
              data-section="aparencia"
            >
-             🎨
+             ${icone.paleta}
              <span>Aparência</span>
            </button>
 
@@ -105,14 +106,15 @@ export async function renderAdmin() {
              class="admin-menu"
              data-section="configuracoes"
            >
-             ⚙️
+             ${icone.engrenagem}
              <span>Configurações</span>
            </button>
 
           <div class="admin-sidebar-bottom">
 
            <a href="#inicio">
-             🔙 Voltar ao site
+             ${icone.setaVoltar}
+             Voltar ao site
            </a>
 
           </div>
@@ -160,7 +162,7 @@ export async function renderAdmin() {
 
               <div class="admin-stat">
 
-                <span>📄</span>
+                <span>${icone.documento}</span>
 
                 <div>
                   <strong>${lista.length}</strong>
@@ -172,7 +174,7 @@ export async function renderAdmin() {
 
               <div class="admin-stat">
 
-                <span>👁️</span>
+                <span>${icone.olho}</span>
 
                 <div>
                   <strong>${publicadas}</strong>
@@ -184,7 +186,7 @@ export async function renderAdmin() {
 
               <div class="admin-stat">
 
-                <span>🙈</span>
+                <span>${icone.olhoFechado}</span>
 
                 <div>
                   <strong>${ocultas}</strong>
@@ -200,7 +202,7 @@ export async function renderAdmin() {
 
               <div class="admin-search">
 
-                🔍
+                ${icone.lupa}
 
                 <input
                   id="admin-search"
@@ -292,7 +294,7 @@ export async function renderAdmin() {
                 <div class="form-card-title">
 
                   <span>
-                    📁
+                    ${icone.pasta}
                   </span>
 
                   <div>
@@ -379,11 +381,11 @@ export async function renderAdmin() {
                       <select id="categoria-ativo">
 
                         <option value="true">
-                          ✅ Ativa
+                          Ativa
                         </option>
 
                         <option value="false">
-                          ❌ Inativa
+                          Inativa
                         </option>
 
                       </select>
@@ -426,7 +428,7 @@ export async function renderAdmin() {
 
               <div class="admin-placeholder">
 
-                <div>📁</div>
+                <div>${icone.pasta}</div>
 
                 <p>
                   Carregando categorias...
@@ -480,7 +482,7 @@ export async function renderAdmin() {
 
                 <div class="admin-stat">
 
-                  <span>📄</span>
+                  <span>${icone.documento}</span>
 
                   <div>
                     <strong id="stat-laminas">-</strong>
@@ -492,7 +494,7 @@ export async function renderAdmin() {
 
                 <div class="admin-stat">
 
-                  <span>👁️</span>
+                  <span>${icone.olho}</span>
 
                   <div>
                     <strong id="stat-publicadas">-</strong>
@@ -504,7 +506,7 @@ export async function renderAdmin() {
 
                 <div class="admin-stat">
 
-                  <span>📁</span>
+                  <span>${icone.pasta}</span>
 
                   <div>
                     <strong id="stat-categorias">-</strong>
@@ -516,118 +518,90 @@ export async function renderAdmin() {
               </div>
 
 
-              <div class="config-card">
+              <form id="configuracoes-form" class="form-card">
 
                 <h2>
-                  ⚙️ Configurações do site
+                  Informações do projeto
                 </h2>
 
                 <p>
-                  Essas configurações são gerenciadas na seção
+                  Dados institucionais exibidos no rodapé e nas páginas
+                  do Atlas. As cores e textos visuais ficam na seção
                   <strong>Aparência</strong>.
                 </p>
 
 
-                <div class="config-list">
+                <div class="form-grid">
 
-                  <div class="config-item">
+                  <div class="form-field">
 
-                    <span class="config-label">
-                      Nome do site
-                    </span>
+                    <label for="config-inst-nome">
+                      Instituição
+                    </label>
 
-                    <span
-                      id="config-view-nome"
-                      class="config-value"
+                    <input
+                      id="config-inst-nome"
+                      type="text"
+                      placeholder="Ex.: Universidade, escola ou laboratório"
                     >
-                      -
-                    </span>
 
                   </div>
 
+                  <div class="form-field">
 
-                  <div class="config-item">
+                    <label for="config-contato-email">
+                      E-mail de contato
+                    </label>
 
-                    <span class="config-label">
-                      Subtítulo
-                    </span>
-
-                    <span
-                      id="config-view-subtitulo"
-                      class="config-value"
+                    <input
+                      id="config-contato-email"
+                      type="email"
+                      placeholder="contato@instituicao.br"
                     >
-                      -
-                    </span>
 
                   </div>
 
+                  <div class="form-field full">
 
-                  <div class="config-item">
+                    <label for="config-link-institucional">
+                      Link institucional
+                    </label>
 
-                    <span class="config-label">
-                      Título da página inicial
-                    </span>
-
-                    <span
-                      id="config-view-titulo"
-                      class="config-value"
+                    <input
+                      id="config-link-institucional"
+                      type="url"
+                      placeholder="https://www.instituicao.br"
                     >
-                      -
-                    </span>
 
                   </div>
 
+                  <div class="form-field full">
 
-                  <div class="config-item">
+                    <label for="config-creditos">
+                      Créditos
+                    </label>
 
-                    <span class="config-label">
-                      Cor principal
-                    </span>
-
-                    <span
-                      id="config-view-cor-principal"
-                      class="config-value"
-                    >
-                      -
-                    </span>
-
-                  </div>
-
-
-                  <div class="config-item">
-
-                    <span class="config-label">
-                      Cor de fundo
-                    </span>
-
-                    <span
-                      id="config-view-cor-fundo"
-                      class="config-value"
-                    >
-                      -
-                    </span>
-
-                  </div>
-
-
-                  <div class="config-item">
-
-                    <span class="config-label">
-                      Logo
-                    </span>
-
-                    <span
-                      id="config-view-logo"
-                      class="config-value"
-                    >
-                      -
-                    </span>
+                    <textarea
+                      id="config-creditos"
+                      rows="3"
+                      placeholder="Autores, orientadores, referências das imagens..."
+                    ></textarea>
 
                   </div>
 
                 </div>
 
-              </div>
+
+                <div class="form-actions">
+
+                  <button type="submit" class="button primary">
+                    ${icone.salvar}
+                    Salvar informações
+                  </button>
+
+                </div>
+
+              </form>
 
             </div>
 
@@ -647,7 +621,7 @@ function renderLaminas(laminas) {
       <div class="admin-empty">
 
         <div>
-          🖼️
+          ${icone.imagem}
         </div>
 
         <h2>
@@ -696,7 +670,7 @@ function renderLaminas(laminas) {
               `
               : `
                 <div class="admin-no-image">
-                  🖼️
+                  ${icone.imagem}
                 </div>
               `
           }
@@ -716,7 +690,7 @@ function renderLaminas(laminas) {
               class="admin-status ${publicada ? "published" : "hidden"}"
             >
 
-              ${publicada ? "✅ Publicada" : "❌ Oculta"}
+              ${publicada ? "Publicada" : "Oculta"}
 
             </span>
 
@@ -737,13 +711,13 @@ function renderLaminas(laminas) {
 
             ${
               lamina.tecnica
-                ? `<span>🔬 ${escapeHtml(lamina.tecnica)}</span>`
+                ? `<span>${icone.microscopio} ${escapeHtml(lamina.tecnica)}</span>`
                 : ""
             }
 
             ${
               lamina.coloracao
-                ? `<span>🧫 ${escapeHtml(lamina.coloracao)}</span>`
+                ? `<span>${icone.gota} ${escapeHtml(lamina.coloracao)}</span>`
                 : ""
             }
 
@@ -759,7 +733,7 @@ function renderLaminas(laminas) {
             class="admin-action view"
             title="Visualizar"
           >
-            👁️
+            ${icone.olho}
           </a>
 
 
@@ -769,7 +743,7 @@ function renderLaminas(laminas) {
             data-id="${lamina.id}"
             title="Editar"
           >
-            ✏️
+            ${icone.editar}
           </button>
 
 
@@ -779,7 +753,7 @@ function renderLaminas(laminas) {
             data-id="${lamina.id}"
             title="${publicada ? "Ocultar" : "Publicar"}"
           >
-            ${publicada ? "🙈" : "👁️"}
+            ${publicada ? icone.olhoFechado : icone.olho}
           </button>
 
 
@@ -789,7 +763,7 @@ function renderLaminas(laminas) {
             data-id="${lamina.id}"
             title="Excluir"
           >
-            🗑️
+            ${icone.lixeira}
           </button>
 
         </div>
@@ -807,7 +781,7 @@ async function carregarCategoriasAdmin() {
 
   lista.innerHTML = `
     <div class="admin-placeholder">
-      <div>📁</div>
+      <div>${icone.pasta}</div>
       <p>Carregando categorias...</p>
     </div>
   `;
@@ -839,7 +813,7 @@ async function carregarCategoriasAdmin() {
   if (!categorias.length) {
     lista.innerHTML = `
       <div class="admin-empty">
-        <div>📁</div>
+        <div>${icone.pasta}</div>
         <h2>Nenhuma categoria</h2>
         <p>Crie sua primeira categoria.</p>
       </div>
@@ -858,7 +832,7 @@ async function carregarCategoriasAdmin() {
           >
 
             <div class="categoria-card-icon">
-              📁
+              ${icone.pasta}
             </div>
 
 
@@ -875,7 +849,7 @@ async function carregarCategoriasAdmin() {
                     categoria.ativo ? "published" : "hidden"
                   }"
                 >
-                  ${categoria.ativo ? "✅ Ativa" : "❌ Inativa"}
+                  ${categoria.ativo ? "Ativa" : "Inativa"}
                 </span>
 
               </div>
@@ -906,7 +880,7 @@ async function carregarCategoriasAdmin() {
                 data-categoria-edit="${categoria.id}"
                 title="Editar"
               >
-                ✏️
+                ${icone.editar}
               </button>
 
 
@@ -916,7 +890,7 @@ async function carregarCategoriasAdmin() {
                 data-categoria-toggle="${categoria.id}"
                 title="${categoria.ativo ? "Desativar" : "Ativar"}"
               >
-                ${categoria.ativo ? "🙈" : "👁️"}
+                ${categoria.ativo ? icone.olhoFechado : icone.olho}
               </button>
 
 
@@ -926,7 +900,7 @@ async function carregarCategoriasAdmin() {
                 data-categoria-delete="${categoria.id}"
                 title="Excluir"
               >
-                🗑️
+                ${icone.lixeira}
               </button>
 
             </div>
@@ -1163,6 +1137,13 @@ async function excluirCategoria(id) {
   await carregarCategoriasAdmin();
 }
 
+/* Detecta nome de coluna inexistente em mensagens do PostgREST */
+function colunaDesconhecida(mensagem = "") {
+  const match = String(mensagem).match(/['"]([a-z_]+)['"]/i);
+
+  return match ? match[1] : null;
+}
+
 function mostrarStatusCategoria(mensagem, tipo) {
   const elemento = document.querySelector("#categoria-status");
 
@@ -1230,44 +1211,28 @@ async function carregarConfiguracoesAdmin() {
       statCategorias.textContent = String(totalCategorias);
     }
 
-    const viewNome = document.querySelector("#config-view-nome");
+    const campoInstituicao = document.querySelector("#config-inst-nome");
 
-    const viewSubtitulo = document.querySelector("#config-view-subtitulo");
+    const campoContato = document.querySelector("#config-contato-email");
 
-    const viewTitulo = document.querySelector("#config-view-titulo");
+    const campoLink = document.querySelector("#config-link-institucional");
 
-    const viewCorPrincipal = document.querySelector(
-      "#config-view-cor-principal",
-    );
+    const campoCreditos = document.querySelector("#config-creditos");
 
-    const viewCorFundo = document.querySelector("#config-view-cor-fundo");
-
-    const viewLogo = document.querySelector("#config-view-logo");
-
-    if (viewNome) {
-      viewNome.textContent = config.nome_site || "Atlas";
+    if (campoInstituicao) {
+      campoInstituicao.value = config.nome_institucional || "";
     }
 
-    if (viewSubtitulo) {
-      viewSubtitulo.textContent = config.subtitulo || "Histológico";
+    if (campoContato) {
+      campoContato.value = config.contato_email || "";
     }
 
-    if (viewTitulo) {
-      viewTitulo.textContent =
-        config.titulo_inicio || "Explore o mundo microscópico.";
+    if (campoLink) {
+      campoLink.value = config.link_institucional || "";
     }
 
-    if (viewCorPrincipal) {
-      viewCorPrincipal.textContent =
-        config.cor_principal || "var(--cor-principal)";
-    }
-
-    if (viewCorFundo) {
-      viewCorFundo.textContent = config.cor_fundo || "#f5f7f6";
-    }
-
-    if (viewLogo) {
-      viewLogo.textContent = config.logo_url ? "Logo definida" : "Sem logo";
+    if (campoCreditos) {
+      campoCreditos.value = config.creditos || "";
     }
   } catch (erro) {
     console.error("Erro ao carregar configurações:", erro);
@@ -1279,7 +1244,103 @@ async function carregarConfiguracoesAdmin() {
   }
 }
 
+/* Salva as informações institucionais da página Configurações. */
+async function salvarConfiguracoesInstitucionais(event) {
+  event.preventDefault();
+
+  const status = document.querySelector("#configuracoes-status");
+
+  const form = event.currentTarget;
+
+  if (form.dataset.salvando === "true") return;
+  form.dataset.salvando = "true";
+
+  try {
+    if (status) {
+      status.textContent = "Salvando...";
+      status.className = "form-status loading";
+    }
+
+    let dados = {
+      nome_institucional:
+        document.querySelector("#config-inst-nome")?.value.trim() || null,
+
+      contato_email:
+        document.querySelector("#config-contato-email")?.value.trim() || null,
+
+      link_institucional:
+        document.querySelector("#config-link-institucional")?.value.trim() ||
+        null,
+
+      creditos:
+        document.querySelector("#config-creditos")?.value.trim() || null,
+
+      atualizado_em: new Date().toISOString(),
+    };
+
+    const { data: existente } = await supabase
+      .from("configuracoes_site")
+      .select("id")
+      .limit(1)
+      .maybeSingle();
+
+    let resultado = null;
+
+    /* Resiliente a colunas ainda não aplicadas (migration pendente). */
+    let tentativas = 0;
+
+    while (tentativas < 6) {
+      tentativas += 1;
+
+      resultado =
+        existente && existente.id
+          ? await supabase
+              .from("configuracoes_site")
+              .update(dados)
+              .eq("id", existente.id)
+          : await supabase.from("configuracoes_site").insert(dados);
+
+      if (!resultado.error) break;
+
+      const coluna = colunaDesconhecida(resultado.error.message || "");
+
+      if (!coluna || !(coluna in dados)) break;
+
+      delete dados[coluna];
+    }
+
+    if (resultado && resultado.error) {
+      console.error(resultado.error);
+
+      if (status) {
+        status.textContent =
+          "Não foi possível salvar: " + resultado.error.message;
+
+        status.className = "form-status error";
+      }
+
+      return;
+    }
+
+    if (status) {
+      status.textContent = "Informações salvas com sucesso!";
+
+      status.className = "form-status success";
+    }
+  } finally {
+    form.dataset.salvando = "false";
+  }
+}
+
 export function setupAdmin() {
+  /*
+   * Configurações institucionais
+   */
+
+  document
+    .querySelector("#configuracoes-form")
+    ?.addEventListener("submit", salvarConfiguracoesInstitucionais);
+
   /*
    * Categorias
    */

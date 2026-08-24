@@ -1,11 +1,12 @@
-﻿import { supabase } from '../lib/supabase.js'
+import { supabase } from '../lib/supabase.js'
+import { icone } from '../lib/icons.js'
 
 export function renderLogin() {
   return `
     <main class="auth-page">
       <div class="auth-card">
 
-        <div class="auth-logo">🔬</div>
+        <div class="auth-logo">${icone.microscopio}</div>
 
         <span class="eyebrow">ÁREA ADMINISTRATIVA</span>
 
