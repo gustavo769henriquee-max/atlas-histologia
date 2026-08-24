@@ -79,14 +79,14 @@
   --muted: var(--cor-texto-suave);
   --border: var(--cor-borda);
 
-  font-family:
+  font-family: var(--fonte-principal,
     Inter,
     ui-sans-serif,
     system-ui,
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
-    sans-serif;
+    sans-serif);
   color: var(--cor-texto);
   background: var(--cor-fundo);
   font-synthesis: none;
@@ -5753,3 +5753,544 @@ button:active {
   height: 1em;
   flex-shrink: 0;
 }
+
+/* ============================================================
+   APARÊNCIA EXPANDIDA — TOKENS CONFIGURÁVEIS (defaults)
+   Todos podem ser sobrescritos pelo painel Aparência via JS
+   (lib/tema.js → aplicarTema no :root). Os defaults derivam
+   das cores base com color-mix(), garantindo fallback seguro
+   mesmo sem nenhuma configuração salva.
+   ============================================================ */
+
+:root {
+  /* ---------- Cores gerais (derivadas) ---------- */
+  --cor-texto-terciario: color-mix(in srgb, var(--cor-texto-suave) 45%, var(--cor-fundo));
+  --cor-borda-forte: color-mix(in srgb, var(--cor-borda) 78%, var(--cor-texto));
+  --cor-hover: color-mix(in srgb, var(--cor-principal) 7%, var(--cor-fundo));
+  --cor-foco: color-mix(in srgb, var(--cor-principal) 32%, transparent);
+  --cor-link: var(--cor-principal);
+  --cor-link-hover: var(--cor-acento);
+  --cor-info: #2f6fa3;
+  --cor-info-bg: color-mix(in srgb, var(--cor-info) 12%, var(--cor-superficie));
+
+  /* ---------- Header / menu ---------- */
+  --header-fundo: color-mix(in srgb, var(--cor-fundo) 86%, #ffffff);
+  --header-borda: var(--cor-borda);
+  --header-icone: var(--cor-principal);
+  --menu-texto: var(--cor-texto-suave);
+  --menu-texto-ativo: var(--cor-principal);
+  --menu-hover: var(--cor-principal);
+  --menu-indicador: var(--cor-acento);
+
+  /* ---------- Hero / página inicial ---------- */
+  --hero-fundo: var(--cor-fundo);
+  --hero-titulo: var(--cor-texto);
+  --hero-subtitulo: var(--cor-principal);
+  --hero-texto: var(--cor-texto-suave);
+  --hero-botao-fundo: var(--cor-principal);
+  --hero-botao-hover: color-mix(in srgb, var(--cor-principal) 86%, #000000);
+  --hero-decorativo: var(--cor-acento);
+  --hero-microscopio: var(--cor-principal);
+
+  /* ---------- Cards Explore / Amplie / Aprenda ---------- */
+  --card-fundo: color-mix(in srgb, var(--cor-fundo) 76%, #ffffff);
+  --card-titulo: var(--cor-texto);
+  --card-texto: var(--cor-texto-suave);
+  --card-icone: var(--cor-principal);
+  --card-borda: var(--cor-borda);
+  --card-hover: color-mix(in srgb, var(--cor-principal) 28%, var(--cor-borda));
+
+  /* ---------- Catálogo ---------- */
+  --catalogo-fundo: var(--cor-fundo);
+  --catalogo-card-fundo: color-mix(in srgb, var(--cor-fundo) 88%, #ffffff);
+  --catalogo-titulo: var(--cor-texto);
+  --catalogo-texto: var(--cor-texto);
+  --catalogo-texto-suave: var(--cor-texto-suave);
+  --catalogo-borda: var(--cor-borda);
+  --catalogo-categoria: color-mix(in srgb, var(--cor-acento) 24%, #ffffff);
+  --catalogo-botao: var(--cor-principal);
+
+  /* ---------- Página da lâmina ---------- */
+  --lamina-fundo: var(--cor-fundo);
+  --lamina-painel-fundo: color-mix(in srgb, var(--cor-fundo) 92%, #ffffff);
+  --lamina-moldura: color-mix(in srgb, var(--cor-acento) 24%, #ffffff);
+  --lamina-indicador: var(--cor-acento);
+
+  /* ---------- Vídeo ---------- */
+  --video-fundo: transparent;
+  --video-titulo: var(--cor-texto);
+  --video-borda: var(--cor-borda);
+
+  /* ---------- Rodapé (independente do texto do site) ---------- */
+  --rodape-fundo: var(--cor-superficie-escura);
+  --rodape-titulo: #f3f0ef;
+  --rodape-texto: rgba(255, 255, 255, 0.72);
+  --rodape-link: #ffffff;
+  --rodape-link-hover: color-mix(in srgb, var(--cor-acento) 55%, #ffffff);
+  --rodape-icone: var(--cor-acento);
+  --rodape-borda: rgba(255, 255, 255, 0.14);
+  --rodape-creditos: rgba(255, 255, 255, 0.5);
+
+  /* ---------- Formulários e inputs ---------- */
+  --input-fundo: var(--cor-superficie);
+  --input-texto: var(--cor-texto);
+  --input-placeholder: color-mix(in srgb, var(--cor-texto-suave) 30%, var(--cor-fundo));
+  --input-borda: var(--cor-borda);
+  --input-foco: var(--cor-principal);
+  --input-label: var(--cor-texto);
+  --input-ajuda: var(--cor-texto-suave);
+
+  /* ---------- Botões ---------- */
+  --botao-primario-fundo: var(--cor-principal);
+  --botao-primario-texto: var(--cor-texto-claro);
+  --botao-primario-hover: color-mix(in srgb, var(--cor-principal) 86%, #000000);
+  --botao-perigo-fundo: #b63b3b;
+
+  /* ---------- Tipografia ---------- */
+  --peso-titulos: 800;
+}
+
+/* ============================================================
+   APARÊNCIA EXPANDIDA — CONSUMO DOS TOKENS POR COMPONENTE
+   Regras no fim do arquivo para vencerem as anteriores sem
+   reescrevê-las; quando o token não está configurado, o
+   default derivado do :root acima entra em ação.
+   ============================================================ */
+
+/* ---------- Header / menu ---------- */
+
+.header {
+  background: var(--header-fundo);
+  border-bottom: 1px solid var(--header-borda);
+}
+
+.brand-icon {
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--header-icone) 92%, white),
+      var(--header-icone)
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 6px 16px color-mix(in srgb, var(--header-icone) 30%, transparent);
+}
+
+.nav {
+  color: var(--menu-texto);
+}
+
+.nav a::after {
+  height: 2px;
+  border-radius: 2px;
+  background: var(--menu-indicador);
+}
+
+.nav a:hover {
+  color: var(--menu-hover);
+}
+
+.nav a.active {
+  color: var(--menu-texto-ativo);
+}
+
+.nav a.active::after {
+  background: var(--menu-indicador);
+}
+
+.menu-button {
+  color: var(--menu-texto);
+}
+
+.menu-button:hover {
+  color: var(--menu-hover);
+}
+
+/* ---------- Hero / página inicial ---------- */
+
+.home-hero {
+  background:
+    radial-gradient(
+      circle at 82% 38%,
+      color-mix(in srgb, var(--hero-decorativo) 13%, transparent),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 8% 90%,
+      color-mix(in srgb, var(--hero-microscopio) 7%, transparent),
+      transparent 30%
+    ),
+    var(--hero-fundo);
+}
+
+.home-eyebrow {
+  border-color: color-mix(in srgb, var(--hero-subtitulo) 18%, var(--cor-borda));
+  background: color-mix(in srgb, var(--hero-fundo) 78%, #ffffff);
+  color: var(--hero-subtitulo);
+}
+
+.home-eyebrow-dot {
+  background: var(--hero-decorativo);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--hero-decorativo) 13%, transparent);
+}
+
+.home-hero h1 {
+  color: var(--hero-titulo);
+  font-size: var(--tamanho-titulo, clamp(48px, 6vw, 82px));
+}
+
+.home-hero-description {
+  color: var(--hero-texto);
+}
+
+.home-hero-note span {
+  color: var(--hero-decorativo);
+}
+
+.home-primary-button {
+  background:
+    linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--hero-botao-fundo) 88%, white),
+      var(--hero-botao-fundo)
+    );
+  color: var(--botao-primario-texto);
+}
+
+.home-primary-button:hover {
+  background: var(--hero-botao-hover);
+}
+
+/* Desenho do microscópio e elementos decorativos — cores controláveis */
+.home-visual-card {
+  border-color: color-mix(in srgb, var(--hero-microscopio) 16%, var(--cor-borda));
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--hero-microscopio) 9%, var(--hero-fundo)),
+      color-mix(in srgb, var(--hero-microscopio) 2%, var(--hero-fundo))
+    );
+}
+
+.home-visual-grid {
+  background-image:
+    linear-gradient(
+      color-mix(in srgb, var(--hero-microscopio) 8%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--hero-microscopio) 8%, transparent) 1px,
+      transparent 1px
+    );
+}
+
+.home-visual-orbit {
+  border-color: color-mix(in srgb, var(--hero-decorativo) 20%, transparent);
+}
+
+/* ---------- Cards Explore / Amplie / Aprenda ---------- */
+
+.home-feature-card {
+  border-color: var(--card-borda);
+  background: var(--card-fundo);
+}
+
+.home-feature-card:hover {
+  border-color: var(--card-hover);
+}
+
+.home-feature-number {
+  color: color-mix(in srgb, var(--card-icone) 25%, transparent);
+}
+
+.home-feature-icon {
+  background: color-mix(in srgb, var(--card-icone) 9%, var(--card-fundo));
+}
+
+.home-feature-card h3 {
+  color: var(--card-titulo);
+}
+
+.home-feature-card p {
+  color: var(--card-texto);
+}
+
+.home-feature-card a {
+  color: var(--card-icone);
+}
+
+.home-feature-icon svg {
+  color: var(--card-icone);
+}
+
+/* Card AMPLIE continua em destaque com a cor de destaque da marca */
+.home-feature-destaque .home-feature-icon svg {
+  color: var(--cor-acento);
+}
+
+/* ---------- Catálogo ---------- */
+
+.catalog-hero h1 {
+  color: var(--catalogo-titulo);
+}
+
+.catalog-hero p {
+  color: var(--catalogo-texto-suave);
+}
+
+.catalog-section {
+  background: var(--catalogo-fundo);
+}
+
+.lamina-card,
+.catalogo-card,
+.catalog-card {
+  border-color: var(--catalogo-borda);
+  background: var(--catalogo-card-fundo);
+}
+
+.lamina-card:hover,
+.catalogo-card:hover,
+.catalog-card:hover {
+  border-color: color-mix(in srgb, var(--catalogo-botao) 30%, var(--catalogo-borda));
+}
+
+.lamina-category {
+  color: var(--catalogo-categoria);
+}
+
+.lamina-content h2 {
+  color: var(--catalogo-titulo);
+}
+
+.lamina-content p {
+  color: var(--catalogo-texto-suave);
+}
+
+.card-link {
+  color: var(--catalogo-botao);
+}
+
+.card-link span {
+  color: var(--catalogo-botao);
+}
+
+.card-link:hover {
+  color: var(--catalogo-botao);
+}
+
+.explore-button {
+  background: var(--catalogo-botao);
+  color: var(--botao-primario-texto);
+}
+
+.search-box {
+  background: var(--input-fundo);
+  border-color: var(--catalogo-borda);
+}
+
+/* ---------- Página da lâmina ---------- */
+
+.slide-header {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--lamina-indicador) 5%, transparent),
+    transparent 60%
+  );
+}
+
+.back-link {
+  color: var(--lamina-moldura);
+}
+
+.panel-label {
+  color: var(--lamina-moldura);
+}
+
+.info-panel {
+  border-color: color-mix(in srgb, var(--lamina-moldura) 45%, var(--cor-borda));
+  background: var(--lamina-painel-fundo);
+}
+
+.structure:hover {
+  border-color: color-mix(in srgb, var(--lamina-indicador) 18%, var(--cor-borda));
+  background: color-mix(in srgb, var(--lamina-indicador) 5%, transparent);
+}
+
+.structure.estrutura-selecionada {
+  border-color: color-mix(in srgb, var(--lamina-indicador) 35%, var(--cor-borda));
+  background: color-mix(in srgb, var(--lamina-indicador) 8%, transparent);
+}
+
+/* ---------- Visualizador / OpenSeadragon ---------- */
+
+.viewer-controls {
+  background: var(--viewer-fundo);
+  border-top-color: var(--viewer-borda);
+  color: var(--viewer-texto);
+}
+
+.viewer-controls span,
+.viewer-controls .zoom-value {
+  color: color-mix(in srgb, var(--viewer-texto) 72%, transparent);
+}
+
+.viewer-controls .zoom-value {
+  color: var(--viewer-texto);
+}
+
+.zoom-buttons button {
+  border-color: var(--viewer-borda);
+  background: rgba(255, 255, 255, 0.09);
+  color: var(--viewer-texto);
+}
+
+.zoom-buttons button:hover {
+  background: var(--viewer-hover);
+  color: var(--viewer-texto);
+  border-color: transparent;
+}
+
+/* ---------- Vídeo ---------- */
+
+.video-secao {
+  background: var(--video-fundo);
+}
+
+.video-cabecalho svg {
+  color: var(--lamina-indicador);
+}
+
+.video-cabecalho h2 {
+  color: var(--video-titulo);
+}
+
+.video-moldura {
+  border-color: var(--video-borda);
+}
+
+/* ---------- Rodapé (cores individuais) ---------- */
+
+.footer {
+  border-top: 1px solid var(--rodape-borda);
+  background:
+    radial-gradient(
+      ellipse at top left,
+      color-mix(in srgb, var(--rodape-icone) 14%, transparent),
+      transparent 55%
+    ),
+    var(--rodape-fundo);
+  color: var(--rodape-texto);
+}
+
+.footer span:first-child,
+.footer-marca {
+  color: var(--rodape-titulo);
+}
+
+.footer-texto {
+  color: var(--rodape-texto);
+}
+
+.footer a {
+  color: var(--rodape-link);
+  transition: color 0.2s ease;
+}
+
+.footer a:hover {
+  color: var(--rodape-link-hover);
+}
+
+.footer svg {
+  color: var(--rodape-icone);
+}
+
+.footer small,
+.footer .footer-creditos {
+  color: var(--rodape-creditos);
+}
+
+/* ---------- Formulários e inputs ---------- */
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--input-placeholder);
+  opacity: 1;
+}
+
+.form-help,
+small.form-help {
+  color: var(--input-ajuda);
+}
+
+/* ---------- Botões ---------- */
+
+.button.primary {
+  background:
+    linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--botao-primario-fundo) 88%, white),
+      var(--botao-primario-fundo)
+    );
+  color: var(--botao-primario-texto);
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--botao-primario-fundo) 26%, transparent);
+}
+
+.button.primary:hover {
+  background: var(--botao-primario-hover);
+}
+
+.button.secondary:hover {
+  border-color: var(--cor-link-hover);
+  color: var(--cor-link-hover);
+}
+
+.button.danger {
+  background: var(--botao-perigo-fundo);
+  color: #ffffff;
+}
+
+button:disabled,
+.button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none !important;
+  filter: saturate(0.6);
+}
+
+/* ---------- Estados semânticos ---------- */
+
+.form-status.success {
+  background: var(--cor-sucesso-bg);
+  color: var(--cor-sucesso);
+}
+
+.form-status.error {
+  background: var(--cor-erro-bg);
+  color: var(--cor-erro);
+}
+
+.form-status.info {
+  background: var(--cor-info-bg);
+  color: var(--cor-info);
+}
+
+/* ---------- Tipografia configurável ---------- */
+
+body {
+  font-size: var(--tamanho-texto, 1rem);
+}
+
+.home-hero h1,
+.catalog-hero h1,
+.slide-title h1,
+.info-panel h2,
+.video-cabecalho h2,
+.section-heading h2,
+.home-section-heading h2,
+.home-about h2,
+.home-feature-card h3 {
+  font-weight: var(--peso-titulos, 800);
+}
+
