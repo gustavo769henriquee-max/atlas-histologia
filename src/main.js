@@ -655,7 +655,7 @@ function renderLamina(lamina, config) {
                 z-index: 60;
                 width: min(320px, calc(100vw - 48px));
                 padding: 20px 22px;
-                background: #ffffff;
+                background: var(--cor-superficie);
                 border: 1px solid var(--border);
                 border-radius: 16px;
                 box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
@@ -689,8 +689,8 @@ function renderLamina(lamina, config) {
                     height: 30px;
                     border-radius: 8px;
                     border: 1px solid var(--border);
-                    background: #f4f7f5;
-                    color: #34413d;
+                    background: var(--cor-hover);
+                    color: var(--cor-texto);
                     font-size: 16px;
                     line-height: 1;
                     cursor: pointer;
@@ -716,14 +716,14 @@ function renderLamina(lamina, config) {
 
               <h3
                 id="estrutura-estudo-nome"
-                style="margin: 6px 0 8px; font-size: 19px; color: #17211f;"
+                style="margin: 6px 0 8px; font-size: 19px; color: var(--cor-texto);"
               >
                 Estrutura
               </h3>
 
               <p
                 id="estrutura-estudo-descricao"
-                style="margin: 0; color: #66736d; font-size: 13px; line-height: 1.6;"
+                style="margin: 0; color: var(--cor-texto-suave); font-size: 13px; line-height: 1.6;"
               ></p>
 
               <p
@@ -1857,13 +1857,13 @@ function desenharEstruturas(viewer, lamina) {
     } else if (caixa.tipo === "texto") {
       conteudoInterno = `
         <span class="estrutura-numero-badge">${numeroRotulo}</span>
-        <span style="display:inline-block;max-width:100%;background:rgba(23,33,31,0.85);color:#fff;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(rotulo)}</span>
+        <span style="display:inline-block;max-width:100%;background:rgba(25, 21, 23, 0.88);color:#fff;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(rotulo)}</span>
       `;
     } else {
       conteudoInterno = `
         <span class="estrutura-numero-badge">${numeroRotulo}</span>
         <span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:#e05252;border:3px solid #ffffff;box-shadow:0 2px 8px rgba(0,0,0,0.35);"></span>
-        <span style="position:absolute;left:60px;top:50%;transform:translateY(-50%);background:rgba(23,33,31,0.85);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap;">${escapeHtml(rotulo)}</span>
+        <span style="position:absolute;left:60px;top:50%;transform:translateY(-50%);background:rgba(25, 21, 23, 0.88);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap;">${escapeHtml(rotulo)}</span>
       `;
     }
 
