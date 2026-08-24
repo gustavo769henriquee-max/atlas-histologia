@@ -2,6 +2,8 @@ import "./style.css";
 import OpenSeadragon from "openseadragon";
 import { supabase, getCurrentSession, isAdmin } from "./lib/supabase.js";
 import { icone } from "./lib/icons.js";
+import { aplicarTema, temaEfetivo } from "./lib/tema.js";
+
 
 import { renderLogin, setupLogin } from "./pages/login.js";
 import { renderAdmin, setupAdmin } from "./pages/admin.js";
@@ -12,73 +14,35 @@ const app = document.querySelector("#app");
 
 /*
  * Aplica as configurações vindas do painel Aparência sobre os
- * tokens centralizados (:root em style.css). Cores derivadas
- * (superfícies, bordas, hover) acompanham automaticamente porque
- * são color-mix() dos tokens base.
+ * tokens centralizados (:root em style.css), usando a fonte única
+ * de verdade (lib/tema.js) — a MESMA função usada pela prévia do
+ * painel. Cores derivadas (superfícies, bordas, hover, rodapé,
+ * visualizador etc.) acompanham automaticamente.
  */
 function aplicarConfiguracoesVisuais(config = {}) {
-  const root = document.documentElement;
-
-  const definir = (token, valor) => {
-    if (valor) root.style.setProperty(token, valor);
-  };
-
-  /* Identidade */
-  definir("--cor-principal", config.cor_principal);
-  definir("--cor-secundaria", config.cor_secundaria);
-  definir("--cor-acento", config.cor_acento);
-
-  /* Superfícies e texto */
-  definir("--cor-fundo", config.cor_fundo);
-  definir("--cor-texto", config.cor_texto);
-
-  /* Aliases legados — mantêm regras antigas seguindo a paleta nova */
-  if (config.cor_principal) {
-    root.style.setProperty("--green", config.cor_principal);
-  }
-  if (config.cor_fundo) {
-    root.style.setProperty("--cream", config.cor_fundo);
-  }
-  if (config.cor_texto) {
-    root.style.setProperty("--text", config.cor_texto);
-  }
-  if (config.cor_destaque) {
-    root.style.setProperty("--green-light", config.cor_destaque);
-  }
+  const temaSalvo =
+    config.tema && typeof config.tema === "object" ? config.tema : {};
 
   /*
-   * Contraste automático do texto sobre a cor principal:
-   * calcula a luminância relativa e escolhe branco ou escuro,
-   * garantindo legibilidade de botões/rodapé em qualquer paleta.
+   * Combina as colunas planas (cor_principal, cor_fundo...) com o
+   * objeto `tema` salvo; colunas planas vencem quando presentes,
+   * preservando compatibilidade com configurações antigas.
    */
-  const principal = config.cor_principal || "#8a2b3d";
+  const combinado = { ...temaSalvo };
 
-  const rgb = principal.replace("#", "");
-
-  const hex =
-    rgb.length === 3
-      ? rgb
-          .split("")
-          .map((c) => c + c)
-          .join("")
-      : rgb;
-
-  if (hex.length === 6) {
-    const r = parseInt(hex.slice(0, 2), 16) / 255;
-    const g = parseInt(hex.slice(2, 4), 16) / 255;
-    const b = parseInt(hex.slice(4, 6), 16) / 255;
-
-    const canal = (c) =>
-      c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-
-    const luminancia =
-      0.2126 * canal(r) + 0.7152 * canal(g) + 0.0722 * canal(b);
-
-    root.style.setProperty(
-      "--cor-texto-claro",
-      luminancia > 0.55 ? "#1d1418" : "#ffffff",
-    );
+  for (const chave of [
+    "cor_principal",
+    "cor_secundaria",
+    "cor_acento",
+    "cor_fundo",
+    "cor_texto",
+  ]) {
+    if (config[chave]) {
+      combinado[chave] = config[chave];
+    }
   }
+
+  aplicarTema(document.documentElement, temaEfetivo(combinado));
 }
 
 

@@ -5,6 +5,40 @@ import { supabase, getCurrentUser, isAdmin } from "../lib/supabase.js";
 import { extrairCaminhoArmazenamento } from "../lib/storage-path.js";
 import { icone } from "../lib/icons.js";
 
+/*
+ * ESTADO DA SEÇÃO ATIVA DO ADMIN
+ *
+ * Causa raiz do bug "trocar de seção volta para Lâminas": o HTML do
+ * admin era estático com `active` fixo em #admin-section-laminas e a
+ * navegação apenas alternava classes sem persistir estado. Qualquer
+ * re-render completo (hashchange disparado pelo Cancelar da Aparência,
+ * renovação de token via onAuthStateChange etc.) reconstruía o painel
+ * e resetava para Lâminas.
+ *
+ * Correção estrutural: a seção atual vive em memória + sessionStorage
+ * e é aplicada NO RENDER, não como hack posterior.
+ */
+
+const SECOES_ADMIN = ["laminas", "categorias", "aparencia", "configuracoes"];
+
+const CHAVE_SECAO_ADMIN = "atlas.admin-secao";
+
+function obterSecaoAdmin() {
+  const salva = sessionStorage.getItem(CHAVE_SECAO_ADMIN);
+
+  return SECOES_ADMIN.includes(salva) ? salva : "laminas";
+}
+
+function definirSecaoAdmin(secao) {
+  if (!SECOES_ADMIN.includes(secao)) return;
+
+  sessionStorage.setItem(CHAVE_SECAO_ADMIN, secao);
+}
+
+/* Classe auxiliar para o template respeitar a seção restaurada */
+const ativoSe = (secao) => (obterSecaoAdmin() === secao ? " active" : "");
+
+
 export async function renderAdmin() {
   const user = await getCurrentUser();
 
@@ -79,7 +113,7 @@ export async function renderAdmin() {
         <aside class="admin-sidebar">
 
            <button
-             class="admin-menu active"
+             class="admin-menu${ativoSe("laminas")}"
              data-section="laminas"
            >
              ${icone.microscopio}
@@ -87,7 +121,7 @@ export async function renderAdmin() {
            </button>
 
            <button
-             class="admin-menu"
+             class="admin-menu${ativoSe("categorias")}"
              data-section="categorias"
            >
              ${icone.pasta}
@@ -95,7 +129,7 @@ export async function renderAdmin() {
            </button>
 
            <button
-             class="admin-menu"
+             class="admin-menu${ativoSe("aparencia")}"
              data-section="aparencia"
            >
              ${icone.paleta}
@@ -103,7 +137,7 @@ export async function renderAdmin() {
            </button>
 
            <button
-             class="admin-menu"
+             class="admin-menu${ativoSe("configuracoes")}"
              data-section="configuracoes"
            >
              ${icone.engrenagem}
@@ -126,7 +160,7 @@ export async function renderAdmin() {
 
           <section
             id="admin-section-laminas"
-            class="admin-section active"
+            class="admin-section${ativoSe("laminas")}"
           >
 
             <div class="admin-title-row">
@@ -245,7 +279,7 @@ export async function renderAdmin() {
 
           <section
             id="admin-section-categorias"
-            class="admin-section"
+            class="admin-section${ativoSe("categorias")}"
           >
 
             <div class="admin-title-row">
@@ -446,7 +480,7 @@ export async function renderAdmin() {
 
           <section
             id="admin-section-configuracoes"
-            class="admin-section"
+            class="admin-section${ativoSe("configuracoes")}"
           >
 
             <div class="admin-title-row">
@@ -1334,6 +1368,23 @@ async function salvarConfiguracoesInstitucionais(event) {
 
 export function setupAdmin() {
   /*
+   * Restauração do NÍVEL 1 (menu lateral) na remontagem da Administração.
+   * O template já marca a section correta como `active` no render
+   * (incl. Aparência via aparencia.js); este reforço sincroniza as
+   * classes garantindo que exatamente UMA seção fique visível e que o
+   * conteúdo principal nunca termine vazio após trocar de página/guia.
+   */
+  const secaoRestaurada = obterSecaoAdmin();
+
+  document.querySelectorAll(".admin-menu").forEach((item) => {
+    item.classList.toggle("active", item.dataset.section === secaoRestaurada);
+  });
+
+  document.querySelectorAll(".admin-section").forEach((item) => {
+    item.classList.toggle("active", item.id === `admin-section-${secaoRestaurada}`);
+  });
+
+  /*
    * Configurações institucionais
    */
 
@@ -1402,12 +1453,16 @@ export function setupAdmin() {
   setupAparencia();
 
   /*
-   * Navegação entre seções
+   * Navegação entre seções — preserva o estado para que
+   * re-renders (hashchange, renovação de sessão etc.) não
+   * devolvam o usuário para Lâminas.
    */
 
   document.querySelectorAll(".admin-menu").forEach((menu) => {
     menu.addEventListener("click", () => {
       const section = menu.dataset.section;
+
+      definirSecaoAdmin(section);
 
       document.querySelectorAll(".admin-menu").forEach((item) => {
         item.classList.remove("active");
