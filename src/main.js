@@ -1,16 +1,11 @@
 import "./style.css";
-import OpenSeadragon from "openseadragon";
 import { supabase, getCurrentSession, isAdmin } from "./lib/supabase.js";
 import { icone } from "./lib/icons.js";
 import { aplicarTema, temaEfetivo } from "./lib/tema.js";
 
-
-import { renderLogin, setupLogin } from "./pages/login.js";
-import { renderAdmin, setupAdmin } from "./pages/admin.js";
-import { renderCatalogo } from "./pages/catalogo.js";
-import { renderNovaLamina, setupNovaLamina } from "./pages/nova-lamina.js";
-
 const app = document.querySelector("#app");
+
+let OpenSeadragon = null;
 
 /*
  * Aplica as configurações vindas do painel Aparência sobre os
@@ -55,7 +50,6 @@ function aplicarConfiguracoesVisuais(config = {}) {
       .trim(),
   );
 }
-
 
 async function carregarConfiguracoesSite() {
   const { data, error } = await supabase
@@ -155,7 +149,7 @@ function renderHome(config = {}, laminaDestaqueId = "") {
             <p class="home-hero-description">
               ${escapeHtml(
                 config.descricao_inicio ||
-                  "Um atlas de histologia interativo para explorar tecidos, estruturas e lâminas histológicas de uma forma visual e dinâmica."
+                  "Um atlas de histologia interativo para explorar tecidos, estruturas e lâminas histológicas de uma forma visual e dinâmica.",
               )}
             </p>
 
@@ -164,14 +158,14 @@ function renderHome(config = {}, laminaDestaqueId = "") {
               <a href="#laminas" class="button primary home-primary-button">
                 ${escapeHtml(
                   config.texto_botao_principal ||
-                    "Explorar " + (config.nome_site || "Atlas")
+                    "Explorar " + (config.nome_site || "Atlas"),
                 )}
                 <span>→</span>
               </a>
 
               <a href="#sobre" class="button secondary home-secondary-button">
                 ${escapeHtml(
-                  config.texto_botao_secundario || "Conheça o projeto"
+                  config.texto_botao_secundario || "Conheça o projeto",
                 )}
               </a>
 
@@ -294,7 +288,7 @@ function renderHome(config = {}, laminaDestaqueId = "") {
                     (config.nome_site || "Atlas") +
                     " " +
                     (config.subtitulo || "Histológico") +
-                    " foi pensado para transformar a observação das lâminas em uma experiência de aprendizagem visual e interativa."
+                    " foi pensado para transformar a observação das lâminas em uma experiência de aprendizagem visual e interativa.",
               )}
             </p>
 
@@ -428,7 +422,7 @@ function renderHome(config = {}, laminaDestaqueId = "") {
         <span class="footer-marca">
           ${icone.microscopio}
           ${escapeHtml(config.nome_site || "Atlas")} ${escapeHtml(
-            config.subtitulo || "Histológico"
+            config.subtitulo || "Histológico",
           )}
         </span>
 
@@ -449,9 +443,7 @@ function renderHome(config = {}, laminaDestaqueId = "") {
         }
 
         ${
-          config.creditos
-            ? `<small>${escapeHtml(config.creditos)}</small>`
-            : ""
+          config.creditos ? `<small>${escapeHtml(config.creditos)}</small>` : ""
         }
 
       </div>
@@ -481,8 +473,9 @@ function renderSecaoVideo(lamina) {
 
   /* YouTube */
   const youtube =
-    url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([\w-]{6,})/) ||
-    null;
+    url.match(
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([\w-]{6,})/,
+    ) || null;
 
   if (youtube) {
     return `
@@ -546,7 +539,6 @@ function renderSecaoVideo(lamina) {
     </section>
   `;
 }
-
 
 function renderLamina(lamina, config) {
   const estruturas = Array.isArray(lamina.estruturas) ? lamina.estruturas : [];
@@ -972,7 +964,12 @@ async function buscarImagensLamina(lamina) {
   return lista;
 }
 
-function iniciarViewer(lamina, imagens) {
+async function iniciarViewer(lamina, imagens) {
+  if (!OpenSeadragon) {
+    const modulo = await import("openseadragon");
+    OpenSeadragon = modulo.default || modulo;
+  }
+
   const elemento = document.querySelector("#openseadragon");
 
   if (!elemento) {
@@ -1882,10 +1879,12 @@ async function render() {
   const route = getRoute();
 
   if (route === "login") {
+    const { renderLogin, setupLogin } = await import("./pages/login.js");
+
+    if (token !== renderToken) return;
+
     app.innerHTML = renderLogin();
-
     setupLogin();
-
     return;
   }
 
@@ -1906,12 +1905,15 @@ async function render() {
 
     if (token !== renderToken) return;
 
+    const { renderAdmin, setupAdmin } = await import("./pages/admin.js");
+
+    if (token !== renderToken) return;
+
     app.innerHTML = await renderAdmin();
 
     if (token !== renderToken) return;
 
     setupAdmin();
-
     return;
   }
 
@@ -1932,31 +1934,54 @@ async function render() {
 
     if (token !== renderToken) return;
 
-    app.innerHTML = renderNovaLamina(config);
+    if (route === "nova-lamina") {
+      const session = await getCurrentSession();
 
-    setupNovaLamina();
+      if (token !== renderToken) return;
 
-    return;
+      if (!session?.user) {
+        window.location.hash = "#login";
+        return;
+      }
+
+      if (!(await isAdmin(session.user))) {
+        window.location.hash = "#inicio";
+        return;
+      }
+
+      const { renderNovaLamina, setupNovaLamina } =
+        await import("./pages/nova-lamina.js");
+
+      if (token !== renderToken) return;
+
+      app.innerHTML = renderNovaLamina(config);
+      setupNovaLamina();
+      return;
+    }
   }
 
   if (route === "catalogo") {
     if (token !== renderToken) return;
 
+    const { renderCatalogo } = await import("./pages/catalogo.js");
+
+    if (token !== renderToken) return;
+
     await renderCatalogo(config);
+    return;
+  }
+}
+
+if (route === "lamina") {
+  const id = window.location.hash.replace("#lamina/", "");
+
+  if (!id) {
+    window.location.hash = "#laminas";
 
     return;
   }
 
-  if (route === "lamina") {
-    const id = window.location.hash.replace("#lamina/", "");
-
-    if (!id) {
-      window.location.hash = "#laminas";
-
-      return;
-    }
-
-    app.innerHTML = `
+  app.innerHTML = `
       ${renderHeader(config)}
 
       <main style="
@@ -1973,12 +1998,12 @@ async function render() {
       </main>
     `;
 
-    const lamina = await buscarLamina(id);
+  const lamina = await buscarLamina(id);
 
-    if (token !== renderToken) return;
+  if (token !== renderToken) return;
 
-    if (!lamina) {
-      app.innerHTML = `
+  if (!lamina) {
+    app.innerHTML = `
         ${renderHeader(config)}
 
         <main style="
@@ -2011,19 +2036,17 @@ async function render() {
         </main>
       `;
 
-      return;
-    }
-
-    app.innerHTML = renderLamina(lamina, config);
-
-    const imagens = await buscarImagensLamina(lamina);
-
-    if (token !== renderToken) return;
-
-    iniciarViewer(lamina, imagens);
-
     return;
   }
+
+  app.innerHTML = renderLamina(lamina, config);
+
+  const imagens = await buscarImagensLamina(lamina);
+
+  if (token !== renderToken) return;
+
+  await iniciarViewer(lamina, imagens);
+  return;
 
   /*
    * Home — busca a lâmina publicada mais recente para dar ao
@@ -2067,10 +2090,7 @@ function configurarRevelacao() {
     "(prefers-reduced-motion: reduce)",
   ).matches;
 
-  if (
-    prefereMenosMovimento ||
-    typeof IntersectionObserver === "undefined"
-  ) {
+  if (prefereMenosMovimento || typeof IntersectionObserver === "undefined") {
     elementos.forEach((el) => el.classList.add("revelado"));
 
     return;
@@ -2128,4 +2148,3 @@ supabase.auth.onAuthStateChange((event) => {
 });
 
 render();
-
