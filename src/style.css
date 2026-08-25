@@ -2,11 +2,11 @@
    ATLAS DE HISTOLOGIA — TOKENS DE DESIGN CENTRALIZADOS
    ------------------------------------------------------------
    Todo o site consome estas variáveis. O painel Aparência
-   sobrescreve --cor-principal / secundária / acento / fundo /
-   texto em tempo real (ver main.js), e os demais tokens são
-   DERIVADOS com color-mix(), então acompanham automaticamente.
+   sobrescreve todos os tokens individualmente (ver main.js),
+   sem derivation automática: cada cor controla apenas o
+   elemento ao qual está atribuída.
    Variáveis antigas (--green, --cream, ...) viraram ALIASES
-   para os novos tokens — nada do site fica preso ao verde antigo.
+   para as cores base — nada do site fica preso ao verde antigo.
    ============================================================ */
 
 :root {
@@ -28,10 +28,10 @@
   --cor-texto-claro: #ffffff;
 
   /* ---------- Linhas e estados ---------- */
-  --cor-borda: #e4dcD8;
-  --cor-borda-forte: #d0c5c0;
-  --cor-hover: color-mix(in srgb, var(--cor-principal) 7%, var(--cor-fundo));
-  --cor-foco: color-mix(in srgb, var(--cor-principal) 32%, transparent);
+  --cor-borda: #e4dcd8;
+  --cor-borda-forte: #4c4546;
+  --cor-hover: #eee5e4;
+  --cor-foco: rgba(138, 43, 61, 0.32);
 
   /* ---------- Semânticas ---------- */
   --cor-sucesso: #2e7d52;
@@ -71,8 +71,8 @@
      Mantêm funcionando regras antigas sem reescrevê-las uma a uma.
      ============================================================ */
   --green: var(--cor-principal);
-  --green-light: color-mix(in srgb, var(--cor-acento) 76%, #ffffff);
-  --mint: color-mix(in srgb, var(--cor-principal) 9%, var(--cor-fundo));
+  --green-light: #d66e79;
+  --mint: #ece1e1;
   --cream: var(--cor-fundo);
   --white: var(--cor-superficie);
   --text: var(--cor-texto);
@@ -2201,7 +2201,6 @@ a {
 }
 
 /* Barra superior */
-
 #aparencia-preview .preview-header {
   min-height: 58px;
 
@@ -2211,14 +2210,15 @@ a {
 
   padding: 0 22px;
 
-  background: color-mix(
-    in srgb,
-    var(--preview-fundo, #ffffff) 94%,
-    var(--preview-principal, var(--green))
-  );
+  background:
+    color-mix(
+      in srgb,
+      var(--preview-principal, var(--green)) 8%,
+      var(--preview-fundo, #ffffff)
+    );
 
   border-bottom: 1px solid
-    color-mix(in srgb, var(--preview-principal, var(--green)) 12%, transparent);
+    color-mix(in srgb, var(--preview-principal, var(--green)) 30%, transparent);
 }
 
 /* Logo */
@@ -2377,14 +2377,32 @@ a {
 #aparencia-preview .preview-footer {
   padding: 14px 22px;
 
-  border-top: 1px solid
-    color-mix(in srgb, var(--preview-texto, var(--cor-texto)) 8%, transparent);
+  border-top: 1px solid var(--rodape-borda);
 
-  color: color-mix(in srgb, var(--preview-texto, var(--cor-texto)) 55%, transparent);
+  background: var(--rodape-fundo);
+
+  color: var(--rodape-texto);
 
   font-size: 10px;
 
   text-align: center;
+}
+
+#aparencia-preview .preview-footer a {
+  color: var(--rodape-link);
+  transition: color 0.2s ease;
+}
+
+#aparencia-preview .preview-footer a:hover {
+  color: var(--rodape-link-hover);
+}
+
+#aparencia-preview .preview-footer .preview-footer-marca {
+  color: var(--rodape-titulo);
+}
+
+#aparencia-preview .preview-footer small {
+  color: var(--rodape-creditos);
 }
 
 /* Indicador */
@@ -5757,24 +5775,24 @@ button:active {
 /* ============================================================
    APARÊNCIA EXPANDIDA — TOKENS CONFIGURÁVEIS (defaults)
    Todos podem ser sobrescritos pelo painel Aparência via JS
-   (lib/tema.js → aplicarTema no :root). Os defaults derivam
-   das cores base com color-mix(), garantindo fallback seguro
+   (lib/tema.js → aplicarTema no :root). Os defaults são
+   valores fixos independentes, garantindo fallback seguro
    mesmo sem nenhuma configuração salva.
    ============================================================ */
 
 :root {
-  /* ---------- Cores gerais (derivadas) ---------- */
-  --cor-texto-terciario: color-mix(in srgb, var(--cor-texto-suave) 45%, var(--cor-fundo));
-  --cor-borda-forte: color-mix(in srgb, var(--cor-borda) 78%, var(--cor-texto));
-  --cor-hover: color-mix(in srgb, var(--cor-principal) 7%, var(--cor-fundo));
-  --cor-foco: color-mix(in srgb, var(--cor-principal) 32%, transparent);
+  /* ---------- Cores gerais (valores fixos — sem color-mix) ---------- */
+  --cor-texto-terciario: #a99ca1;
+  --cor-borda-forte: #4c4546;
+  --cor-hover: #eee5e4;
+  --cor-foco: rgba(138, 43, 61, 0.32);
   --cor-link: var(--cor-principal);
   --cor-link-hover: var(--cor-acento);
   --cor-info: #2f6fa3;
-  --cor-info-bg: color-mix(in srgb, var(--cor-info) 12%, var(--cor-superficie));
+  --cor-info-bg: #eef5fb;
 
   /* ---------- Header / menu ---------- */
-  --header-fundo: color-mix(in srgb, var(--cor-fundo) 86%, #ffffff);
+  --header-fundo: #fefdfd;
   --header-borda: var(--cor-borda);
   --header-icone: var(--cor-principal);
   --menu-texto: var(--cor-texto-suave);
@@ -5788,32 +5806,32 @@ button:active {
   --hero-subtitulo: var(--cor-principal);
   --hero-texto: var(--cor-texto-suave);
   --hero-botao-fundo: var(--cor-principal);
-  --hero-botao-hover: color-mix(in srgb, var(--cor-principal) 86%, #000000);
+  --hero-botao-hover: #772534;
   --hero-decorativo: var(--cor-acento);
   --hero-microscopio: var(--cor-principal);
 
   /* ---------- Cards Explore / Amplie / Aprenda ---------- */
-  --card-fundo: color-mix(in srgb, var(--cor-fundo) 76%, #ffffff);
+  --card-fundo: #f8f6f4;
   --card-titulo: var(--cor-texto);
   --card-texto: var(--cor-texto-suave);
   --card-icone: var(--cor-principal);
   --card-borda: var(--cor-borda);
-  --card-hover: color-mix(in srgb, var(--cor-principal) 28%, var(--cor-borda));
+  --card-hover: #cbaaad;
 
   /* ---------- Catálogo ---------- */
   --catalogo-fundo: var(--cor-fundo);
-  --catalogo-card-fundo: color-mix(in srgb, var(--cor-fundo) 88%, #ffffff);
+  --catalogo-card-fundo: #f7f4f3;
   --catalogo-titulo: var(--cor-texto);
   --catalogo-texto: var(--cor-texto);
   --catalogo-texto-suave: var(--cor-texto-suave);
   --catalogo-borda: var(--cor-borda);
-  --catalogo-categoria: color-mix(in srgb, var(--cor-acento) 24%, #ffffff);
+  --catalogo-categoria: #f2d1d5;
   --catalogo-botao: var(--cor-principal);
 
   /* ---------- Página da lâmina ---------- */
   --lamina-fundo: var(--cor-fundo);
-  --lamina-painel-fundo: color-mix(in srgb, var(--cor-fundo) 92%, #ffffff);
-  --lamina-moldura: color-mix(in srgb, var(--cor-acento) 24%, #ffffff);
+  --lamina-painel-fundo: #f7f4f2;
+  --lamina-moldura: #f2d1d5;
   --lamina-indicador: var(--cor-acento);
 
   /* ---------- Vídeo ---------- */
@@ -5822,11 +5840,11 @@ button:active {
   --video-borda: var(--cor-borda);
 
   /* ---------- Rodapé (independente do texto do site) ---------- */
-  --rodape-fundo: var(--cor-superficie-escura);
+  --rodape-fundo: #191d21;
   --rodape-titulo: #f3f0ef;
   --rodape-texto: rgba(255, 255, 255, 0.72);
   --rodape-link: #ffffff;
-  --rodape-link-hover: color-mix(in srgb, var(--cor-acento) 55%, #ffffff);
+  --rodape-link-hover: #e7a9b0;
   --rodape-icone: var(--cor-acento);
   --rodape-borda: rgba(255, 255, 255, 0.14);
   --rodape-creditos: rgba(255, 255, 255, 0.5);
@@ -5834,7 +5852,7 @@ button:active {
   /* ---------- Formulários e inputs ---------- */
   --input-fundo: var(--cor-superficie);
   --input-texto: var(--cor-texto);
-  --input-placeholder: color-mix(in srgb, var(--cor-texto-suave) 30%, var(--cor-fundo));
+  --input-placeholder: #8d8489;
   --input-borda: var(--cor-borda);
   --input-foco: var(--cor-principal);
   --input-label: var(--cor-texto);
@@ -5843,18 +5861,23 @@ button:active {
   /* ---------- Botões ---------- */
   --botao-primario-fundo: var(--cor-principal);
   --botao-primario-texto: var(--cor-texto-claro);
-  --botao-primario-hover: color-mix(in srgb, var(--cor-principal) 86%, #000000);
+  --botao-primario-hover: #772534;
   --botao-perigo-fundo: #b63b3b;
 
   /* ---------- Tipografia ---------- */
   --peso-titulos: 800;
+
+  /* ---------- Aliases de prévia (seguem cores base) ---------- */
+  --preview-principal: var(--cor-principal);
+  --preview-texto: var(--cor-texto);
+  --preview-fundo: var(--cor-fundo);
 }
 
 /* ============================================================
    APARÊNCIA EXPANDIDA — CONSUMO DOS TOKENS POR COMPONENTE
    Regras no fim do arquivo para vencerem as anteriores sem
    reescrevê-las; quando o token não está configurado, o
-   default derivado do :root acima entra em ação.
+   default fixo do :root acima entra em ação.
    ============================================================ */
 
 /* ---------- Header / menu ---------- */
@@ -6177,7 +6200,7 @@ button:active {
   background:
     radial-gradient(
       ellipse at top left,
-      color-mix(in srgb, var(--rodape-icone) 14%, transparent),
+      color-mix(in srgb, var(--rodape-fundo) 14%, transparent),
       transparent 55%
     ),
     var(--rodape-fundo);
