@@ -1366,6 +1366,43 @@ async function salvarConfiguracoesInstitucionais(event) {
   }
 }
 
+/*
+ * Remonta a seção Aparência com dados FRESCOS do banco (SELECT novo) e
+ * religa os listeners dela. Usada ao clicar no item "Aparência" do menu,
+ * porque a navegação entre seções só alterna classes — sem isto o painel
+ * exibiria os valores congelados da montagem original.
+ */
+async function remontarSecaoAparencia() {
+  if (obterSecaoAdmin() !== "aparencia") return;
+
+  const secaoAtual = document.querySelector("#admin-section-aparencia");
+
+  if (!secaoAtual) return;
+
+  try {
+    const html = await renderAparencia();
+
+    /* O usuário pode ter trocado de seção durante a busca — aborta. */
+    if (obterSecaoAdmin() !== "aparencia") return;
+
+    const modelo = document.createElement("template");
+
+    modelo.innerHTML = html.trim();
+
+    const novaSecao = modelo.content.firstElementChild;
+
+    if (!novaSecao) return;
+
+    novaSecao.classList.add("active");
+
+    secaoAtual.replaceWith(novaSecao);
+
+    setupAparencia();
+  } catch (erro) {
+    console.error("Erro ao atualizar a seção Aparência:", erro);
+  }
+}
+
 export function setupAdmin() {
   /*
    * Restauração do NÍVEL 1 (menu lateral) na remontagem da Administração.
@@ -1477,6 +1514,16 @@ export function setupAdmin() {
       document
         .querySelector(`#admin-section-${section}`)
         ?.classList.add("active");
+
+      /*
+       * Aparência: a troca de seções apenas alterna classes (sem
+       * re-render). Sem remontagem, voltar para Aparência mostraria os
+       * valores do DOM da montagem original — não os recém-salvos no
+       * banco. Remonta com SELECT fresco e religa os listeners.
+       */
+      if (section === "aparencia") {
+        remontarSecaoAparencia();
+      }
     });
   });
 

@@ -43,6 +43,17 @@ function aplicarConfiguracoesVisuais(config = {}) {
   }
 
   aplicarTema(document.documentElement, temaEfetivo(combinado));
+
+  /*
+   * Verificação objetiva (requisito #7): o valor computado precisa ser
+   * exatamente o valor salvo no banco para o token testado.
+   */
+  console.debug(
+    "[APARÊNCIA DEBUG] --cor-texto-suave computada:",
+    getComputedStyle(document.documentElement)
+      .getPropertyValue("--cor-texto-suave")
+      .trim(),
+  );
 }
 
 
@@ -2084,6 +2095,18 @@ function configurarRevelacao() {
 }
 
 window.addEventListener("hashchange", render);
+
+/*
+ * Reaplicação imediata do tema após o painel Aparência salvar.
+ * O evento é disparado pelo submit verificado de aparencia.js; aqui o
+ * banco é RELIDO (sem cache em memória/storage) e os tokens são
+ * reaplicados ao documento, sem exigir navegação nem recarregamento.
+ */
+window.addEventListener("atlas:config-atualizada", async () => {
+  const config = await carregarConfiguracoesSite();
+
+  aplicarConfiguracoesVisuais(config);
+});
 
 /*
  * Mantém a interface sincronizada com o estado de autenticação.

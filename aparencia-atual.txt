@@ -1,4 +1,4 @@
-import { supabase } from "../lib/supabase.js";
+﻿import { supabase } from "../lib/supabase.js";
 import { icone } from "../lib/icons.js";
 import {
   aplicarTema,
@@ -12,7 +12,7 @@ let logoUrlAtual = "";
 
 let temaSalvoAparencia = {};
 
-/* Paleta padrão do site — espelha :root em style.css */
+/* Paleta padrÃ£o do site â€” espelha :root em style.css */
 const PADRAO = {
   cor_principal: "#8a2b3d",
   cor_secundaria: "#2e3a45",
@@ -22,30 +22,30 @@ const PADRAO = {
 };
 
 /*
- * ABAS DO PAINEL — cada agrupa uma categoria visual real.
- * O estado da aba atual é preservado em sessionStorage para que
- * trocar de guia (ou recarregar a página) NÃO devolva o usuário
- * para outra seção nem reinicie o painel.
+ * ABAS DO PAINEL â€” cada agrupa uma categoria visual real.
+ * O estado da aba atual Ã© preservado em sessionStorage para que
+ * trocar de guia (ou recarregar a pÃ¡gina) NÃƒO devolva o usuÃ¡rio
+ * para outra seÃ§Ã£o nem reinicie o painel.
  */
 const ABAS_APARENCIA = [
   ["identidade", "Identidade"],
   ["cores", "Cores gerais"],
   ["header", "Header & Menu"],
   ["home", "Home"],
-  ["catalogo", "Catálogo"],
-  ["lamina", "Lâmina & Viewer"],
-  ["rodape", "Rodapé"],
-  ["admin", "Administração"],
-  ["formularios", "Formulários"],
+  ["catalogo", "CatÃ¡logo"],
+  ["lamina", "LÃ¢mina & Viewer"],
+  ["rodape", "RodapÃ©"],
+  ["admin", "AdministraÃ§Ã£o"],
+  ["formularios", "FormulÃ¡rios"],
   ["estilos", "Estados & Tipo"],
 ];
 
 const CHAVE_ABA_APARENCIA = "atlas.aparencia-aba";
 
 /*
- * Campos que o usuário alterou de facto nesta sessão. Permite salvar
- * apenas configurações realmente editadas — as demais continuam
- * DERIVANDO das cores base (fallback coerente e dinâmico).
+ * Campos que o usuÃ¡rio alterou de facto nesta sessÃ£o. Permite salvar
+ * apenas configuraÃ§Ãµes realmente editadas â€” as demais continuam
+ * DERIVANDO das cores base (fallback coerente e dinÃ¢mico).
  */
 const CAMPOS_MODIFICADOS = new Set();
 
@@ -57,17 +57,17 @@ function marcarModificado(chave) {
   const input = document.querySelector(`[data-chave="${chave}"]`);
 
   console.debug(
-    "[APARÊNCIA DEBUG] campo alterado:",
+    "[APARÃŠNCIA DEBUG] campo alterado:",
     JSON.stringify({ chave, valor: input ? input.value : "(sem input)" }),
   );
 }
 
-/* Lê o objeto `tema` salvo com segurança (fallback: objeto vazio) */
+/* LÃª o objeto `tema` salvo com seguranÃ§a (fallback: objeto vazio) */
 function obterTema(config = {}) {
   return config.tema && typeof config.tema === "object" ? config.tema : {};
 }
 
-/* Valor exibido num campo: configuração salva → senão padrão */
+/* Valor exibido num campo: configuraÃ§Ã£o salva â†’ senÃ£o padrÃ£o */
 function valorTema(config, chave, padrao) {
   const tema = obterTema(config);
 
@@ -91,7 +91,7 @@ function abrirAba(id) {
   }>`;
 }
 
-/* Botão de aba com estado (aria-selected + classe ativa) */
+/* BotÃ£o de aba com estado (aria-selected + classe ativa) */
 function estadoAba(id) {
   const ativa = abaAtivaSalva();
 
@@ -100,12 +100,13 @@ function estadoAba(id) {
     : ' class="aparencia-tab" aria-selected="false"';
 }
 
-/* Seção ativa no painel lateral (NÍVEL 1) — mesma chave usada em admin.js.
-   Mantém a section de Aparência visível quando a Administração é remontada
-   com a seção "aparencia" restaurada do sessionStorage. */
+/* SeÃ§Ã£o ativa no painel lateral (NÃVEL 1) â€” mesma chave usada em admin.js.
+   MantÃ©m a section de AparÃªncia visÃ­vel quando a AdministraÃ§Ã£o Ã© remontada
+   com a seÃ§Ã£o "aparencia" restaurada do sessionStorage. */
 function secaoAparenciaAtiva() {
   return sessionStorage.getItem("atlas.admin-secao") === "aparencia";
 }
+
 
 export async function renderAparencia() {
   const { data, error } = await supabase
@@ -117,16 +118,15 @@ export async function renderAparencia() {
   if (error) {
     console.error(error);
 
-    return `<div class="admin-error">Erro ao carregar as configurações.</div>`;
+    return `<div class="admin-error">Erro ao carregar as configuraÃ§Ãµes.</div>`;
   }
 
   const config = data || {};
 
-  temaSalvoAparencia =
-    config.tema && typeof config.tema === "object" ? config.tema : {};
+  temaSalvoAparencia = config.tema && typeof config.tema === "object" ? config.tema : {};
 
   console.debug(
-    "[APARÊNCIA DEBUG] tema lido do banco em renderAparencia:",
+    "[APARÃŠNCIA DEBUG] tema lido do banco em renderAparencia:",
     JSON.stringify(temaSalvoAparencia),
   );
 
@@ -138,20 +138,20 @@ export async function renderAparencia() {
       <div class="admin-title-row">
 
         <div>
-          <span class="eyebrow">PERSONALIZAÇÃO</span>
+          <span class="eyebrow">PERSONALIZAÃ‡ÃƒO</span>
 
-          <h1>Aparência</h1>
+          <h1>AparÃªncia</h1>
 
           <p>
             Personalize as cores, textos e a identidade visual do Atlas.
-            A prévia reflete as alterações imediatamente.
+            A prÃ©via reflete as alteraÃ§Ãµes imediatamente.
           </p>
         </div>
 
       </div>
 
 
-      <div class="aparencia-tabs" role="tablist" aria-label="Seções de Aparência">
+      <div class="aparencia-tabs" role="tablist" aria-label="SeÃ§Ãµes de AparÃªncia">
         ${ABAS_APARENCIA.map(
           ([id, rotulo]) => `
             <button
@@ -287,13 +287,13 @@ export async function renderAparencia() {
 
               <div class="form-field">
 
-                <label for="config-subtitulo">Subtítulo</label>
+                <label for="config-subtitulo">SubtÃ­tulo</label>
 
                 <input
                   id="config-subtitulo"
                   type="text"
                   value="${escapeHtml(config.subtitulo || "")}"
-                  placeholder="Histológico"
+                  placeholder="HistolÃ³gico"
                 >
 
               </div>
@@ -303,9 +303,9 @@ export async function renderAparencia() {
 
             <div class="aparencia-cores">
 
-              ${campoTema("cor_principal", "Cor principal", config, config.cor_principal || PADRAO.cor_principal, "Botões, links e elementos da marca.")}
+              ${campoTema("cor_principal", "Cor principal", config, config.cor_principal || PADRAO.cor_principal, "BotÃµes, links e elementos da marca.")}
 
-              ${campoTema("cor_secundaria", "Cor secundária", config, config.cor_secundaria || PADRAO.cor_secundaria, "Seções e elementos de apoio.")}
+              ${campoTema("cor_secundaria", "Cor secundÃ¡ria", config, config.cor_secundaria || PADRAO.cor_secundaria, "SeÃ§Ãµes e elementos de apoio.")}
 
               ${campoTema("cor_acento", "Cor de destaque", config, config.cor_acento || PADRAO.cor_acento, "Detalhes e identidade visual.")}
 
@@ -330,7 +330,7 @@ export async function renderAparencia() {
                 <h2>Cores gerais</h2>
 
                 <p>
-                  Cores base do site. Superfícies, bordas e estados
+                  Cores base do site. SuperfÃ­cies, bordas e estados
                   podem ser configuradas individualmente; o resto deriva
                   automaticamente com fallback seguro.
                 </p>
@@ -341,23 +341,23 @@ export async function renderAparencia() {
 
             <div class="aparencia-cores">
 
-              ${campoTema("cor_fundo", "Fundo principal", config, config.cor_fundo || PADRAO.cor_fundo, "Cor base das páginas.")}
+              ${campoTema("cor_fundo", "Fundo principal", config, config.cor_fundo || PADRAO.cor_fundo, "Cor base das pÃ¡ginas.")}
 
-              ${campoTema("cor_texto", "Texto principal", config, config.cor_texto || PADRAO.cor_texto, "Títulos, parágrafos e menus.")}
+              ${campoTema("cor_texto", "Texto principal", config, config.cor_texto || PADRAO.cor_texto, "TÃ­tulos, parÃ¡grafos e menus.")}
 
-              ${campoTema("superficie", "Superfície / cartões", config, "#ffffff", "Fundo de cartões e painéis.")}
+              ${campoTema("superficie", "SuperfÃ­cie / cartÃµes", config, "#ffffff", "Fundo de cartÃµes e painÃ©is.")}
 
-              ${campoTema("texto_secundario", "Texto secundário", config, "#6f6267", "Subtítulos, metadados e descrições.")}
+              ${campoTema("texto_secundario", "Texto secundÃ¡rio", config, "#6f6267", "SubtÃ­tulos, metadados e descriÃ§Ãµes.")}
 
-              ${campoTema("texto_terciario", "Texto terciário", config, "#a99ca1", "Notas e detalhes menores.")}
+              ${campoTema("texto_terciario", "Texto terciÃ¡rio", config, "#a99ca1", "Notas e detalhes menores.")}
 
-              ${campoTema("borda", "Bordas", config, "#e4dcd8", "Contornos de cartões e separadores.")}
+              ${campoTema("borda", "Bordas", config, "#e4dcd8", "Contornos de cartÃµes e separadores.")}
 
-              ${campoTema("borda_forte", "Borda forte", config, "#d0c5c0", "Bordas mais visíveis.")}
+              ${campoTema("borda_forte", "Borda forte", config, "#d0c5c0", "Bordas mais visÃ­veis.")}
 
               ${campoTema("hover", "Hover", config, "#f0adbb", "Preenchimento de elementos ao passar o mouse.")}
 
-              ${campoTema("foco", "Foco / seleção", config, "#b74854", "Anel de foco e seleção ativa.")}
+              ${campoTema("foco", "Foco / seleÃ§Ã£o", config, "#b74854", "Anel de foco e seleÃ§Ã£o ativa.")}
 
               ${campoTema("link", "Links", config, "#8a2b3d", "Cor dos links de texto.")}
 
@@ -393,11 +393,11 @@ export async function renderAparencia() {
 
               ${campoTema("header_fundo", "Fundo do header", config, "#f6f3f1", "Barra superior do site.")}
 
-              ${campoTema("header_titulo", "Título do header", config, "#211b1d", "")}
+              ${campoTema("header_titulo", "TÃ­tulo do header", config, "#211b1d", "")}
 
               ${campoTema("header_borda", "Borda do header", config, "#e4dcd8", "")}
 
-              ${campoTema("header_icone", "Ícone do header", config, "#8a2b3d", "Logotipo / ícone da marca.")}
+              ${campoTema("header_icone", "Ãcone do header", config, "#8a2b3d", "Logotipo / Ã­cone da marca.")}
 
               ${campoTema("menu_texto", "Texto do menu", config, "#211b1d", "")}
 
@@ -414,7 +414,7 @@ export async function renderAparencia() {
           </div>
 
 
-          <!-- ==================== ABA PÁGINA INICIAL ==================== -->
+          <!-- ==================== ABA PÃGINA INICIAL ==================== -->
 
           ${abrirAba("home")}
 
@@ -425,9 +425,9 @@ export async function renderAparencia() {
               <span>${icone.documento}</span>
 
               <div>
-                <h2>Página inicial</h2>
+                <h2>PÃ¡gina inicial</h2>
 
-                <p>Textos e cores do hero, dos cards Explore / Amplie / Aprenda e do rodapé textual.</p>
+                <p>Textos e cores do hero, dos cards Explore / Amplie / Aprenda e do rodapÃ© textual.</p>
               </div>
 
             </div>
@@ -437,7 +437,7 @@ export async function renderAparencia() {
 
               <div class="form-field full">
 
-                <label for="config-titulo">Título inicial</label>
+                <label for="config-titulo">TÃ­tulo inicial</label>
 
                 <input
                   id="config-titulo"
@@ -450,7 +450,7 @@ export async function renderAparencia() {
 
               <div class="form-field full">
 
-                <label for="config-descricao">Descrição inicial</label>
+                <label for="config-descricao">DescriÃ§Ã£o inicial</label>
 
                 <textarea
                   id="config-descricao"
@@ -462,33 +462,33 @@ export async function renderAparencia() {
 
               <div class="form-field">
 
-                <label for="config-botao">Botão principal</label>
+                <label for="config-botao">BotÃ£o principal</label>
 
                 <input
                   id="config-botao"
                   type="text"
                   value="${escapeHtml(config.texto_botao_principal || "")}"
-                  placeholder="Explorar lâminas"
+                  placeholder="Explorar lÃ¢minas"
                 >
 
               </div>
 
               <div class="form-field">
 
-                <label for="config-botao-secundario">Botão secundário</label>
+                <label for="config-botao-secundario">BotÃ£o secundÃ¡rio</label>
 
                 <input
                   id="config-botao-secundario"
                   type="text"
                   value="${escapeHtml(config.texto_botao_secundario || "")}"
-                  placeholder="Conheça o projeto"
+                  placeholder="ConheÃ§a o projeto"
                 >
 
               </div>
 
               <div class="form-field full">
 
-                <label for="config-sobre">Texto da seção Sobre</label>
+                <label for="config-sobre">Texto da seÃ§Ã£o Sobre</label>
 
                 <textarea
                   id="config-sobre"
@@ -500,13 +500,13 @@ export async function renderAparencia() {
 
               <div class="form-field full">
 
-                <label for="config-rodape">Texto do rodapé</label>
+                <label for="config-rodape">Texto do rodapÃ©</label>
 
                 <input
                   id="config-rodape"
                   type="text"
                   value="${escapeHtml(config.texto_rodape || "")}"
-                  placeholder="Projeto acadêmico"
+                  placeholder="Projeto acadÃªmico"
                 >
 
               </div>
@@ -515,18 +515,18 @@ export async function renderAparencia() {
 
 
             <div class="aparencia-cores">
-              ${campoTema("hero_fundo", "Fundo do hero", config, "#f6f3f1", "Fundo da seção inicial.")}
-              ${campoTema("hero_titulo", "Título do hero", config, "#211b1d", "")}
-              ${campoTema("hero_subtitulo", "Subtítulo do hero", config, "#8a2b3d", "Eyebrow do hero.")}
+              ${campoTema("hero_fundo", "Fundo do hero", config, "#f6f3f1", "Fundo da seÃ§Ã£o inicial.")}
+              ${campoTema("hero_titulo", "TÃ­tulo do hero", config, "#211b1d", "")}
+              ${campoTema("hero_subtitulo", "SubtÃ­tulo do hero", config, "#8a2b3d", "Eyebrow do hero.")}
               ${campoTema("hero_texto", "Texto do hero", config, "#6f6267", "")}
-              ${campoTema("hero_botao_fundo", "Fundo do botão principal", config, "#8a2b3d", "")}
-              ${campoTema("hero_botao_hover", "Hover do botão", config, "#771f30", "")}
+              ${campoTema("hero_botao_fundo", "Fundo do botÃ£o principal", config, "#8a2b3d", "")}
+              ${campoTema("hero_botao_hover", "Hover do botÃ£o", config, "#771f30", "")}
               ${campoTema("hero_decorativo", "Elementos decorativos", config, "#c9404f", "")}
-              ${campoTema("hero_microscopio", "Destaque do microscópio", config, "#8a2b3d", "")}
+              ${campoTema("hero_microscopio", "Destaque do microscÃ³pio", config, "#8a2b3d", "")}
               ${campoTema("card_fundo", "Fundo dos cards", config, "#f6f3f1", "Cards Explore / Amplie / Aprenda.")}
-              ${campoTema("card_titulo", "Título dos cards", config, "#211b1d", "")}
+              ${campoTema("card_titulo", "TÃ­tulo dos cards", config, "#211b1d", "")}
               ${campoTema("card_texto", "Texto dos cards", config, "#6f6267", "")}
-              ${campoTema("card_icone", "Ícone dos cards", config, "#8a2b3d", "")}
+              ${campoTema("card_icone", "Ãcone dos cards", config, "#8a2b3d", "")}
               ${campoTema("card_borda", "Borda dos cards", config, "#e4dcd8", "")}
               ${campoTema("card_hover", "Hover dos cards", config, "#8a2b3d", "")}
             </div>
@@ -536,7 +536,7 @@ export async function renderAparencia() {
           </div>
 
 
-          <!-- ==================== ABA CATÁLOGO ==================== -->
+          <!-- ==================== ABA CATÃLOGO ==================== -->
 
           ${abrirAba("catalogo")}
 
@@ -545,20 +545,20 @@ export async function renderAparencia() {
             <div class="form-card-title">
               <span>${icone.camadas}</span>
               <div>
-                <h2>Catálogo</h2>
-                <p>Cores do catálogo, dos cards de lâmina e indicadores.</p>
+                <h2>CatÃ¡logo</h2>
+                <p>Cores do catÃ¡logo, dos cards de lÃ¢mina e indicadores.</p>
               </div>
             </div>
 
             <div class="aparencia-cores">
-              ${campoTema("catalogo_fundo", "Fundo do catálogo", config, "#f6f3f1", "")}
+              ${campoTema("catalogo_fundo", "Fundo do catÃ¡logo", config, "#f6f3f1", "")}
               ${campoTema("catalogo_card_fundo", "Fundo dos cards", config, "#f6f3f1", "")}
-              ${campoTema("catalogo_titulo", "Título", config, "#211b1d", "")}
+              ${campoTema("catalogo_titulo", "TÃ­tulo", config, "#211b1d", "")}
               ${campoTema("catalogo_texto", "Texto", config, "#211b1d", "")}
-              ${campoTema("catalogo_texto_suave", "Texto secundário", config, "#6f6267", "")}
+              ${campoTema("catalogo_texto_suave", "Texto secundÃ¡rio", config, "#6f6267", "")}
               ${campoTema("catalogo_borda", "Borda", config, "#e4dcd8", "")}
-              ${campoTema("catalogo_categoria", "Categoria", config, "#c9404f", "Rótulo da categoria.")}
-              ${campoTema("catalogo_botao", "Botão", config, "#8a2b3d", "")}
+              ${campoTema("catalogo_categoria", "Categoria", config, "#c9404f", "RÃ³tulo da categoria.")}
+              ${campoTema("catalogo_botao", "BotÃ£o", config, "#8a2b3d", "")}
             </div>
 
           </div>
@@ -566,7 +566,7 @@ export async function renderAparencia() {
           </div>
 
 
-<!-- ==================== ABA ADMINISTRAÇÃO ==================== -->
+<!-- ==================== ABA ADMINISTRAÃ‡ÃƒO ==================== -->
 
           ${abrirAba("admin")}
 
@@ -575,18 +575,18 @@ export async function renderAparencia() {
             <div class="form-card-title">
               <span>${icone.engrenagem}</span>
               <div>
-                <h2>Administração</h2>
+                <h2>AdministraÃ§Ã£o</h2>
                 <p>Cores do painel administrativo. Sem verdes de identidade.</p>
               </div>
             </div>
 
             <div class="aparencia-cores">
               ${campoTema("admin_fundo", "Fundo", config, "#f6f3f1", "")}
-              ${campoTema("admin_superficie", "Superfície", config, "#ffffff", "Cards e painéis.")}
+              ${campoTema("admin_superficie", "SuperfÃ­cie", config, "#ffffff", "Cards e painÃ©is.")}
               ${campoTema("admin_texto", "Texto", config, "#211b1d", "")}
-              ${campoTema("admin_texto_suave", "Texto secundário", config, "#6f6267", "")}
+              ${campoTema("admin_texto_suave", "Texto secundÃ¡rio", config, "#6f6267", "")}
               ${campoTema("admin_borda", "Borda", config, "#e4dcd8", "")}
-              ${campoTema("admin_destaque", "Destaque", config, "#c9404f", "Acentos e ações principais.")}
+              ${campoTema("admin_destaque", "Destaque", config, "#c9404f", "Acentos e aÃ§Ãµes principais.")}
               ${campoTema("admin_sidebar", "Sidebar", config, "#2a2e33", "Fundo da barra lateral.")}
               ${campoTema("admin_item_ativo", "Item ativo", config, "#c9404f", "Menu ativo da sidebar.")}
               ${campoTema("admin_hover", "Hover", config, "#ffffff", "")}
@@ -597,7 +597,7 @@ export async function renderAparencia() {
           </div>
 
 
-          <!-- ==================== ABA FORMULÁRIOS ==================== -->
+          <!-- ==================== ABA FORMULÃRIOS ==================== -->
 
           ${abrirAba("formularios")}
 
@@ -606,8 +606,8 @@ export async function renderAparencia() {
             <div class="form-card-title">
               <span>${icone.editar}</span>
               <div>
-                <h2>Formulários e botões</h2>
-                <p>Cores de inputs, labels e botões em todo o site.</p>
+                <h2>FormulÃ¡rios e botÃµes</h2>
+                <p>Cores de inputs, labels e botÃµes em todo o site.</p>
               </div>
             </div>
 
@@ -619,10 +619,10 @@ export async function renderAparencia() {
               ${campoTema("input_foco", "Foco do input", config, "#8a2b3d", "")}
               ${campoTema("input_label", "Label", config, "#211b1d", "")}
               ${campoTema("input_ajuda", "Texto de ajuda", config, "#6f6267", "")}
-              ${campoTema("botao_primario_fundo", "Botão primário", config, "#8a2b3d", "")}
-              ${campoTema("botao_primario_texto", "Texto do botão primário", config, "#ffffff", "")}
-              ${campoTema("botao_primario_hover", "Hover do botão primário", config, "#771f30", "")}
-              ${campoTema("botao_perigo", "Botão de perigo", config, "#b63b3b", "")}
+              ${campoTema("botao_primario_fundo", "BotÃ£o primÃ¡rio", config, "#8a2b3d", "")}
+              ${campoTema("botao_primario_texto", "Texto do botÃ£o primÃ¡rio", config, "#ffffff", "")}
+              ${campoTema("botao_primario_hover", "Hover do botÃ£o primÃ¡rio", config, "#771f30", "")}
+              ${campoTema("botao_perigo", "BotÃ£o de perigo", config, "#b63b3b", "")}
             </div>
 
           </div>
@@ -637,23 +637,23 @@ export async function renderAparencia() {
             <div class="form-card-title">
               <span>${icone.microscopio}</span>
               <div>
-                <h2>Lâmina & Visualizador</h2>
-                <p>Página da lâmina, controles do OpenSeadragon e vídeo.</p>
+                <h2>LÃ¢mina & Visualizador</h2>
+                <p>PÃ¡gina da lÃ¢mina, controles do OpenSeadragon e vÃ­deo.</p>
               </div>
             </div>
 
             <div class="aparencia-cores">
-              ${campoTema("lamina_fundo", "Fundo da página", config, "#f6f3f1", "")}
-              ${campoTema("lamina_painel_fundo", "Fundo dos painéis", config, "#f6f3f1", "")}
-              ${campoTema("lamina_moldura", "Moldura / destaque", config, "#c9404f", "Moldura avermelhada, com cor configurável.")}
+              ${campoTema("lamina_fundo", "Fundo da pÃ¡gina", config, "#f6f3f1", "")}
+              ${campoTema("lamina_painel_fundo", "Fundo dos painÃ©is", config, "#f6f3f1", "")}
+              ${campoTema("lamina_moldura", "Moldura / destaque", config, "#c9404f", "Moldura avermelhada, com cor configurÃ¡vel.")}
               ${campoTema("lamina_indicador", "Indicadores", config, "#c9404f", "")}
               ${campoTema("viewer_fundo", "Fundo dos controles", config, "#2a2e33", "")}
-              ${campoTema("viewer_icone", "Ícones dos controles", config, "#f3f0ef", "Ícones claros, legíveis sobre imagens claras e escuras.")}
+              ${campoTema("viewer_icone", "Ãcones dos controles", config, "#f3f0ef", "Ãcones claros, legÃ­veis sobre imagens claras e escuras.")}
               ${campoTema("viewer_hover", "Hover dos controles", config, "#c9404f", "")}
               ${campoTema("viewer_borda", "Borda dos controles", config, "#ffffff", "")}
-              ${campoTema("video_fundo", "Fundo da seção de vídeo", config, "#f6f3f1", "")}
-              ${campoTema("video_titulo", "Título da seção de vídeo", config, "#211b1d", "")}
-              ${campoTema("video_borda", "Borda do vídeo", config, "#e4dcd8", "")}
+              ${campoTema("video_fundo", "Fundo da seÃ§Ã£o de vÃ­deo", config, "#f6f3f1", "")}
+              ${campoTema("video_titulo", "TÃ­tulo da seÃ§Ã£o de vÃ­deo", config, "#211b1d", "")}
+              ${campoTema("video_borda", "Borda do vÃ­deo", config, "#e4dcd8", "")}
             </div>
 
           </div>
@@ -661,7 +661,7 @@ export async function renderAparencia() {
           </div>
 
 
-          <!-- ==================== ABA RODAPÉ ==================== -->
+          <!-- ==================== ABA RODAPÃ‰ ==================== -->
 
           ${abrirAba("rodape")}
 
@@ -670,20 +670,20 @@ export async function renderAparencia() {
             <div class="form-card-title">
               <span>${icone.documento}</span>
               <div>
-                <h2>Rodapé</h2>
-                <p>Cores individuais do rodapé, independentes do texto do site.</p>
+                <h2>RodapÃ©</h2>
+                <p>Cores individuais do rodapÃ©, independentes do texto do site.</p>
               </div>
             </div>
 
             <div class="aparencia-cores">
-              ${campoTema("rodape_fundo", "Fundo do rodapé", config, "#5c162b", "Ex.: #5C162B")}
-              ${campoTema("rodape_titulo", "Título do rodapé", config, "#f3f0ef", "")}
-              ${campoTema("rodape_texto", "Texto do rodapé", config, "#ffffff", "")}
-              ${campoTema("rodape_link", "Links do rodapé", config, "#ffffff", "")}
+              ${campoTema("rodape_fundo", "Fundo do rodapÃ©", config, "#5c162b", "Ex.: #5C162B")}
+              ${campoTema("rodape_titulo", "TÃ­tulo do rodapÃ©", config, "#f3f0ef", "")}
+              ${campoTema("rodape_texto", "Texto do rodapÃ©", config, "#ffffff", "")}
+              ${campoTema("rodape_link", "Links do rodapÃ©", config, "#ffffff", "")}
               ${campoTema("rodape_link_hover", "Links hover", config, "#e8a6b8", "")}
-              ${campoTema("rodape_icone", "Ícones", config, "#c9404f", "")}
+              ${campoTema("rodape_icone", "Ãcones", config, "#c9404f", "")}
               ${campoTema("rodape_borda", "Bordas / divisores", config, "#ffffff", "")}
-              ${campoTema("rodape_creditos", "Créditos", config, "#ffffff", "")}
+              ${campoTema("rodape_creditos", "CrÃ©ditos", config, "#ffffff", "")}
             </div>
 
           </div>
@@ -700,16 +700,16 @@ export async function renderAparencia() {
             <div class="form-card-title">
               <span>${icone.paleta}</span>
               <div>
-                <h2>Estados semânticos & Tipografia</h2>
-                <p>Sucesso, aviso, erro, informação e ajustes de texto.</p>
+                <h2>Estados semÃ¢nticos & Tipografia</h2>
+                <p>Sucesso, aviso, erro, informaÃ§Ã£o e ajustes de texto.</p>
               </div>
             </div>
 
             <div class="aparencia-cores">
-              ${campoTema("sucesso", "Sucesso", config, "#2e7d52", "Verde semântico — não é cor de identidade.")}
+              ${campoTema("sucesso", "Sucesso", config, "#2e7d52", "Verde semÃ¢ntico â€” nÃ£o Ã© cor de identidade.")}
               ${campoTema("alerta", "Aviso", config, "#a06a1c", "")}
               ${campoTema("erro", "Erro", config, "#b23f3e", "")}
-              ${campoTema("informacao", "Informação", config, "#2f6fa3", "")}
+              ${campoTema("informacao", "InformaÃ§Ã£o", config, "#2f6fa3", "")}
             </div>
 
             <div class="form-grid" style="margin-top:4px">
@@ -725,9 +725,9 @@ export async function renderAparencia() {
               </div>
 
               <div class="form-field">
-                <label for="config-peso-titulos">Peso dos títulos</label>
+                <label for="config-peso-titulos">Peso dos tÃ­tulos</label>
                 <select id="config-peso-titulos">
-                  <option value="" ${!valorTema(config, "peso_titulos", "") ? "selected" : ""}>Padrão (800)</option>
+                  <option value="" ${!valorTema(config, "peso_titulos", "") ? "selected" : ""}>PadrÃ£o (800)</option>
                   <option value="700" ${valorTema(config, "peso_titulos", "") === "700" ? "selected" : ""}>700</option>
                   <option value="800" ${valorTema(config, "peso_titulos", "") === "800" ? "selected" : ""}>800</option>
                   <option value="900" ${valorTema(config, "peso_titulos", "") === "900" ? "selected" : ""}>900</option>
@@ -735,11 +735,11 @@ export async function renderAparencia() {
               </div>
 
               <div class="form-field">
-                <label for="config-tamanho-titulo">Tamanho do título principal</label>
+                <label for="config-tamanho-titulo">Tamanho do tÃ­tulo principal</label>
                 <select id="config-tamanho-titulo">
-                  <option value="" ${!valorTema(config, "tamanho_titulo", "") ? "selected" : ""}>Padrão</option>
+                  <option value="" ${!valorTema(config, "tamanho_titulo", "") ? "selected" : ""}>PadrÃ£o</option>
                   <option value="clamp(40px, 5vw, 68px)" ${valorTema(config, "tamanho_titulo", "") === "clamp(40px, 5vw, 68px)" ? "selected" : ""}>Menor</option>
-                  <option value="clamp(48px, 6vw, 82px)" ${valorTema(config, "tamanho_titulo", "") === "clamp(48px, 6vw, 82px)" ? "selected" : ""}>Padrão atual</option>
+                  <option value="clamp(48px, 6vw, 82px)" ${valorTema(config, "tamanho_titulo", "") === "clamp(48px, 6vw, 82px)" ? "selected" : ""}>PadrÃ£o atual</option>
                   <option value="clamp(56px, 7vw, 96px)" ${valorTema(config, "tamanho_titulo", "") === "clamp(56px, 7vw, 96px)" ? "selected" : ""}>Maior</option>
                 </select>
               </div>
@@ -747,7 +747,7 @@ export async function renderAparencia() {
               <div class="form-field">
                 <label for="config-tamanho-texto">Tamanho do texto</label>
                 <select id="config-tamanho-texto">
-                  <option value="" ${!valorTema(config, "tamanho_texto", "") ? "selected" : ""}>Padrão (16px)</option>
+                  <option value="" ${!valorTema(config, "tamanho_texto", "") ? "selected" : ""}>PadrÃ£o (16px)</option>
                   <option value="0.9375rem" ${valorTema(config, "tamanho_texto", "") === "0.9375rem" ? "selected" : ""}>15px</option>
                   <option value="1rem" ${valorTema(config, "tamanho_texto", "") === "1rem" ? "selected" : ""}>16px</option>
                   <option value="1.0625rem" ${valorTema(config, "tamanho_texto", "") === "1.0625rem" ? "selected" : ""}>17px</option>
@@ -778,24 +778,24 @@ export async function renderAparencia() {
 
               <button type="submit" class="button primary" id="salvar-aparencia">
                 ${icone.salvar}
-                Salvar aparência
+                Salvar aparÃªncia
               </button>
 
             </div>
 
         </form>
 
-        <!-- ==================== PRÉVIA AO VIVO ==================== -->
+        <!-- ==================== PRÃ‰VIA AO VIVO ==================== -->
 
         <aside
           id="aparencia-preview"
           class="aparencia-preview"
-          aria-label="Prévia do site"
+          aria-label="PrÃ©via do site"
         >
 
           <div class="preview-rotulo">
             ${icone.olho}
-            Prévia ao vivo
+            PrÃ©via ao vivo
           </div>
 
 
@@ -812,12 +812,12 @@ export async function renderAparencia() {
 
               <span class="preview-marca">
                 <strong id="preview-nome">${escapeHtml(config.nome_site || "Atlas")}</strong>
-                <small id="preview-subtitulo">${escapeHtml(config.subtitulo || "Histológico")}</small>
+                <small id="preview-subtitulo">${escapeHtml(config.subtitulo || "HistolÃ³gico")}</small>
               </span>
 
               <nav class="preview-navi">
-                <a>Início</a>
-                <a>Lâminas</a>
+                <a>InÃ­cio</a>
+                <a>LÃ¢minas</a>
                 <a>Sobre</a>
               </nav>
 
@@ -826,14 +826,14 @@ export async function renderAparencia() {
 
             <div class="preview-hero">
 
-              <span class="eyebrow">MICROSCOPIA · ESTUDO · EXPLORAÇÃO</span>
+              <span class="eyebrow">MICROSCOPIA Â· ESTUDO Â· EXPLORAÃ‡ÃƒO</span>
 
               <h1 id="preview-titulo">
                 ${escapeHtml(config.titulo_inicio || "Explore a Microestrutura do Mundo Animal")}
               </h1>
 
               <p id="preview-descricao">
-                ${escapeHtml(config.descricao_inicio || "Um atlas de histologia interativo para explorar tecidos, estruturas e lâminas histológicas de uma forma visual e dinâmica.")}
+                ${escapeHtml(config.descricao_inicio || "Um atlas de histologia interativo para explorar tecidos, estruturas e lÃ¢minas histolÃ³gicas de uma forma visual e dinÃ¢mica.")}
               </p>
 
               <div class="preview-actions">
@@ -842,14 +842,14 @@ export async function renderAparencia() {
                   class="preview-button preview-primary"
                   id="preview-botao"
                 >
-                  ${escapeHtml(config.texto_botao_principal || "Explorar lâminas")}
+                  ${escapeHtml(config.texto_botao_principal || "Explorar lÃ¢minas")}
                 </span>
 
                 <span
                   class="preview-button preview-secondary"
                   id="preview-botao-secundario"
                 >
-                  ${escapeHtml(config.texto_botao_secundario || "Conheça o projeto")}
+                  ${escapeHtml(config.texto_botao_secundario || "ConheÃ§a o projeto")}
                 </span>
 
               </div>
@@ -872,18 +872,18 @@ export async function renderAparencia() {
 
             <div class="preview-cat" id="preview-catalogo">
 
-              <div class="preview-cat-titulo">Catálogo de lâminas</div>
+              <div class="preview-cat-titulo">CatÃ¡logo de lÃ¢minas</div>
 
               <div class="preview-cat-card">
-                <b>Fígado</b>
-                <small>HE · Fígado</small>
-                <span>Explorar →</span>
+                <b>FÃ­gado</b>
+                <small>HE Â· FÃ­gado</small>
+                <span>Explorar â†’</span>
               </div>
 
               <div class="preview-cat-card">
                 <b>Rim</b>
-                <small>PAS · Rim</small>
-                <span>Explorar →</span>
+                <small>PAS Â· Rim</small>
+                <span>Explorar â†’</span>
               </div>
 
             </div>
@@ -891,7 +891,7 @@ export async function renderAparencia() {
 
             <div class="preview-slide" id="preview-lamina">
 
-              <div class="preview-slide-titulo">Lâmina & Visualizador</div>
+              <div class="preview-slide-titulo">LÃ¢mina & Visualizador</div>
 
               <div class="preview-slide-painel">
 
@@ -902,7 +902,7 @@ export async function renderAparencia() {
                 <div class="preview-slide-controles">
                   <span>100%</span>
                   <i>+</i>
-                  <i>−</i>
+                  <i>âˆ’</i>
                 </div>
 
               </div>
@@ -914,16 +914,16 @@ export async function renderAparencia() {
 
               <div class="preview-footer-marca">
                 ${icone.microscopio}
-                <span>${escapeHtml(config.nome_site || "Atlas")} ${escapeHtml(config.subtitulo || "Histológico")}</span>
+                <span>${escapeHtml(config.nome_site || "Atlas")} ${escapeHtml(config.subtitulo || "HistolÃ³gico")}</span>
               </div>
 
               <div class="preview-footer-links">
-                <a>Início</a>
-                <a>Lâminas</a>
+                <a>InÃ­cio</a>
+                <a>LÃ¢minas</a>
                 <a>Sobre</a>
               </div>
 
-              <small>${escapeHtml(config.texto_rodape || "Projeto acadêmico")}</small>
+              <small>${escapeHtml(config.texto_rodape || "Projeto acadÃªmico")}</small>
 
             </footer>
 
@@ -937,58 +937,52 @@ export async function renderAparencia() {
   `;
 }
 
-/* Campo de cor reutilizável: seletor + código hex sincronizado.
+/* Campo de cor reutilizÃ¡vel: seletor + cÃ³digo hex sincronizado.
    data-chave liga o campo ao token correspondente no objeto tema. */
 function campoCor(chave, rotulo, valor, ajuda = "") {
-  const valorSeguro = corValida(valor) ? valor : "#000000";
-  const valorHex = String(valorSeguro).toUpperCase();
-
   return `
-    <div
-      class="campo-cor"
-      data-campo-cor="${escapeHtml(chave)}"
-    >
+    <div class="campo-cor" data-campo-cor="${chave}">
 
-      <label for="config-cor-${escapeHtml(chave)}">
-        ${escapeHtml(rotulo)}
-      </label>
+      <label for="config-cor-${chave}">${rotulo}</label>
 
       <div class="campo-cor-controles">
 
         <input
-          id="config-cor-${escapeHtml(chave)}"
-          data-chave="${escapeHtml(chave)}"
+          id="config-cor-${chave}"
+          data-chave="${chave}"
           type="color"
-          value="${escapeHtml(valorSeguro)}"
-          aria-label="${escapeHtml(rotulo)}"
+          value="${escapeHtml(valor)}"
         >
 
         <input
-          id="cor-${escapeHtml(chave)}-valor"
+          id="cor-${chave}-valor"
           class="codigo-cor"
           type="text"
-          maxlength="7"
-          value="${escapeHtml(valorHex)}"
+          maxlength="9"
+          value="${escapeHtml(String(valor).toUpperCase())}"
           spellcheck="false"
-          autocomplete="off"
-          data-codigo-cor="${escapeHtml(chave)}"
-          aria-label="${escapeHtml(rotulo)} (código hexadecimal)"
+          aria-label="${escapeHtml(rotulo)} (cÃ³digo)"
         >
 
       </div>
 
-      ${ajuda ? `<small>${escapeHtml(ajuda)}</small>` : ""}
+      ${ajuda ? `<small>${ajuda}</small>` : ""}
 
     </div>
   `;
 }
 
-/* Campo de cor que lê o valor salvo no objeto tema */
+/* Campo de cor que lÃª o valor salvo no objeto tema */
 function campoTema(chave, rotulo, config, padraoHex, ajuda = "") {
-  return campoCor(chave, rotulo, valorTema(config, chave, padraoHex), ajuda);
+  return campoCor(
+    chave,
+    rotulo,
+    valorTema(config, chave, padraoHex),
+    ajuda,
+  );
 }
 
-/* Cores-base persistidas em colunas planas (não duplicam no objeto tema) */
+/* Cores-base persistidas em colunas planas (nÃ£o duplicam no objeto tema) */
 const CHAVES_BASE_PLANAS = new Set([
   "cor_principal",
   "cor_secundaria",
@@ -997,19 +991,17 @@ const CHAVES_BASE_PLANAS = new Set([
   "cor_texto",
 ]);
 
-/* Coleta o tema atual do formulário (todas as cores + tipografia) */
+/* Coleta o tema atual do formulÃ¡rio (todas as cores + tipografia) */
 function coletarTemaParaSalvar() {
   const tema = {};
 
-  document
-    .querySelectorAll('input[type="color"][data-chave]')
-    .forEach((input) => {
-      const chave = input.dataset.chave;
+  document.querySelectorAll("[data-chave]").forEach((input) => {
+    const chave = input.dataset.chave;
 
-      const valor = (input.value || "").trim();
+    const valor = (input.value || "").trim();
 
-      if (chave && corValida(valor)) tema[chave] = valor;
-    });
+    if (chave && corValida(valor)) tema[chave] = valor;
+  });
 
   const fonte = document.querySelector("#config-fonte")?.value.trim();
 
@@ -1038,20 +1030,17 @@ export function setupAparencia() {
   configurarTamanhoLogo();
 
   /*
-   * Restauração do NÍVEL 2 (aba interna) na remontagem da
-   * Administração. O template já marca a aba e o painel corretos via
-   * abaAtivaSalva()/abrirAba(); este reforço sincroniza as classes
-   * garantindo que a subseção salva apareça mesmo após trocar de
-   * página/guia e que o painel nunca fique vazio.
+   * RestauraÃ§Ã£o do NÃVEL 2 (aba interna) na remontagem da
+   * AdministraÃ§Ã£o. O template jÃ¡ marca a aba e o painel corretos via
+   * abaAtivaSalva()/abrirAba(); este reforÃ§o sincroniza as classes
+   * garantindo que a subseÃ§Ã£o salva apareÃ§a mesmo apÃ³s trocar de
+   * pÃ¡gina/guia e que o painel nunca fique vazio.
    */
   const abaRestaurada = abaAtivaSalva();
 
   document.querySelectorAll(".aparencia-tab").forEach((tab) => {
     tab.classList.toggle("active", tab.dataset.aba === abaRestaurada);
-    tab.setAttribute(
-      "aria-selected",
-      tab.dataset.aba === abaRestaurada ? "true" : "false",
-    );
+    tab.setAttribute("aria-selected", tab.dataset.aba === abaRestaurada ? "true" : "false");
   });
 
   document.querySelectorAll(".aparencia-aba").forEach((painel) => {
@@ -1059,8 +1048,8 @@ export function setupAparencia() {
   });
 
   /*
-   * Navegação entre abas — preserva a aba ativa em sessionStorage.
-   * Trocar de guia NÃO re-renderiza o admin nem volta para Lâminas.
+   * NavegaÃ§Ã£o entre abas â€” preserva a aba ativa em sessionStorage.
+   * Trocar de guia NÃƒO re-renderiza o admin nem volta para LÃ¢minas.
    */
   document.querySelectorAll(".aparencia-tab").forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -1102,7 +1091,9 @@ export function setupAparencia() {
     const noTexto = Array.from(botaoSalvar.childNodes)
       .reverse()
       .find(
-        (n) => n.nodeType === Node.TEXT_NODE && n.textContent.trim().length > 0,
+        (n) =>
+          n.nodeType === Node.TEXT_NODE &&
+          n.textContent.trim().length > 0,
       );
 
     if (noTexto) {
@@ -1188,14 +1179,14 @@ export function setupAparencia() {
 
       const efetivoAtual = temaEfetivo(temaSalvoAparencia);
 
-      console.debug("[APARÊNCIA DEBUG] tema coletado:", temaColetado);
+      console.debug("[APARÃŠNCIA DEBUG] tema coletado:", temaColetado);
 
       /*
-       * Detecção de alteração ROBUSTA — NÃO depende somente de
-       * CAMPOS_MODIFICADOS: cada campo do formulário é comparado contra o
+       * DetecÃ§Ã£o de alteraÃ§Ã£o ROBUSTA â€” NÃƒO depende somente de
+       * CAMPOS_MODIFICADOS: cada campo do formulÃ¡rio Ã© comparado contra o
        * tema efetivo persistido (banco + defaults derivados). Qualquer
-       * diferença entra no delta MESMO que o evento input/change não
-       * tenha marcado a chave. Campos iguais ao efetivo são ignorados.
+       * diferenÃ§a entra no delta MESMO que o evento input/change nÃ£o
+       * tenha marcado a chave. Campos iguais ao efetivo sÃ£o ignorados.
        */
       const temaPronto = {};
 
@@ -1209,7 +1200,7 @@ export function setupAparencia() {
         temaPronto[chave] = temaColetado[chave];
       });
 
-      /* União com chaves marcadas pelos listeners (cinto e suspensório). */
+      /* UniÃ£o com chaves marcadas pelos listeners (cinto e suspensÃ³rio). */
       CAMPOS_MODIFICADOS.forEach((chave) => {
         if (CHAVES_BASE_PLANAS.has(chave)) return;
 
@@ -1218,24 +1209,25 @@ export function setupAparencia() {
         }
       });
 
-      console.debug("[APARÊNCIA DEBUG] campos modificados nesta submissão:", [
-        ...CAMPOS_MODIFICADOS,
-      ]);
+      console.debug(
+        "[APARÃŠNCIA DEBUG] campos modificados nesta submissÃ£o:",
+        [...CAMPOS_MODIFICADOS],
+      );
 
-      console.debug("[APARÊNCIA DEBUG] temaPronto:", temaPronto);
+      console.debug("[APARÃŠNCIA DEBUG] temaPronto:", temaPronto);
 
       /*
-       * Delta real desta submissão: somente chaves cujo valor difere do
-       * efetivo atual. Se o usuário alterou uma cor, este objeto NÃO pode
+       * Delta real desta submissÃ£o: somente chaves cujo valor difere do
+       * efetivo atual. Se o usuÃ¡rio alterou uma cor, este objeto NÃƒO pode
        * chegar vazio ao payload.
        */
       const deltaTema = temaParaSalvar(temaPronto, efetivoAtual);
 
-      console.debug("[APARÊNCIA DEBUG] delta:", deltaTema);
+      console.debug("[APARÃŠNCIA DEBUG] delta:", deltaTema);
 
       /*
        * Registro correto: SELECT e UPDATE passam a usar SEMPRE o mesmo id
-       * (tabela singleton — primeiro/único registro).
+       * (tabela singleton â€” primeiro/Ãºnico registro).
        */
       const { data: registroExistente } = await supabase
         .from("configuracoes_site")
@@ -1244,13 +1236,15 @@ export function setupAparencia() {
         .maybeSingle();
 
       const idRegistro =
-        registroExistente && registroExistente.id ? registroExistente.id : null;
+        registroExistente && registroExistente.id
+          ? registroExistente.id
+          : null;
 
       /*
-       * Tema JÁ persistido no banco. O jsonb é regravado POR INTEIRO a cada
-       * UPDATE, então o novo valor precisa ser um MERGE (existente +
-       * alterações desta submissão). Gravar só o delta apagaria as
-       * personalizações anteriores; gravar null zeraria tudo.
+       * Tema JÃ persistido no banco. O jsonb Ã© regravado POR INTEIRO a cada
+       * UPDATE, entÃ£o o novo valor precisa ser um MERGE (existente +
+       * alteraÃ§Ãµes desta submissÃ£o). Gravar sÃ³ o delta apagaria as
+       * personalizaÃ§Ãµes anteriores; gravar null zeraria tudo.
        */
       let temaNoBanco = {};
 
@@ -1263,7 +1257,7 @@ export function setupAparencia() {
 
         if (leituraTema.error) {
           console.error(
-            "[APARÊNCIA] Falha ao ler a coluna 'tema' antes de salvar:",
+            "[APARÃŠNCIA] Falha ao ler a coluna 'tema' antes de salvar:",
             leituraTema.error,
           );
         } else if (
@@ -1279,12 +1273,9 @@ export function setupAparencia() {
       if (Object.keys(deltaTema).length > 0) {
         dados.tema = { ...temaNoBanco, ...deltaTema };
       }
-      /* Nada alterado no tema → a chave fica FORA do payload (nunca null). */
+      /* Nada alterado no tema â†’ a chave fica FORA do payload (nunca null). */
 
-      console.log(
-        "[APARÊNCIA] payload enviado:",
-        JSON.stringify(dados, null, 2),
-      );
+      console.log("[APARÃŠNCIA] payload enviado:", JSON.stringify(dados, null, 2));
 
       let resultado = null;
 
@@ -1297,7 +1288,7 @@ export function setupAparencia() {
         tentativas += 1;
 
         /*
-         * .select("id") faz o PostgREST devolver as linhas afetadas —
+         * .select("id") faz o PostgREST devolver as linhas afetadas â€”
          * permite detectar UPDATE que bateu em 0 linhas (RLS/registro
          * inexistente), que antes retornava sucesso silencioso.
          */
@@ -1315,7 +1306,7 @@ export function setupAparencia() {
         if (!resultado.error) break;
 
         console.error(
-          `[APARÊNCIA] Supabase devolveu erro na tentativa ${tentativas}:`,
+          `[APARÃŠNCIA] Supabase devolveu erro na tentativa ${tentativas}:`,
           resultado.error,
         );
 
@@ -1328,7 +1319,7 @@ export function setupAparencia() {
 
         /*
          * PROIBIDO remover 'tema' do payload como fallback: salvar cores
-         * DEPENDE da coluna tema. Removê-la produzia o falso positivo
+         * DEPENDE da coluna tema. RemovÃª-la produzia o falso positivo
          * "Salvo com sucesso" sem persistir nada. Aborta com erro claro.
          */
         if (coluna === "tema") {
@@ -1360,7 +1351,7 @@ export function setupAparencia() {
 
         setTimeout(() => {
           if (botaoSalvar) {
-            atualizarRotuloBotaoSalvar("Salvar aparência");
+            atualizarRotuloBotaoSalvar("Salvar aparÃªncia");
           }
         }, 3000);
       };
@@ -1368,8 +1359,8 @@ export function setupAparencia() {
       if (falhaGravacao) {
         if (colunaTemaRejeitada) {
           console.error(
-            "[APARÊNCIA] A coluna 'tema' não existe na tabela public.configuracoes_site.\n" +
-              "A migration supabase/migrations/20260824120000_aparencia_tema_expandido.sql NÃO foi aplicada no banco.\n" +
+            "[APARÃŠNCIA] A coluna 'tema' nÃ£o existe na tabela public.configuracoes_site.\n" +
+              "A migration supabase/migrations/20260824120000_aparencia_tema_expandido.sql NÃƒO foi aplicada no banco.\n" +
               "Execute no SQL Editor do Supabase:\n" +
               "  alter table public.configuracoes_site add column if not exists tema jsonb;\n" +
               "  notify pgrst, 'reload_schema';\n" +
@@ -1377,25 +1368,22 @@ export function setupAparencia() {
             resultado && resultado.error ? resultado.error : "(sem detalhes)",
           );
 
-          mostrarFeedbackSubmit(
-            "Não foi possível salvar a aparência.",
-            "error",
-          );
+          mostrarFeedbackSubmit("NÃ£o foi possÃ­vel salvar a aparÃªncia.", "error");
         } else if (resultado && resultado.error) {
-          console.error("[ATLAS] Erro ao salvar aparência:", resultado.error);
+          console.error("[ATLAS] Erro ao salvar aparÃªncia:", resultado.error);
 
           mostrarFeedbackSubmit(
-            `Não foi possível salvar a aparência: ${resultado.error.message}`,
+            `NÃ£o foi possÃ­vel salvar a aparÃªncia: ${resultado.error.message}`,
             "error",
           );
         } else {
           console.error(
-            "[APARÊNCIA] A gravação não afetou NENHUMA linha — política de RLS ou registro inexistente. Payload enviado:",
+            "[APARÃŠNCIA] A gravaÃ§Ã£o nÃ£o afetou NENHUMA linha â€” polÃ­tica de RLS ou registro inexistente. Payload enviado:",
             dados,
           );
 
           mostrarFeedbackSubmit(
-            "Não foi possível salvar a aparência (permissão de gravação negada).",
+            "NÃ£o foi possÃ­vel salvar a aparÃªncia (permissÃ£o de gravaÃ§Ã£o negada).",
             "error",
           );
         }
@@ -1405,12 +1393,12 @@ export function setupAparencia() {
         return;
       }
 
-      console.log("[APARÊNCIA] resposta do Supabase:", resultado.data);
+      console.log("[APARÃŠNCIA] resposta do Supabase:", resultado.data);
 
       /*
-       * CONFIRMAÇÃO REAL: reler o registro imediatamente e conferir se cada
+       * CONFIRMAÃ‡ÃƒO REAL: reler o registro imediatamente e conferir se cada
        * chave enviada voltou do banco com o mesmo valor. O feedback
-       * "Salvo com sucesso" SÓ aparece depois desta verificação.
+       * "Salvo com sucesso" SÃ“ aparece depois desta verificaÃ§Ã£o.
        */
       const idVerificacao =
         idRegistro ||
@@ -1452,14 +1440,12 @@ export function setupAparencia() {
                 String(temaRetornado[chave] ?? "")
                   .trim()
                   .toLowerCase() ===
-                String(valor ?? "")
-                  .trim()
-                  .toLowerCase(),
+                String(valor ?? "").trim().toLowerCase(),
             )));
 
       if (!persistiu) {
         console.error(
-          "[APARÊNCIA] Alteração não foi persistida.\nValor ENVIADO:",
+          "[APARÃŠNCIA] AlteraÃ§Ã£o nÃ£o foi persistida.\nValor ENVIADO:",
           temaEnviado,
           "\nValor RETORNADO do banco:",
           temaRetornado,
@@ -1467,7 +1453,7 @@ export function setupAparencia() {
           erroVerificacao,
         );
 
-        mostrarFeedbackSubmit("Alteração não foi persistida.", "error");
+        mostrarFeedbackSubmit("AlteraÃ§Ã£o nÃ£o foi persistida.", "error");
 
         falhaNoBotaoSalvar();
 
@@ -1475,16 +1461,16 @@ export function setupAparencia() {
       }
 
       console.log(
-        "[APARÊNCIA] verificação pós-salvamento OK — tema no banco:",
+        "[APARÃŠNCIA] verificaÃ§Ã£o pÃ³s-salvamento OK â€” tema no banco:",
         temaRetornado,
       );
 
-      /* Cache local recebe o estado COMPLETO gravado no banco (não o delta). */
+      /* Cache local recebe o estado COMPLETO gravado no banco (nÃ£o o delta). */
       temaSalvoAparencia = temaRetornado || { ...temaNoBanco };
 
       CAMPOS_MODIFICADOS.clear();
 
-      mostrarFeedbackSubmit("Aparência salva com sucesso.", "success");
+      mostrarFeedbackSubmit("AparÃªncia salva com sucesso.", "success");
 
       if (botaoSalvar) {
         botaoSalvar.disabled = false;
@@ -1494,20 +1480,23 @@ export function setupAparencia() {
 
       /*
        * Reaplica o tema no site real IMEDIATAMENTE (main.js escuta este
-       * evento e relê configuracoes_site do banco — sem cache). Sem isto,
-       * os tokens do documento só eram atualizados na próxima navegação.
+       * evento e relÃª configuracoes_site do banco â€” sem cache). Sem isto,
+       * os tokens do documento sÃ³ eram atualizados na prÃ³xima navegaÃ§Ã£o.
        */
       window.dispatchEvent(new CustomEvent("atlas:config-atualizada"));
 
       setTimeout(() => {
         if (botaoSalvar) {
-          atualizarRotuloBotaoSalvar("Salvar aparência");
+          atualizarRotuloBotaoSalvar("Salvar aparÃªncia");
         }
       }, 3000);
     } catch (erro) {
-      console.error("[ATLAS] Erro inesperado ao salvar aparência:", erro);
+      console.error("[ATLAS] Erro inesperado ao salvar aparÃªncia:", erro);
 
-      mostrarFeedbackSubmit("Não foi possível salvar a aparência.", "error");
+      mostrarFeedbackSubmit(
+        "NÃ£o foi possÃ­vel salvar a aparÃªncia.",
+        "error",
+      );
 
       if (botaoSalvar) {
         botaoSalvar.disabled = false;
@@ -1517,7 +1506,7 @@ export function setupAparencia() {
 
       setTimeout(() => {
         if (botaoSalvar) {
-          atualizarRotuloBotaoSalvar("Salvar aparência");
+          atualizarRotuloBotaoSalvar("Salvar aparÃªncia");
         }
       }, 3000);
     } finally {
@@ -1537,8 +1526,8 @@ export function setupAparencia() {
  * Formatos conhecidos:
  * - PGRST204: Could not find the 'tema' column of 'configuracoes_site' in the schema cache
  * - 42703:    column configuracoes_site.tema does not exist
- * Quando `candidatas` é informado (payload atual), só aceita nomes que
- * fazem parte dele — evita capturar identificadores alheios à mensagem.
+ * Quando `candidatas` Ã© informado (payload atual), sÃ³ aceita nomes que
+ * fazem parte dele â€” evita capturar identificadores alheios Ã  mensagem.
  */
 function colunaDesconhecida(mensagem = "", candidatas = []) {
   const texto = String(mensagem);
@@ -1562,10 +1551,10 @@ function colunaDesconhecida(mensagem = "", candidatas = []) {
 }
 
 /*
- * PRÉVIA AO VIVO — usa os MESMOS tokens do site real.
- * Os valores são aplicados como CSS custom properties no contêiner
- * da prévia; como todo o site consome essas variáveis (inclusive os
- * aliases legados), a miniatura reflete fielmente qualquer mudança.
+ * PRÃ‰VIA AO VIVO â€” usa os MESMOS tokens do site real.
+ * Os valores sÃ£o aplicados como CSS custom properties no contÃªiner
+ * da prÃ©via; como todo o site consome essas variÃ¡veis (inclusive os
+ * aliases legados), a miniatura reflete fielmente qualquer mudanÃ§a.
  */
 function configurarPreviewAoVivo() {
   const preview = document.querySelector("#aparencia-preview");
@@ -1574,8 +1563,8 @@ function configurarPreviewAoVivo() {
 
   /*
    * Coleta todos os campos (cores com data-chave + tipografia).
-   * Valores inválidos/vazios são ignorados — quem decide o valor
-   * efetivo é temaEfetivo(), com fallback derivado seguro.
+   * Valores invÃ¡lidos/vazios sÃ£o ignorados â€” quem decide o valor
+   * efetivo Ã© temaEfetivo(), com fallback derivado seguro.
    */
   function coletarTema() {
     const tema = {};
@@ -1593,9 +1582,7 @@ function configurarPreviewAoVivo() {
     const peso = document.querySelector("#config-peso-titulos")?.value;
     if (peso) tema.peso_titulos = peso;
 
-    const tamanhoTitulo = document.querySelector(
-      "#config-tamanho-titulo",
-    )?.value;
+    const tamanhoTitulo = document.querySelector("#config-tamanho-titulo")?.value;
     if (tamanhoTitulo) tema.tamanho_titulo = tamanhoTitulo;
 
     const tamanhoTexto = document.querySelector("#config-tamanho-texto")?.value;
@@ -1604,7 +1591,7 @@ function configurarPreviewAoVivo() {
     return tema;
   }
 
-  /* Aplica os MESMOS tokens do site real na prévia */
+  /* Aplica os MESMOS tokens do site real na prÃ©via */
   function aplicarAoVivo() {
     const base = temaEfetivo(temaSalvoAparencia);
 
@@ -1613,7 +1600,7 @@ function configurarPreviewAoVivo() {
     aplicarTema(preview, { ...base, ...delta });
   }
 
-  /* Sincroniza seletor de cor <-> código hex e reaplica */
+  /* Sincroniza seletor de cor <-> cÃ³digo hex e reaplica */
   function sincronizarCampo(campo) {
     const chave = campo.dataset.campoCor;
 
@@ -1621,118 +1608,36 @@ function configurarPreviewAoVivo() {
 
     const codigo = campo.querySelector(".codigo-cor");
 
-    if (!chave || !color || !codigo) {
-      console.warn("[APARÊNCIA] Campo de cor incompleto:", {
-        chave,
-        color,
-        codigo,
-      });
+    if (!chave || !color || !codigo) return;
 
-      return;
-    }
+    color.addEventListener("input", () => {
+      codigo.value = color.value.toUpperCase();
 
-    function aplicarValor(valor) {
-      let novoValor = String(valor || "").trim();
-
-      if (!novoValor.startsWith("#")) {
-        novoValor = `#${novoValor}`;
-      }
-
-      novoValor = novoValor.toUpperCase();
-
-      if (!corValida(novoValor)) {
-        return false;
-      }
-
-      /*
-       * Atualiza SEMPRE os dois controles.
-       */
-      color.value = novoValor.toLowerCase();
-
-      codigo.value = novoValor;
-
-      /*
-       * Marca a chave correta.
-       */
       marcarModificado(chave);
 
-      /*
-       * Atualiza a prévia imediatamente.
-       */
       aplicarAoVivo();
-
-      console.debug(
-        "[APARÊNCIA DEBUG] cor sincronizada:",
-        JSON.stringify({
-          chave,
-          valor: novoValor,
-        }),
-      );
-
-      return true;
-    }
-
-    /*
-     * Seletor visual de cor.
-     *
-     * O evento "input" é importante porque o navegador pode alterar
-     * o valor enquanto o seletor de cores está aberto.
-     */
-    color.addEventListener("input", () => {
-      aplicarValor(color.value);
     });
 
-    color.addEventListener("change", () => {
-      aplicarValor(color.value);
-    });
-
-    /*
-     * Campo hexadecimal.
-     *
-     * Atualiza a cor enquanto o usuário digita quando o valor já
-     * representa uma cor válida.
-     */
-    codigo.addEventListener("input", () => {
-      let valor = codigo.value.trim();
-
-      if (!valor.startsWith("#")) {
-        valor = `#${valor}`;
-      }
-
-      if (corValida(valor)) {
-        aplicarValor(valor);
-      }
-    });
-
-    /*
-     * Ao sair do campo, normaliza o valor.
-     */
     codigo.addEventListener("change", () => {
       let valor = codigo.value.trim();
 
-      if (!valor.startsWith("#")) {
-        valor = `#${valor}`;
-      }
+      if (valor && !valor.startsWith("#")) valor = "#" + valor;
 
-      if (!aplicarValor(valor)) {
+      if (corValida(valor)) {
+        color.value = valor;
+
+        marcarModificado(chave);
+
+        aplicarAoVivo();
+      } else {
         codigo.value = color.value.toUpperCase();
-
-        console.warn("[APARÊNCIA] Código de cor inválido:", {
-          chave,
-          valor,
-        });
       }
     });
-
-    /*
-     * Garante que os dois controles começam sincronizados.
-     */
-    codigo.value = color.value.toUpperCase();
   }
 
   document.querySelectorAll(".campo-cor").forEach(sincronizarCampo);
 
-  /* Textos da prévia */
+  /* Textos da prÃ©via */
   function aplicarTextos() {
     const ler = (id, padrao) =>
       document.querySelector(id)?.value?.trim() || padrao;
@@ -1745,7 +1650,7 @@ function configurarPreviewAoVivo() {
 
     definir("#preview-nome", "#config-nome", "Atlas");
 
-    definir("#preview-subtitulo", "#config-subtitulo", "Histológico");
+    definir("#preview-subtitulo", "#config-subtitulo", "HistolÃ³gico");
 
     definir(
       "#preview-titulo",
@@ -1759,27 +1664,24 @@ function configurarPreviewAoVivo() {
       "Um atlas de histologia interativo para explorar tecidos e estruturas.",
     );
 
-    definir("#preview-botao", "#config-botao", "Explorar lâminas");
+    definir("#preview-botao", "#config-botao", "Explorar lÃ¢minas");
 
     definir(
       "#preview-botao-secundario",
       "#config-botao-secundario",
-      "Conheça o projeto",
+      "ConheÃ§a o projeto",
     );
 
     const marca = document.querySelector(".preview-footer-marca span");
 
     if (marca) {
       marca.textContent =
-        ler("#config-nome", "Atlas") +
-        " " +
-        ler("#config-subtitulo", "Histológico");
+        ler("#config-nome", "Atlas") + " " + ler("#config-subtitulo", "HistolÃ³gico");
     }
 
     const creditos = document.querySelector(".preview-footer small");
 
-    if (creditos)
-      creditos.textContent = ler("#config-rodape", "Projeto acadêmico");
+    if (creditos) creditos.textContent = ler("#config-rodape", "Projeto acadÃªmico");
   }
 
   [
@@ -1804,7 +1706,7 @@ function configurarPreviewAoVivo() {
     const evento = id === "#config-fonte" ? "input" : "change";
 
     document.querySelector(id)?.addEventListener(evento, () => {
-      /* Normaliza hífens: "peso-titulos" → "peso_titulos" (chave do tema). */
+      /* Normaliza hÃ­fens: "peso-titulos" â†’ "peso_titulos" (chave do tema). */
       marcarModificado(id.replace("#config-", "").replace(/-/g, "_"));
 
       aplicarAoVivo();
@@ -1907,7 +1809,7 @@ function configurarLogoPreview() {
     const logoUrl = urlData.publicUrl;
 
     if (!logoUrl) {
-      nome.textContent = "Não foi possível obter a URL da logo";
+      nome.textContent = "NÃ£o foi possÃ­vel obter a URL da logo";
 
       return;
     }
@@ -1930,7 +1832,7 @@ function configurarLogoPreview() {
 
     nome.textContent = arquivo.name;
 
-    /* Mostra também na prévia do site */
+    /* Mostra tambÃ©m na prÃ©via do site */
 
     const previewLogo = document.querySelector(".preview-logo");
 
@@ -1980,3 +1882,6 @@ function escapeHtml(value = "") {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
+
+
+

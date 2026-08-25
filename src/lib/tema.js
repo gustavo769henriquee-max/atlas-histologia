@@ -12,6 +12,17 @@
  *   site continua funcionando inteiro com os defaults;
  * - Valores inválidos são descartados antes de virarem CSS.
  */
+// == DOCUMENTAÇÃO INTERNA: DEFAULTS ---------------------------------------------------
+// Cada chave tem um default derivado que representa a configuração original
+// antes de qualquer personalização.
+const DEFAULTS = {
+  cor_principal: "#8a2b3d",
+  cor_secundaria: "#2e3a45",
+  cor_acento: "#c9404f",
+  cor_fundo: "#f6f3f1",
+  cor_texto: "#211b1d",
+};
+// == END DOCUMENTAÇÃO -------------------------------------------------------------
 
 export const HEX_RE = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
 
@@ -280,80 +291,72 @@ export function temaEfetivo(bruto = {}) {
   const pegarCor = (chave, padrao) =>
     corValida(bruto[chave]) ? bruto[chave].trim() : padrao;
 
-  const principal = pegarCor("cor_principal", BASES.cor_principal);
-  const acento = pegarCor("cor_acento", BASES.cor_acento);
-  const fundo = pegarCor("cor_fundo", BASES.cor_fundo);
-  const texto = pegarCor("cor_texto", BASES.cor_texto);
-  const superficie = pegarCor("superficie", "#ffffff");
-  const textoSuave = pegarCor("texto_secundario", "#6f6267");
-  const borda = pegarCor("borda", "#e4dcd8");
-
   return {
     /* Bases */
-    cor_principal: principal,
-    cor_secundaria: pegarCor("cor_secundaria", BASES.cor_secundaria),
-    cor_acento: acento,
-    cor_fundo: fundo,
-    cor_texto: texto,
+    cor_principal: pegarCor("cor_principal", "#8a2b3d"),
+    cor_secundaria: pegarCor("cor_secundaria", "#2e3a45"),
+    cor_acento: pegarCor("cor_acento", "#c9404f"),
+    cor_fundo: pegarCor("cor_fundo", "#f6f3f1"),
+    cor_texto: pegarCor("cor_texto", "#211b1d"),
 
     /* Cores gerais */
-    superficie,
-    texto_secundario: textoSuave,
-    texto_terciario: pegarCor("texto_terciario", mixHex(textoSuave, fundo, 0.45)),
-    borda,
-    borda_forte: pegarCor("borda_forte", mixHex(borda, texto, 0.22)),
-    hover: pegarCor("hover", mixHex(principal, fundo, 0.07)),
-    foco: bruto.foco && corValida(bruto.foco) ? bruto.foco.trim() : rgbaDe(principal, 0.32),
-    link: pegarCor("link", principal),
-    link_hover: pegarCor("link_hover", acento),
+    superficie: pegarCor("superficie", "#ffffff"),
+    texto_secundario: pegarCor("texto_secundario", "#6f6267"),
+    texto_terciario: pegarCor("texto_terciario", "#b9b2b3"),
+    borda: pegarCor("borda", "#e4dcd8"),
+    borda_forte: pegarCor("borda_forte", "#4c4546"),
+    hover: pegarCor("hover", "#eee5e4"),
+    foco: bruto.foco && corValida(bruto.foco) ? bruto.foco.trim() : "rgba(138, 43, 61, 0.32)",
+    link: pegarCor("link", "#8a2b3d"),
+    link_hover: pegarCor("link_hover", "#c9404f"),
 
     /* Header / menu */
-    header_fundo: pegarCor("header_fundo", mixHex(fundo, "#ffffff", 0.14)),
-    header_borda: pegarCor("header_borda", borda),
-    header_icone: pegarCor("header_icone", principal),
-    menu_texto: pegarCor("menu_texto", textoSuave),
-    menu_texto_ativo: pegarCor("menu_texto_ativo", principal),
-    menu_hover: pegarCor("menu_hover", principal),
-    menu_indicador: pegarCor("menu_indicador", acento),
+    header_fundo: pegarCor("header_fundo", "#fefdfd"),
+    header_borda: pegarCor("header_borda", "#e4dcd8"),
+    header_icone: pegarCor("header_icone", "#8a2b3d"),
+    menu_texto: pegarCor("menu_texto", "#6f6267"),
+    menu_texto_ativo: pegarCor("menu_texto_ativo", "#8a2b3d"),
+    menu_hover: pegarCor("menu_hover", "#8a2b3d"),
+    menu_indicador: pegarCor("menu_indicador", "#c9404f"),
 
     /* Hero */
-    hero_fundo: pegarCor("hero_fundo", fundo),
-    hero_titulo: pegarCor("hero_titulo", texto),
-    hero_subtitulo: pegarCor("hero_subtitulo", principal),
-    hero_texto: pegarCor("hero_texto", textoSuave),
-    hero_botao_fundo: pegarCor("hero_botao_fundo", principal),
-    hero_botao_hover: pegarCor("hero_botao_hover", mixHex(principal, "#000000", 0.86)),
-    hero_decorativo: pegarCor("hero_decorativo", acento),
-    hero_microscopio: pegarCor("hero_microscopio", principal),
+    hero_fundo: pegarCor("hero_fundo", "#f6f3f1"),
+    hero_titulo: pegarCor("hero_titulo", "#211b1d"),
+    hero_subtitulo: pegarCor("hero_subtitulo", "#8a2b3d"),
+    hero_texto: pegarCor("hero_texto", "#6f6267"),
+    hero_botao_fundo: pegarCor("hero_botao_fundo", "#8a2b3d"),
+    hero_botao_hover: pegarCor("hero_botao_hover", "#772534"),
+    hero_decorativo: pegarCor("hero_decorativo", "#c9404f"),
+    hero_microscopio: pegarCor("hero_microscopio", "#8a2b3d"),
 
     /* Cards Explore / Amplie / Aprenda */
-    card_fundo: pegarCor("card_fundo", mixHex(fundo, "#ffffff", 0.76)),
-    card_titulo: pegarCor("card_titulo", texto),
-    card_texto: pegarCor("card_texto", textoSuave),
-    card_icone: pegarCor("card_icone", principal),
-    card_borda: pegarCor("card_borda", borda),
-    card_hover: pegarCor("card_hover", mixHex(principal, borda, 0.28)),
+    card_fundo: pegarCor("card_fundo", "#f8f6f4"),
+    card_titulo: pegarCor("card_titulo", "#211b1d"),
+    card_texto: pegarCor("card_texto", "#6f6267"),
+    card_icone: pegarCor("card_icone", "#8a2b3d"),
+    card_borda: pegarCor("card_borda", "#e4dcd8"),
+    card_hover: pegarCor("card_hover", "#cbaaad"),
 
     /* Catálogo */
-    catalogo_fundo: pegarCor("catalogo_fundo", fundo),
-    catalogo_card_fundo: pegarCor("catalogo_card_fundo", mixHex(fundo, "#ffffff", 0.88)),
-    catalogo_titulo: pegarCor("catalogo_titulo", texto),
-    catalogo_texto: pegarCor("catalogo_texto", texto),
-    catalogo_texto_suave: pegarCor("catalogo_texto_suave", textoSuave),
-    catalogo_borda: pegarCor("catalogo_borda", borda),
-    catalogo_categoria: pegarCor("catalogo_categoria", mixHex(acento, "#ffffff", 0.24)),
-    catalogo_botao: pegarCor("catalogo_botao", principal),
+    catalogo_fundo: pegarCor("catalogo_fundo", "#f6f3f1"),
+    catalogo_card_fundo: pegarCor("catalogo_card_fundo", "#f7f4f3"),
+    catalogo_titulo: pegarCor("catalogo_titulo", "#211b1d"),
+    catalogo_texto: pegarCor("catalogo_texto", "#211b1d"),
+    catalogo_texto_suave: pegarCor("catalogo_texto_suave", "#6f6267"),
+    catalogo_borda: pegarCor("catalogo_borda", "#e4dcd8"),
+    catalogo_categoria: pegarCor("catalogo_categoria", "#f2d1d5"),
+    catalogo_botao: pegarCor("catalogo_botao", "#8a2b3d"),
 
     /* Página da lâmina */
-    lamina_fundo: pegarCor("lamina_fundo", fundo),
-    lamina_painel_fundo: pegarCor("lamina_painel_fundo", mixHex(fundo, "#ffffff", 0.92)),
-    lamina_moldura: pegarCor("lamina_moldura", mixHex(acento, "#ffffff", 0.24)),
-    lamina_indicador: pegarCor("lamina_indicador", acento),
+    lamina_fundo: pegarCor("lamina_fundo", "#f6f3f1"),
+    lamina_painel_fundo: pegarCor("lamina_painel_fundo", "#f7f4f2"),
+    lamina_moldura: pegarCor("lamina_moldura", "#f2d1d5"),
+    lamina_indicador: pegarCor("lamina_indicador", "#c9404f"),
 
     /* Visualizador / OpenSeadragon */
-    viewer_fundo: pegarCor("viewer_fundo", mixHex(principal, "#15181c", 0.16)),
+    viewer_fundo: pegarCor("viewer_fundo", "#281b21"),
     viewer_icone: pegarCor("viewer_icone", "#f3f0ef"),
-    viewer_hover: pegarCor("viewer_hover", mixHex(acento, "#ffffff", 0.2)),
+    viewer_hover: pegarCor("viewer_hover", "#f4d9dc"),
     viewer_borda:
       bruto.viewer_borda && corValida(bruto.viewer_borda)
         ? bruto.viewer_borda.trim()
@@ -364,19 +367,19 @@ export function temaEfetivo(bruto = {}) {
       bruto.video_fundo && corValida(bruto.video_fundo)
         ? bruto.video_fundo.trim()
         : "transparent",
-    video_titulo: pegarCor("video_titulo", texto),
-    video_borda: pegarCor("video_borda", borda),
+    video_titulo: pegarCor("video_titulo", "#211b1d"),
+    video_borda: pegarCor("video_borda", "#e4dcd8"),
 
     /* Rodapé */
-    rodape_fundo: pegarCor("rodape_fundo", SUPERFICIE_ESCURA),
+    rodape_fundo: pegarCor("rodape_fundo", "#191d21"),
     rodape_titulo: pegarCor("rodape_titulo", "#f3f0ef"),
     rodape_texto:
       bruto.rodape_texto && corValida(bruto.rodape_texto)
         ? bruto.rodape_texto.trim()
         : "rgba(255, 255, 255, 0.72)",
     rodape_link: pegarCor("rodape_link", "#ffffff"),
-    rodape_link_hover: pegarCor("rodape_link_hover", mixHex(acento, "#ffffff", 0.45)),
-    rodape_icone: pegarCor("rodape_icone", acento),
+    rodape_link_hover: pegarCor("rodape_link_hover", "#e7a9b0"),
+    rodape_icone: pegarCor("rodape_icone", "#c9404f"),
     rodape_borda:
       bruto.rodape_borda && corValida(bruto.rodape_borda)
         ? bruto.rodape_borda.trim()
@@ -387,38 +390,32 @@ export function temaEfetivo(bruto = {}) {
         : "rgba(255, 255, 255, 0.5)",
 
     /* Administração */
-    admin_fundo: pegarCor("admin_fundo", fundo),
-    admin_superficie: pegarCor("admin_superficie", superficie),
-    admin_texto: pegarCor("admin_texto", texto),
-    admin_texto_suave: pegarCor("admin_texto_suave", textoSuave),
-    admin_borda: pegarCor("admin_borda", borda),
-    admin_destaque: pegarCor("admin_destaque", acento),
-    admin_sidebar: pegarCor("admin_sidebar", mixHex(principal, "#141518", 0.14)),
-    admin_item_ativo: pegarCor("admin_item_ativo", acento),
+    admin_fundo: pegarCor("admin_fundo", "#f6f3f1"),
+    admin_superficie: pegarCor("admin_superficie", "#ffffff"),
+    admin_texto: pegarCor("admin_texto", "#211b1d"),
+    admin_texto_suave: pegarCor("admin_texto_suave", "#6f6267"),
+    admin_borda: pegarCor("admin_borda", "#e4dcd8"),
+    admin_destaque: pegarCor("admin_destaque", "#c9404f"),
+    admin_sidebar: pegarCor("admin_sidebar", "#25181d"),
+    admin_item_ativo: pegarCor("admin_item_ativo", "#c9404f"),
     admin_hover:
       bruto.admin_hover && corValida(bruto.admin_hover)
         ? bruto.admin_hover.trim()
         : "rgba(255, 255, 255, 0.055)",
 
     /* Formulários e inputs */
-    input_fundo: pegarCor("input_fundo", superficie),
-    input_texto: pegarCor("input_texto", texto),
-    input_placeholder: pegarCor("input_placeholder", mixHex(textoSuave, fundo, 0.3)),
-    input_borda: pegarCor("input_borda", borda),
-    input_foco: pegarCor("input_foco", principal),
-    input_label: pegarCor("input_label", texto),
-    input_ajuda: pegarCor("input_ajuda", textoSuave),
+    input_fundo: pegarCor("input_fundo", "#ffffff"),
+    input_texto: pegarCor("input_texto", "#211b1d"),
+    input_placeholder: pegarCor("input_placeholder", "#cec8c8"),
+    input_borda: pegarCor("input_borda", "#e4dcd8"),
+    input_foco: pegarCor("input_foco", "#8a2b3d"),
+    input_label: pegarCor("input_label", "#211b1d"),
+    input_ajuda: pegarCor("input_ajuda", "#6f6267"),
 
     /* Botões */
-    botao_primario_fundo: pegarCor("botao_primario_fundo", principal),
-    botao_primario_texto: pegarCor(
-      "botao_primario_texto",
-      textoContrasteAuto(principal),
-    ),
-    botao_primario_hover: pegarCor(
-      "botao_primario_hover",
-      mixHex(principal, "#000000", 0.86),
-    ),
+    botao_primario_fundo: pegarCor("botao_primario_fundo", "#8a2b3d"),
+    botao_primario_texto: pegarCor("botao_primario_texto", "#ffffff"),
+    botao_primario_hover: pegarCor("botao_primario_hover", "#772534"),
     botao_perigo: pegarCor("botao_perigo", "#b63b3b"),
 
     /* Estados semânticos (verde = sucesso, nunca identidade) */
@@ -428,17 +425,17 @@ export function temaEfetivo(bruto = {}) {
     informacao: pegarCor("informacao", "#2f6fa3"),
 
     /* Derivado: texto sobre fundos coloridos (contraste automático) */
-    _texto_claro: textoContrasteAuto(principal),
+    _texto_claro: "#ffffff",
 
-    /* Aliases legados */
-    _green: principal,
-    _green_light: mixHex(acento, "#ffffff", 0.76),
-    _mint: mixHex(principal, fundo, 0.09),
-    _cream: fundo,
-    _white: superficie,
-    _text: texto,
-    _muted: textoSuave,
-    _border: borda,
+    /* Aliases legados — seguem suas cores base (não derivam) */
+    _green: pegarCor("cor_principal", "#8a2b3d"),
+    _green_light: pegarCor("_green_light", "#d66e79"),
+    _mint: pegarCor("_mint", "#ece1e1"),
+    _cream: pegarCor("cor_fundo", "#f6f3f1"),
+    _white: pegarCor("_white", "#ffffff"),
+    _text: pegarCor("cor_texto", "#211b1d"),
+    _muted: pegarCor("texto_secundario", "#6f6267"),
+    _border: pegarCor("borda", "#e4dcd8"),
 
     /* Tipografia */
     fonte: valorSeguro(bruto.fonte),
