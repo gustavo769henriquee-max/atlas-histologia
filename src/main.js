@@ -921,7 +921,68 @@ async function buscarLamina(id) {
     return null;
   }
 
+  /*
+   * FASE 2 — Novo modelo de marcações (public.estruturas).
+   * Lê as estruturas da tabela nova vinculada à imagem; se a migração
+   * ainda não estiver aplicada ou a lâmina não possuir linhas, mantém o
+   * fallback em laminas.estruturas (JSONB). Transição segura.
+   */
+  try {
+    const { data: estruturas, error: erroEstruturas } = await supabase
+      .from("estruturas")
+      .select(
+        "nome, descricao, tipo, x, y, x2, y2, largura, altura, texto, ordem",
+      )
+      .eq("lamina_id", data.id)
+      .order("ordem", { ascending: true })
+      .order("created_at", { ascending: true });
+
+    if (!erroEstruturas && Array.isArray(estruturas) && estruturas.length > 0) {
+      data.estruturas = estruturas
+        .map(estruturaDeBancoParaApp)
+        .sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
+    }
+  } catch (erro) {
+    console.warn(
+      "[ATLAS] Não foi possível ler public.estruturas; usando JSONB (fallback):",
+      erro,
+    );
+  }
+
   return data;
+}
+
+/*
+ * Converte uma linha de public.estruturas (colunas numeric via PostgREST
+ * chegam como string) no formato consumido pelo visualizador — o mesmo
+ * formato usado pelo antigo laminas.estruturas (JSONB).
+ */
+function estruturaDeBancoParaApp(linha = {}) {
+  const numero = (valor, padrao) => {
+    const n = Number(valor);
+
+    return Number.isFinite(n) ? n : padrao;
+  };
+
+  return {
+    nome: String(linha.nome || "").trim(),
+    descricao: String(linha.descricao || "").trim(),
+    tipo: ["ponto", "retangulo", "seta", "texto"].includes(linha.tipo)
+      ? linha.tipo
+      : "ponto",
+    texto: String(linha.texto || "").trim(),
+    x: Math.max(0, Math.min(1, numero(linha.x, 0.5))),
+    y: Math.max(0, Math.min(1, numero(linha.y, 0.5))),
+    ...(linha.tipo === "seta"
+      ? {
+          x2: Math.max(0, Math.min(1, numero(linha.x2 ?? linha.x, linha.x))),
+          y2: Math.max(0, Math.min(1, numero(linha.y2 ?? linha.y, linha.y))),
+        }
+      : {}),
+    largura: Math.max(0.01, Math.min(1, numero(linha.largura, 0.08))),
+    altura: Math.max(0.01, Math.min(1, numero(linha.altura, 0.08))),
+    ordem: numero(linha.ordem, 0),
+  };
 }
 
 async function buscarImagensLamina(lamina) {
@@ -1934,30 +1995,14 @@ async function render() {
 
     if (token !== renderToken) return;
 
-    if (route === "nova-lamina") {
-      const session = await getCurrentSession();
+    const { renderNovaLamina, setupNovaLamina } =
+      await import("./pages/nova-lamina.js");
 
-      if (token !== renderToken) return;
+    if (token !== renderToken) return;
 
-      if (!session?.user) {
-        window.location.hash = "#login";
-        return;
-      }
-
-      if (!(await isAdmin(session.user))) {
-        window.location.hash = "#inicio";
-        return;
-      }
-
-      const { renderNovaLamina, setupNovaLamina } =
-        await import("./pages/nova-lamina.js");
-
-      if (token !== renderToken) return;
-
-      app.innerHTML = renderNovaLamina(config);
-      setupNovaLamina();
-      return;
-    }
+    app.innerHTML = renderNovaLamina(config);
+    setupNovaLamina();
+    return;
   }
 
   if (route === "catalogo") {
@@ -1970,9 +2015,8 @@ async function render() {
     await renderCatalogo(config);
     return;
   }
-}
 
-if (route === "lamina") {
+  if (route === "lamina") {
   const id = window.location.hash.replace("#lamina/", "");
 
   if (!id) {
@@ -2047,6 +2091,7 @@ if (route === "lamina") {
 
   await iniciarViewer(lamina, imagens);
   return;
+  }
 
   /*
    * Home — busca a lâmina publicada mais recente para dar ao
