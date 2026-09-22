@@ -2,7 +2,9 @@
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master
+      - feature/redesign-visual
   workflow_dispatch:
 
 permissions:
